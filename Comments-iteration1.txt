@@ -1,0 +1,16 @@
+Group 17,
+
+While you seem to have a clear idea of your project, it is not entirely communicated by your requirements documentation.  Your Vision Statement, for instance, gives a clear impression of the purpose of your project, which I would summarize as a "generalized notification app."  Your features list, however, is quite sparse.  It is missing, for instance, that developers can create notification feeds, that users can subscribe to them, that notifications can be batched into a digest (which I presume since users can control the frequency with which they receive the notifications), and so forth.  Also, you don't have an extended features list.
+
+Your GUI sketches are quite informative.  I'm a little surprised by some of the content in the Notification Frequency dialog -- I'm not sure what happens if I've already received 20 notifications -- but the interface makes sense.
+
+The diamonds in your domain model are all composition relationships, which are too strong for the meaning you seem to intend.  This diagram says, for instance, that a Subscription is made up of Users (which makes sense) and also that a User cannot exist without the presence of its Subscription (which does not).  In terms of domain model content, please remove the redundant properties (e.g. "developerAccounts" from Server); you don't need to express in text what you have already shown in picture (via the line from Server to User).  (It might also help to annotate the edges in your diagram with the nature of the relationship.)
+
+What is the difference between UserNotification and SubscriptionNotification?  This distinction is not discussed elsewhere and does not appear in your requirements.
+
+Your activity diagram seems to communicate the idea of sending a notification (which is good) but uses incorrect syntax.  The diagram does not contain a terminal node, does not use diamonds on conditions, and does not join the concurrent operation started after "get user list for notification".
+
+Your Use-cases section does not contain use cases.  Please see the Iteration 1 requirements documentation and accompanying format hyperlink to see what we expected.  Your application would warrant at least half a dozen use cases: posting a notification, receiving a notification, subscribing to a feed, etc.
+
+Total Score: 68/100
+Resubmit Options: Feature List, Domain Model, Activity Diagram, Use Cases
