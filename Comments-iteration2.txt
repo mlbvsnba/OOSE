@@ -1,0 +1,12 @@
+Group 17,
+
+Your Iteration 1 content is much better!  Your feature list is detailed and your use cases are much improved.  The activity diagram has a minor syntax error -- each opening diamond should have a closing diamond -- but is otherwise good.  Further, your class diagram illustrates a domain model.
+
+Your class diagram doesn't show anything other than the missing domain model from Iteration 1, though.  In Iteration 2, we expect your Architecture section and class diagram to illustrate how different pieces of your software (and the libraries you're using) interact; I'm not seeing any of that here.  For instance, it would've been good to see a couple major UI classes in those diagrams.
+
+Your use cases are mildly inconsistent.  Either interleave alternate paths or keep them separate, but pick one.
+
+In general, however, this iteration looks a lot better than your previous one.  Keep up the good work.  :)
+
+Iteration 2 Grade: 88
+Iteration 1 Regrade: 88
