@@ -8,3 +8,10 @@ class User(models.Model):
 
 class Developer(User):
     api_key = models.CharField(max_length=50)
+    
+    def verify(self, api_key):
+        """
+
+        :type api_key: string
+        """
+        return self.api_key == api_key
