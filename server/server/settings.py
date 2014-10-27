@@ -58,7 +58,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-host = 'locahost'
+host = 'localhost'
 if platform.system() == 'Darwin':
     host = '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock'
 
