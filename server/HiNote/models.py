@@ -8,7 +8,7 @@ class User(models.Model):
 
 class Subscription(models.Model):
     # many-to-one relationship
-    owner = models.ForeignKey(Developer)
+    owner = models.ForeignKey(Developer, related_name='subscription')
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created')
