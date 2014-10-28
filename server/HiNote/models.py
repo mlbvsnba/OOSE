@@ -6,22 +6,8 @@ class User(models.Model):
     creation_date = models.DateTimeField('date created')
 
 
-class Subscription(models.Model):
-    # many-to-one relationship
-    owner = models.ForeignKey(Developer, related_name='subscription')
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=300)
-    creation_date = models.DateTimeField('date created')
-
-    def __init__(self, owner, name, description):
-        super(Subscription, self).__init__()
-        self.owner = owner
-        self.name = name
-        self.description = description
-
-
 class Developer(User):
-    api_key = models.CharField(max_length=50)
+    api_ky = models.CharField(max_length=50)
 
     def verify(self, api_key):
         """
@@ -41,3 +27,17 @@ class Developer(User):
         :param subscription_key: the integer key of the Developer's subscription to push to
         """
         pass
+
+
+class Subscription(models.Model):
+    # many-to-one relationship
+    owner = models.ForeignKey(Developer, related_name='subscription')
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=300)
+    creation_date = models.DateTimeField('date created')
+
+    def __init__(self, owner, name, description):
+        super(Subscription, self).__init__()
+        self.owner = owner
+        self.name = name
+        self.description = description
