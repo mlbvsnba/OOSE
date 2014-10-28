@@ -1,3 +1,4 @@
+*.pyc
 server/.idea/workspace.xml
 server/.idea/dataSources.xml
 server/.idea/server.iws
