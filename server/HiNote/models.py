@@ -1,13 +1,20 @@
 from django.db import models
 
 
+# maybe use django's built in User class as it has
+# authentication / session management?
 class User(models.Model):
-    name = models.CharField(max_length=100)
-    creation_date = models.DateTimeField('date created')
+    name = models.CharField(max_length=100, unique=True)
+    email_address = models.EmailField()
+    creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
+
+
+class CommonUser(User):
+    subscriptions = models.ManyToManyField('Subscription')
 
 
 class Developer(User):
-    api_ky = models.CharField(max_length=50)
+    api_key = models.CharField(max_length=50)
 
     def verify(self, api_key):
         """
@@ -34,10 +41,25 @@ class Subscription(models.Model):
     owner = models.ForeignKey(Developer, related_name='subscription')
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=300)
-    creation_date = models.DateTimeField('date created')
+    creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
 
-    def __init__(self, owner, name, description):
-        super(Subscription, self).__init__()
-        self.owner = owner
-        self.name = name
-        self.description = description
+
+class Notification(models.Model):
+    sender = models.ForeignKey(User)
+    contents = models.CharField(max_length=300)
+    creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
+
+    def get_sender(self):
+        pass
+
+    def get_actions(self):
+        pass
+
+    def get_ios_display(self):
+        pass
+
+
+class DeveloperNotification(Notification):
+    # should use a pre-init to verify the sender is a Developer.  Similar to
+    # http://stackoverflow.com/questions/9415616/adding-to-the-constructor-of-a-django-model
+    pass
