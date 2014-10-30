@@ -12,7 +12,8 @@ class MasterViewController: UITableViewController {
 
     let streams: [String] = ["Sports", "Local","CameronsLife"]
     var detailViewController: DetailViewController? = nil
-    var objects = NSMutableArray()
+    var active = NSMutableArray()
+    var muted = NSMutableArray()
 
 
     override func awakeFromNib() {
@@ -41,17 +42,19 @@ class MasterViewController: UITableViewController {
     }
 
     func insertNewObject(sender: AnyObject) {
-        objects.insertObject("#" + streams[objects.count % streams.count], atIndex: 0)
+        active.insertObject("#" + streams[active.count % streams.count], atIndex: 0)
         let indexPath = NSIndexPath(forRow: 0, inSection: 0)
         self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
     }
+    
+    
 
     // MARK: - Segues
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow() {
-                let object = objects[indexPath.row] as String
+                let object = active[indexPath.row] as String
                 let controller = (segue.destinationViewController as UINavigationController).topViewController as DetailViewController
                 controller.detailItem = object
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
@@ -63,17 +66,40 @@ class MasterViewController: UITableViewController {
     // MARK: - Table View
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
+    }
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+        return "active"
+        }
+        if section == 1 {
+        return "muted"
+        }
+        return "section shouldn't be here"
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return objects.count
+        if section == 0 {
+            return active.count
+        }
+        if section == 1 {
+            return muted.count
+        }
+        return 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
-        if let label = objects[indexPath.row] as? String {
-        cell.textLabel.text = label
+        if indexPath.section == 0 {
+            if let label = active[indexPath.row] as? String {
+                cell.textLabel.text = label
+            }
+        }
+        
+        if indexPath.section == 1 {
+            if let label = muted[indexPath.row] as? String {
+                cell.textLabel.text = label
+            }
         }
         return cell
     }
@@ -85,8 +111,11 @@ class MasterViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            objects.removeObjectAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            muted.insertObject(active[indexPath.row], atIndex: 0)
+            let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+            let toIndexPath = NSIndexPath(forRow: 0, inSection: 1)
+            active.removeObjectAtIndex(indexPath.row)
+            tableView.moveRowAtIndexPath(indexPath, toIndexPath: toIndexPath)
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
