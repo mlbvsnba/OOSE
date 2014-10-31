@@ -53,12 +53,5 @@ class NotifcationController: UITableViewController, UITableViewDataSource, UITab
     {
         //get the notications from the server. For now hard-coded.
     }
-    
-    override func didReceiveMemoryWarning()
-    {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
+
 }
