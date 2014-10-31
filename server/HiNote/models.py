@@ -13,9 +13,9 @@ class SubscriptionSettings(models.Model):
 
 
 class Developer(django.contrib.auth.models.User):
-    api_key = models.CharField(max_length=50)
+    api_key = models.CharField(max_length=50, blank=False)
 
-    def verify_api(self, api_key):
+    def verify_api_key(self, api_key):
         """
         Verifies a Developer's API key.
         :param api_key string
@@ -26,6 +26,16 @@ class Developer(django.contrib.auth.models.User):
     def create_subscription(self, name, description):
         sub = Subscription(owner=self, name=name, description=description)
         sub.save()
+
+    @staticmethod
+    def create_api_key():
+        # method from http://jetfar.com/simple-api-key-generation-in-python/
+        import random
+        import hashlib
+        import base64
+        h = hashlib.sha256(str(random.getrandbits(256))).digest()
+        rand = random.choice(['rA','aZ','gQ','hH','hG','aR','DD'])
+        return base64.b64encode(h, rand).rstrip('==')
 
 
 class Subscription(models.Model):

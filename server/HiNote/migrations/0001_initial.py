@@ -68,6 +68,27 @@ class Migration(migrations.Migration):
             },
             bases=(models.Model,),
         ),
+        migrations.CreateModel(
+            name='SubscriptionSettings',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('subscription', models.ForeignKey(to='HiNote.Subscription')),
+                ('user', models.ForeignKey(to='HiNote.CommonUser')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='UserNotification',
+            fields=[
+                ('notification_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='HiNote.Notification')),
+                ('recipient', models.ForeignKey(to='HiNote.CommonUser')),
+            ],
+            options={
+            },
+            bases=('HiNote.notification',),
+        ),
         migrations.AddField(
             model_name='notification',
             name='sender',
@@ -75,9 +96,9 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='commonuser',
-            name='subscriptions',
-            field=models.ManyToManyField(to='HiNote.Subscription'),
+            model_name='developernotification',
+            name='subscription',
+            field=models.ForeignKey(to='HiNote.Subscription'),
             preserve_default=True,
         ),
     ]

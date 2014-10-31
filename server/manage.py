@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import os
 import sys
+import os
+
+os.environ.setdefault('LANG','en_US.UTF-8')
+os.environ["LANG"]="en_US.UTF-8"
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
