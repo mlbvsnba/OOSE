@@ -13,6 +13,9 @@
 		3EF5F82A1A03064500E5B177 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EF5F8291A03064500E5B177 /* Images.xcassets */; };
 		3EF5F82D1A03064500E5B177 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EF5F82B1A03064500E5B177 /* LaunchScreen.xib */; };
 		3EF5F8391A03064500E5B177 /* HiNoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8381A03064500E5B177 /* HiNoteTests.swift */; };
+		3EF5F8431A0308DC00E5B177 /* StreamTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8421A0308DC00E5B177 /* StreamTableView.swift */; };
+		3EF5F8451A03090900E5B177 /* NotificationTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8441A03090900E5B177 /* NotificationTableView.swift */; };
+		3EF5F8471A03105900E5B177 /* notificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8461A03105900E5B177 /* notificationCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +39,9 @@
 		3EF5F8321A03064500E5B177 /* HiNoteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HiNoteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EF5F8371A03064500E5B177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EF5F8381A03064500E5B177 /* HiNoteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiNoteTests.swift; sourceTree = "<group>"; };
+		3EF5F8421A0308DC00E5B177 /* StreamTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamTableView.swift; sourceTree = "<group>"; };
+		3EF5F8441A03090900E5B177 /* NotificationTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationTableView.swift; sourceTree = "<group>"; };
+		3EF5F8461A03105900E5B177 /* notificationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notificationCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +86,9 @@
 				3EF5F8221A03064500E5B177 /* AppDelegate.swift */,
 				3EF5F8241A03064500E5B177 /* ViewController.swift */,
 				3EF5F8261A03064500E5B177 /* Main.storyboard */,
+				3EF5F8421A0308DC00E5B177 /* StreamTableView.swift */,
+				3EF5F8441A03090900E5B177 /* NotificationTableView.swift */,
+				3EF5F8461A03105900E5B177 /* notificationCell.swift */,
 				3EF5F8291A03064500E5B177 /* Images.xcassets */,
 				3EF5F82B1A03064500E5B177 /* LaunchScreen.xib */,
 				3EF5F8201A03064500E5B177 /* Supporting Files */,
@@ -212,8 +221,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EF5F8451A03090900E5B177 /* NotificationTableView.swift in Sources */,
 				3EF5F8251A03064500E5B177 /* ViewController.swift in Sources */,
+				3EF5F8471A03105900E5B177 /* notificationCell.swift in Sources */,
 				3EF5F8231A03064500E5B177 /* AppDelegate.swift in Sources */,
+				3EF5F8431A0308DC00E5B177 /* StreamTableView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
