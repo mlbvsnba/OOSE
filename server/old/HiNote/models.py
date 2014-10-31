@@ -1,19 +1,12 @@
 from django.db import models
+import django.contrib.auth.models
 
 
-# maybe use django's built in User class as it has
-# authentication / session management?
-class User(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    email_address = models.EmailField()
-    creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
-
-
-class CommonUser(User):
+class CommonUser(models.Model):
     subscriptions = models.ManyToManyField('Subscription')
 
 
-class Developer(User):
+class Developer(django.contrib.auth.models.User):
     api_key = models.CharField(max_length=50)
 
     def verify(self, api_key):
@@ -45,7 +38,7 @@ class Subscription(models.Model):
 
 
 class Notification(models.Model):
-    sender = models.ForeignKey(User)
+    sender = models.ForeignKey(django.contrib.auth.models.User)
     contents = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
 

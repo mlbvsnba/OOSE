@@ -1,6 +1,4 @@
 *.pyc
-server/.idea/workspace.xml
-server/.idea/dataSources.xml
-server/.idea/server.iws
-server/.idea/server.iml
-server/HiNote/migrations
+.idea
+.DS_Store
+Thumbs.db
