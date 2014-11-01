@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController  {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +21,6 @@ class ViewController: UIViewController {
         buttonToNotifications.backgroundColor = UIColor.greenColor()
         buttonToNotifications.addTarget(self, action: "showNotifications", forControlEvents: .TouchUpInside)
         self.view.addSubview(buttonToNotifications)
-        
         let buttonToStream = UIButton()
         buttonToStream.enabled = true
         buttonToStream.setTitle("stream Menu", forState: .Normal)
@@ -47,14 +46,15 @@ class ViewController: UIViewController {
     
     func showStream () {
         let vc : AnyObject! = self.storyboard?.instantiateViewControllerWithIdentifier("Streams")
-        self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
-        println("made it")
+        //self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
+        self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
+        println("show stream")
     }
     
     func showNotifications() {
         let vc : AnyObject! = self.storyboard?.instantiateViewControllerWithIdentifier("Notifications")
-        self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
-        println("made it")
+        self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
+        println("show notificaitons")
     }
     
     

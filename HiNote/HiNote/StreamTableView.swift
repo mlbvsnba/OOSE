@@ -14,7 +14,12 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
-        cell.textLabel.text = "woo"
+        if indexPath.section == 0 {
+        cell.textLabel.text = "#baltimore"
+        }
+        else {
+            cell.textLabel.text = "#America"
+        }
         return cell
     }
     
@@ -32,6 +37,12 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         return "Active"
         }
         return "Muted"
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let vc : AnyObject! = self.storyboard?.instantiateViewControllerWithIdentifier("Notifications")
+        //self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
+        self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
     }
     
     

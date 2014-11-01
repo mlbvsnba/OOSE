@@ -31,6 +31,7 @@ class NotifcationController: UITableViewController, UITableViewDataSource, UITab
     }
     
     
+    
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
        return self.SUBJECT
