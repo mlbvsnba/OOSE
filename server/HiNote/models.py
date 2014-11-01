@@ -2,7 +2,7 @@ from django.db import models
 import django.contrib.auth.models
 
 
-class CommonUser(models.Model):
+class CommonUser(django.contrib.auth.models.User):
     pass
 
 
@@ -24,8 +24,9 @@ class Developer(django.contrib.auth.models.User):
         return self.api_key == api_key
 
     def create_subscription(self, name, description):
-        sub = Subscription(owner=self, name=name, description=description)
-        sub.save()
+        sub = self.subscription_set.create(owner=self, name=name,
+                                           description=description)
+        return sub
 
     @staticmethod
     def create_api_key():
@@ -40,7 +41,7 @@ class Developer(django.contrib.auth.models.User):
 
 class Subscription(models.Model):
     # many-to-one relationship
-    owner = models.ForeignKey(Developer, related_name='subscription', editable=False)
+    owner = models.ForeignKey(Developer, editable=False)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
