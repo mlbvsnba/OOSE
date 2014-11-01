@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E95B6D51A0561C600AC73B7 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E95B6D41A0561C600AC73B7 /* SettingsController.swift */; };
 		3EF5F8231A03064500E5B177 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8221A03064500E5B177 /* AppDelegate.swift */; };
 		3EF5F8251A03064500E5B177 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8241A03064500E5B177 /* ViewController.swift */; };
 		3EF5F8281A03064500E5B177 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EF5F8261A03064500E5B177 /* Main.storyboard */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3E95B6D41A0561C600AC73B7 /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		3EF5F81D1A03064500E5B177 /* HiNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiNote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EF5F8211A03064500E5B177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EF5F8221A03064500E5B177 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				3EF5F8221A03064500E5B177 /* AppDelegate.swift */,
 				3EF5F8241A03064500E5B177 /* ViewController.swift */,
 				3EF5F8261A03064500E5B177 /* Main.storyboard */,
+				3E95B6D41A0561C600AC73B7 /* SettingsController.swift */,
 				3EF5F8421A0308DC00E5B177 /* StreamTableView.swift */,
 				3EF5F8441A03090900E5B177 /* NotificationTableView.swift */,
 				3EF5F8461A03105900E5B177 /* notificationCell.swift */,
@@ -221,6 +224,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E95B6D51A0561C600AC73B7 /* SettingsController.swift in Sources */,
 				3EF5F8451A03090900E5B177 /* NotificationTableView.swift in Sources */,
 				3EF5F8251A03064500E5B177 /* ViewController.swift in Sources */,
 				3EF5F8471A03105900E5B177 /* notificationCell.swift in Sources */,
@@ -419,6 +423,7 @@
 				3EF5F83E1A03064500E5B177 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3EF5F83F1A03064500E5B177 /* Build configuration list for PBXNativeTarget "HiNoteTests" */ = {
 			isa = XCConfigurationList;
@@ -427,6 +432,7 @@
 				3EF5F8411A03064500E5B177 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

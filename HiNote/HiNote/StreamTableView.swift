@@ -44,10 +44,15 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         //self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
         self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
     }
+    func addStream() {
+       println("add")
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Add", style: .Plain, target: self, action: "addStream")
+        self.navigationItem.rightBarButtonItem = rightSideButton
         self.tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 20))
         println(self.tableView.tableHeaderView?.frame)
         // Do any additional setup after loading the view, typically from a nib.

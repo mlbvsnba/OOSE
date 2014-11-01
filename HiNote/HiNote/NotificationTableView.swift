@@ -17,17 +17,35 @@ class NotifcationController: UITableViewController, UITableViewDataSource, UITab
     
     var SUBJECT = "#LocalNews"
     
+    func settings() {
+        let vc : AnyObject! = self.storyboard?.instantiateViewControllerWithIdentifier("Settings")
+        //self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
+        self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
+    }
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Settings", style: .Plain, target: self, action: "settings")
+        self.navigationItem.rightBarButtonItem = rightSideButton
         
+        getJson()
         self.tableView.tableHeaderView = UIView( frame: CGRectMake( 0, 0, self.view.frame.width, 20 ) )
         
         //self.tableView.
         
        // (tableView: UITableView, UIEdgeInsetsMake(20, self.tableView.contentInset.left, self.tableView.contentInset.bottom, self.tableView.contentInset.right))
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    func getJson () {
+        let url = NSURL(string: "http://mlbvsnba.no-ip.org/oose/sample_notification.json")
+        
+        let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
+            println(NSString(data: data, encoding: NSUTF8StringEncoding))
+        }
+        
+        task.resume()
     }
     
     
