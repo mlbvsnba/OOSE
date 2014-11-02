@@ -10,6 +10,10 @@ class SubscriptionSettings(models.Model):
     #  Many-to-one relationships
     user = models.ForeignKey('CommonUser')
     subscription = models.ForeignKey('Subscription')
+    receive_notifications = models.BooleanField(default=True)
+    radius_in_miles = models.IntegerField(default=-1)
+    notification_frequency = models.IntegerField(default=-1)
+
 
 
 class Developer(django.contrib.auth.models.User):
@@ -47,11 +51,11 @@ class Subscription(models.Model):
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
 
     def push_notification(self, notification):
-        """
-        Pushes a given notification to the matching subscription.
-        :param notification: a DeveloperNotification to push
-        :param subscription_key: the integer key of the Developer's subscription to push to
-        """
+        #
+        # Pushes a given notification to the matching subscription.
+        # :param notification: a DeveloperNotification to push
+        # :param subscription_key: the integer key of the Developer's subscription to push to
+        #
         pass
 
 
