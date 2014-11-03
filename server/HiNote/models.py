@@ -15,7 +15,6 @@ class SubscriptionSettings(models.Model):
     notification_frequency = models.IntegerField(default=-1)
 
 
-
 class Developer(django.contrib.auth.models.User):
     api_key = models.CharField(max_length=50, blank=False)
 
