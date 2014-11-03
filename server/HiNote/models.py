@@ -1,5 +1,7 @@
+from django import forms
 from django.db import models
 import django.contrib.auth.models
+from django.forms import ModelForm
 
 
 class CommonUser(django.contrib.auth.models.User):
@@ -42,6 +44,12 @@ class Developer(django.contrib.auth.models.User):
         return base64.b64encode(h, rand).rstrip('==')
 
 
+class DeveloperForm(ModelForm):
+    class Meta:
+        model = Developer
+        fields = ['first_name', 'last_name', 'email', 'username', 'password']
+
+
 class Subscription(models.Model):
     # many-to-one relationship
     owner = models.ForeignKey(Developer, editable=False)
@@ -49,11 +57,10 @@ class Subscription(models.Model):
     description = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
 
-    def push_notification(self, notification):
+    def push_notification(self, contents):
         #
         # Pushes a given notification to the matching subscription.
         # :param notification: a DeveloperNotification to push
-        # :param subscription_key: the integer key of the Developer's subscription to push to
         #
         pass
 
