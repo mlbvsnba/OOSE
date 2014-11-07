@@ -28,7 +28,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     
@@ -36,7 +36,10 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     if section == 0 {
         return "Active"
         }
-        return "Muted"
+    if section == 1 {
+            return "Muted"
+        }
+        return "New"
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
