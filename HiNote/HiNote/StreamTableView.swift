@@ -78,11 +78,17 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        if  tableView == self.searchDisplayController!.searchResultsTableView {
+            return 1
+        }
         return 3
     }
     
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    if  tableView == self.searchDisplayController!.searchResultsTableView {
+            return "found"
+        }
     if section == 0 {
         return "Active"
         }
@@ -108,13 +114,13 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         self.active = [Stream(title: "Water"), Stream(title: "Fire"), Stream(title: "Air"), Stream(title: "Blue Sky")]
         self.muted = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
         self.newStreams = [Stream(title: "WompWompWomp"), Stream(title: "CatDog"), Stream(title: "The Rains in Africa")]
+
+        self.searchDisplayController?.displaysSearchBarInNavigationBar = true
         
-        self.tableView.tableHeaderView?.addSubview(searchBar)
         
         let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Add", style: .Plain, target: self, action: "addStream")
         self.navigationItem.rightBarButtonItem = rightSideButton
-        self.tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, searchBar.frame.height))
-        println(self.tableView.tableHeaderView?.frame)
+
     }
     
     override func didReceiveMemoryWarning() {
