@@ -9,22 +9,72 @@
 import Foundation
 import UIKit
 
-class StreamController: UITableViewController, UITableViewDataSource, UITableViewDelegate  {
+class StreamController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate  {
+    var active: [Stream] = []
+    var muted: [Stream] = []
+    var newStreams: [Stream] = []
+    @IBOutlet weak var searchBar: UISearchBar!
     
+    var searchResults: [Stream] = []
+    var con: UISearchDisplayController = UISearchDisplayController()
+    
+
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
+        if  tableView == self.searchDisplayController!.searchResultsTableView {
+            cell.textLabel.text = searchResults[indexPath.row].title
+            return cell
+        }
+        
+        
         if indexPath.section == 0 {
-        cell.textLabel.text = "#baltimore"
+        cell.textLabel.text = active[indexPath.row].title
         }
-        else {
-            cell.textLabel.text = "#America"
+        if indexPath.section == 1 {
+            cell.textLabel.text = muted[indexPath.row].title
         }
+        if indexPath.section == 2 {
+                cell.textLabel.text = newStreams[indexPath.row].title
+        }
+
         return cell
     }
     
+    func filterContentForSearchText(searchText: String) {
+        // Filter the array using the filter method
+        self.searchResults = (self.active + self.muted + self.newStreams).filter({( stream: Stream) -> Bool in
+            let stringMatch = stream.title.rangeOfString(searchText)
+            return (stringMatch != nil)
+        })
+    }
+    
+    func searchDisplayController(controller: UISearchDisplayController!, shouldReloadTableForSearchString searchString: String!) -> Bool {
+        self.filterContentForSearchText(searchString)
+        return true
+    }
+    
+    func searchDisplayController(controller: UISearchDisplayController!, shouldReloadTableForSearchScope searchOption: Int) -> Bool {
+        self.filterContentForSearchText(self.searchDisplayController!.searchBar.text)
+        return true
+    }
+    
+    
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if  tableView == self.searchDisplayController!.searchResultsTableView {
+            return self.searchResults.count
+        }
+        if section == 0 {
+            return active.count
+        }
+        if section == 1 {
+            return muted.count
+            }
+        if section == 2 {
+            return newStreams.count
+            }
+        return 0
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -47,18 +97,24 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         //self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
         self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
     }
+
     func addStream() {
-       println("add")
+        println(con.searchBar.text)
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.active = [Stream(title: "Water"), Stream(title: "Fire"), Stream(title: "Air"), Stream(title: "Blue Sky")]
+        self.muted = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
+        self.newStreams = [Stream(title: "WompWompWomp"), Stream(title: "CatDog"), Stream(title: "The Rains in Africa")]
+        
+        self.tableView.tableHeaderView?.addSubview(searchBar)
+        
         let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Add", style: .Plain, target: self, action: "addStream")
         self.navigationItem.rightBarButtonItem = rightSideButton
-        self.tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 20))
+        self.tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, searchBar.frame.height))
         println(self.tableView.tableHeaderView?.frame)
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func didReceiveMemoryWarning() {

@@ -34,14 +34,22 @@
         <scene sceneID="dq8-bN-cId">
             <objects>
                 <tableViewController storyboardIdentifier="Streams" id="wXY-VR-umo" customClass="StreamController" customModule="HiNote" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="cFW-Az-cSi">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="22" sectionFooterHeight="22" id="cFW-Az-cSi">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableFooterView" contentMode="top" text="" id="SFc-0E-nhg">
+                            <rect key="frame" x="0.0" y="130" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="wXY-VR-umo" id="uti-b6-GpO"/>
+                            </connections>
+                        </searchBar>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StreamCell" id="POe-BY-k3w">
+                            <tableViewCell contentMode="bottom" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="a5N-IF-XZg">
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="POe-BY-k3w" id="uS5-mq-7SA">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="a5N-IF-XZg" id="sjf-8f-q47">
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -52,8 +60,21 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="NZb-Ck-Pt7"/>
+                    <connections>
+                        <outlet property="searchBar" destination="SFc-0E-nhg" id="NE5-Dd-x7H"/>
+                        <outlet property="searchDisplayController" destination="kKo-hy-hYO" id="JPC-wG-Ocb"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gBd-ND-Gvn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="kKo-hy-hYO">
+                    <connections>
+                        <outlet property="delegate" destination="wXY-VR-umo" id="cvC-iy-Bo9"/>
+                        <outlet property="searchBar" destination="SFc-0E-nhg" id="FbE-8F-JXn"/>
+                        <outlet property="searchContentsController" destination="wXY-VR-umo" id="EBG-zn-sFm"/>
+                        <outlet property="searchResultsDataSource" destination="wXY-VR-umo" id="uzR-gI-aq5"/>
+                        <outlet property="searchResultsDelegate" destination="wXY-VR-umo" id="fCY-zx-xbq"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1933" y="382"/>
         </scene>
