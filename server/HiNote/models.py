@@ -48,6 +48,7 @@ class DeveloperForm(ModelForm):
     class Meta:
         model = Developer
         fields = ['first_name', 'last_name', 'email', 'username', 'password']
+
     def save(self, commit=True):
         dev = super(DeveloperForm, self).save(commit=False)
         dev.set_password(self.cleaned_data["password"])
@@ -77,6 +78,13 @@ class SubscriptionCreationForm(forms.Form):
     api_key = forms.CharField(label='Developer API Key:', max_length=43)
     name = forms.CharField(label='Subscription Name', max_length=50)
     description = forms.CharField(label='Subscription Description', max_length=300)
+
+    def save(self, commit=True):
+        dev = Developer.objects.get(api_key=self.cleaned_data['api_key'])
+        sub = dev.create_subscription(name=self.cleaned_data['name'], description=self.cleaned_data['description'])
+        if commit:
+            sub.save()
+        return sub
 
 
 class Notification(models.Model):

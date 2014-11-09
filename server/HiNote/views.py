@@ -21,6 +21,7 @@ def dev_signup(request):
         form = DeveloperForm()
     return render(request, 'basic_form.html', {'form': form})
 
+
 def make_subscription(request):
     if request.method == 'POST':
         form = SubscriptionCreationForm(request.POST)
@@ -30,6 +31,7 @@ def make_subscription(request):
     else:
         form = SubscriptionCreationForm()
     return render(request, 'basic_form.html', {'form': form})
+
 
 def list_subscriptions(request):
     subs = Subscription.objects.all()
