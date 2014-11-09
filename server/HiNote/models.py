@@ -48,6 +48,14 @@ class DeveloperForm(ModelForm):
     class Meta:
         model = Developer
         fields = ['first_name', 'last_name', 'email', 'username', 'password']
+    def save(self, commit=True):
+        dev = super(DeveloperForm, self).save(commit=False)
+        dev.set_password(self.cleaned_data["password"])
+        if not dev.api_key:
+            dev.api_key = Developer.create_api_key()
+        if commit:
+            dev.save()
+        return dev
 
 
 class Subscription(models.Model):
