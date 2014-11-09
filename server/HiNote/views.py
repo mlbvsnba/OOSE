@@ -12,6 +12,7 @@ def dev_signup(request):
         form = DeveloperForm(request.POST)
         if form.is_valid():
             dev = form.save()
+            return render(request, 'signup.html', {'api_key': dev.api_key})
     else:
         form = DeveloperForm()
     return render(request, 'signup.html', {'form': form})
