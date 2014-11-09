@@ -1,0 +1,11 @@
+Group 17,
+
+It looks like you're off to a good start.  You have a good representation of your domain model in the form of a Django ORM layer and you've built a good mock GUI.  I'm actually pretty interested to see how using Swift turns out.  :)  You don't have a lot of visible interoperability yet, but you do have several points of connection: your client is doing some amount of networking (but only to static content), your server has a persistence mechanism (but nothing significant to query it), and your user interface is operable (but has several components which do not tie into the underlying model).  This is, in general, a good place to be for Iteration 3.
+
+I note that Swift has a notion of packages just like Java does; is there a reason you are not organizing your source files into packages?  I also observe that you do not seem to have autodoc comments in the Swift or in the Python that you have written; please ensure that your code is properly documented.  Keeping your codebase organized from the start is how you manage to keep a handle on things in the long run.
+
+You don't have any unit tests at the moment.  While they are not strictly required for Iteration 3, they will be for Iteration 4.  Unit tests will save you time in the long run; they're really for your benefit.  At this point, you've succeeded in establishing some units of code.  Start writing tests for them so you can automatically notice if they stop working correctly.  :)
+
+In general, well done.  Keep up the good work and I expect your project will go quite well.
+
+Total Score: 95/100
