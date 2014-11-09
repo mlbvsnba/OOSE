@@ -9,4 +9,6 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^signup/', 'HiNote.views.dev_signup'),
+    url(r'^listall/', 'HiNote.views.list_subscriptions'),
+    url(r'createsub/', 'HiNote.views.make_subscription')
 )

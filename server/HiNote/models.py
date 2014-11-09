@@ -18,7 +18,7 @@ class SubscriptionSettings(models.Model):
 
 
 class Developer(django.contrib.auth.models.User):
-    api_key = models.CharField(max_length=50, blank=False)
+    api_key = models.CharField(max_length=43, blank=False)
 
     def verify_api_key(self, api_key):
         """
@@ -71,6 +71,12 @@ class Subscription(models.Model):
         # :param notification: a DeveloperNotification to push
         #
         pass
+
+
+class SubscriptionCreationForm(forms.Form):
+    api_key = forms.CharField(label='Developer API Key:', max_length=43)
+    name = forms.CharField(label='Subscription Name', max_length=50)
+    description = forms.CharField(label='Subscription Description', max_length=300)
 
 
 class Notification(models.Model):
