@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             name='Developer',
             fields=[
                 ('user_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
-                ('api_key', models.CharField(max_length=50)),
+                ('api_key', models.CharField(max_length=43)),
             ],
             options={
                 'abstract': False,
@@ -39,24 +39,17 @@ class Migration(migrations.Migration):
             bases=('auth.user',),
         ),
         migrations.CreateModel(
-            name='Notification',
+            name='DeveloperNotification',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('contents', models.CharField(max_length=300)),
                 ('creation_date', models.DateTimeField(auto_now_add=True, verbose_name=b'date created')),
+                ('sender', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
+                'abstract': False,
             },
             bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name='DeveloperNotification',
-            fields=[
-                ('notification_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='HiNote.Notification')),
-            ],
-            options={
-            },
-            bases=('HiNote.notification',),
         ),
         migrations.CreateModel(
             name='Subscription',
@@ -65,7 +58,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=50)),
                 ('description', models.CharField(max_length=300)),
                 ('creation_date', models.DateTimeField(auto_now_add=True, verbose_name=b'date created')),
-                ('owner', models.ForeignKey(related_name='subscription', editable=False, to='HiNote.Developer')),
+                ('owner', models.ForeignKey(editable=False, to='HiNote.Developer')),
             ],
             options={
             },
@@ -75,6 +68,9 @@ class Migration(migrations.Migration):
             name='SubscriptionSettings',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('receive_notifications', models.BooleanField(default=True)),
+                ('radius_in_miles', models.IntegerField(default=-1)),
+                ('notification_frequency', models.IntegerField(default=-1)),
                 ('subscription', models.ForeignKey(to='HiNote.Subscription')),
                 ('user', models.ForeignKey(to='HiNote.CommonUser')),
             ],
@@ -85,18 +81,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserNotification',
             fields=[
-                ('notification_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='HiNote.Notification')),
-                ('recipient', models.ForeignKey(to='HiNote.CommonUser')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('contents', models.CharField(max_length=300)),
+                ('creation_date', models.DateTimeField(auto_now_add=True, verbose_name=b'date created')),
+                ('recipient', models.ForeignKey(related_name='recipient', to='HiNote.CommonUser')),
+                ('sender', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
+                'abstract': False,
             },
-            bases=('HiNote.notification',),
-        ),
-        migrations.AddField(
-            model_name='notification',
-            name='sender',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
-            preserve_default=True,
+            bases=(models.Model,),
         ),
         migrations.AddField(
             model_name='developernotification',

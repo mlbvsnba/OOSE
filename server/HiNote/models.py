@@ -66,12 +66,9 @@ class Subscription(models.Model):
     description = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
 
-    def push_notification(self, contents):
-        #
-        # Pushes a given notification to the matching subscription.
-        # :param notification: a DeveloperNotification to push
-        #
-        pass
+    def create_notification(self, contents):
+        notif = self.developernotification_set.create(sender=self.owner, contents=contents)
+        return notif
 
 
 class SubscriptionCreationForm(forms.Form):
@@ -87,6 +84,20 @@ class SubscriptionCreationForm(forms.Form):
         return sub
 
 
+class PushNotificationForm(forms.Form):
+    api_key = forms.CharField(label='Developer API Key:', max_length=43)
+    sub_id = forms.IntegerField(label='Subscription ID:')
+    contents = forms.CharField(max_length=300)
+
+    def save(self, commit=True):
+        dev = Developer.objects.get(api_key=self.cleaned_data['api_key'])
+        sub = dev.subscription_set.get(id=self.cleaned_data['sub_id'])
+        notif = sub.create_notification(contents=self.cleaned_data['contents'])
+        if commit:
+            notif.save()
+        return notif
+
+
 class Notification(models.Model):
     sender = models.ForeignKey(django.contrib.auth.models.User)
     contents = models.CharField(max_length=300)
@@ -100,6 +111,9 @@ class Notification(models.Model):
         # will be fleshed out later
         pass
 
+    class Meta:
+        abstract = True
+
 
 class DeveloperNotification(Notification):
     # Many-to-One relationship
@@ -112,6 +126,6 @@ class DeveloperNotification(Notification):
 
 class UserNotification(Notification):
     # Many-to-One relationship
-    recipient = models.ForeignKey(CommonUser)
+    recipient = models.ForeignKey(CommonUser, related_name='recipient')
 
     pass
