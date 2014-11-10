@@ -106,9 +106,25 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     }
 
     func addStream() {
-        println("add")
+        
+        var addCategoryAlert = UIAlertController(title: "Add Hashtag", message: "Please enter the hashtag:", preferredStyle: UIAlertControllerStyle.Alert)
+        addCategoryAlert.addAction(UIAlertAction(title: "Add", style: UIAlertActionStyle.Default,
+            handler: {(alertAction:UIAlertAction!) in
+                let textField = addCategoryAlert.textFields![0] as UITextField
+                self.addCategory(textField.text)} ))
+        addCategoryAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
+        addCategoryAlert.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+            textField.placeholder = "Enter hashtag"
+            textField.secureTextEntry = false
+        })
+        self.presentViewController(addCategoryAlert, animated: true, completion: nil)
+        
     }
     
+    func addCategory(categoryToAdd: String)
+    {
+        println( "Adding: " + categoryToAdd )
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

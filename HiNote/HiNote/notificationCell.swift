@@ -14,18 +14,18 @@ class NotificationCell: UITableViewCell {
     
     override init() {
         super.init()
-        label.text = "woo bitch"
+        label.text = "woo"
         self.addSubview(label)
     }
 
     required init(coder aDecoder: NSCoder) {
         super.init()
-        label.text = "woo bitch"
+        label.text = "woo"
         self.addSubview(label)
     }
     override init(frame: CGRect) {
         super.init(frame: frame)
-        label.text = "woo bitch"
+        label.text = "woo"
         self.addSubview(label)
     }
     
