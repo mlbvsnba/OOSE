@@ -99,13 +99,14 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let vc : AnyObject! = self.storyboard?.instantiateViewControllerWithIdentifier("Notifications")
+        let vc : NotifcationController! = self.storyboard?.instantiateViewControllerWithIdentifier("Notifications") as NotifcationController
         //self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
+        vc.stream = active[indexPath.row]
         self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
     }
 
     func addStream() {
-        println(con.searchBar.text)
+        println("add")
     }
     
     

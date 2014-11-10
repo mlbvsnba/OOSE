@@ -23,7 +23,7 @@ class Notification {
 
 class Stream {
     var title: String
-    private var Notifications: [Notification] = []
+    var Notifications: [Notification] = []
     init() {
         self.title = "Stream Title Not Initilized"
     }
