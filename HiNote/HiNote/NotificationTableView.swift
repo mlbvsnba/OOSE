@@ -46,12 +46,13 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Settings", style: .Plain, target: self, action: "settings")
         stream.addNotifications([Notification(title: "First", subtitle: "first Note"), Notification(title: "Second", subtitle: "second Note")])
         SUBJECT = stream.title
-        self.navigationItem.rightBarButtonItem = rightSideButton
         self.searchDisplayController?.displaysSearchBarInNavigationBar = true
+        let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Settings", style: .Plain, target: self, action: "settings")
+        self.navigationItem.rightBarButtonItem = rightSideButton
         getJson()
+        self.navigationItem.leftBarButtonItem?.title = "back"
         //self.tableView.tableHeaderView = UIView( frame: CGRectMake( 0, 0, self.view.frame.width, 20 ) )
         
         //self.tableView.
