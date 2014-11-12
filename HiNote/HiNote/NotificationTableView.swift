@@ -51,7 +51,6 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         self.searchDisplayController?.displaysSearchBarInNavigationBar = true
         let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Settings", style: .Plain, target: self, action: "settings")
         self.navigationItem.rightBarButtonItem = rightSideButton
-        getJson()
         self.navigationItem.leftBarButtonItem?.title = "back"
         //self.tableView.tableHeaderView = UIView( frame: CGRectMake( 0, 0, self.view.frame.width, 20 ) )
         
@@ -61,15 +60,7 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         // Do any additional setup after loading the view, typically from a nib.
     }
     
-    func getJson () {
-        let url = NSURL(string: "http://mlbvsnba.no-ip.org/oose/sample_notification.json")
-        
-        let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))
-        }
-        
-        task.resume()
-    }
+
     
     
     

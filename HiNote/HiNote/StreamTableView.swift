@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class StreamController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate  {
+class StreamController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, NSURLConnectionDelegate  {
     var active: [Stream] = []
     var muted: [Stream] = []
     var newStreams: [Stream] = []
@@ -39,6 +39,53 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         }
 
         return cell
+    }
+    
+    func getNotifications(id: String, stream: Stream) {
+        let url: NSURL = NSURL(string: "http://localhost:8000/listnotif/?id=" + id)!
+        let session = NSURLSession.sharedSession()
+        println("made it")
+        let task = session.dataTaskWithURL(url, completionHandler: { data, response, error -> Void in
+            var err: NSError?
+            let jsonObject : AnyObject! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil)
+            if let notificationArray = jsonObject as? NSArray{
+                for notification in notificationArray {
+                if let streamJSON = notification as? NSDictionary {
+                    if let nextJSON = streamJSON["fields"] as? NSDictionary {
+                        stream.addNotifications( [Notification(title: nextJSON["contents"]as String!, subtitle: "Legit content")])
+                    }
+                }
+                }
+            }
+    })
+    task.resume()
+    }
+    
+    func getStreams() {
+        let url: NSURL = NSURL(string: "http://localhost:8000/listall/")!
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithURL(url, completionHandler: { data, response, error -> Void in
+            var err: NSError?
+           let jsonObject : AnyObject! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil)
+            if let streamArray = jsonObject as? NSArray{
+                for stream  in streamArray  {
+                    if let streamJSON = stream as? NSDictionary {
+                        
+                        if let nextJSON = streamJSON["fields"] as? NSDictionary {
+                            let toAdd = Stream(title: nextJSON["description"]as String!)
+                            self.active.append(toAdd)
+                            if let id = streamJSON["pk"] as? Int {
+                                self.getNotifications(String(id), stream: toAdd)
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        task.resume()
+        while (task.state != NSURLSessionTaskState.Completed) {
+            
+        }
     }
     
     func filterContentForSearchText(searchText: String) {
@@ -128,7 +175,9 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.active = [Stream(title: "Water"), Stream(title: "Fire"), Stream(title: "Air"), Stream(title: "Blue Sky")]
+        getStreams()
+        println(self.active)
+        //self.active = [Stream(title: "Water"), Stream(title: "Fire"), Stream(title: "Air"), Stream(title: "Blue Sky")]
         self.muted = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
         self.newStreams = [Stream(title: "WompWompWomp"), Stream(title: "CatDog"), Stream(title: "The Rains in Africa")]
 
