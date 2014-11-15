@@ -1,3 +1,6 @@
+{% if plain_response %}
+    {{ plain_response }}
+{% elif form %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -5,15 +8,11 @@
     <title>{{ title }}</title>
 </head>
 <body>
-{% if form %}
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit" />
     </form>
-{% elif plain_response %}
-    {{ plain_response }}
-{% endif %}
-
 </body>
 </html>
+{% endif %}

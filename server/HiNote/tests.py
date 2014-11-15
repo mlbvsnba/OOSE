@@ -30,6 +30,47 @@ class DeveloperTestCase(TestCase):
                           api_key="fake key")
 
 
+class ViewsTest(TestCase):
+
+    def test_developer_signup(self):
+        response = self.client.get('/signup/')
+        self.assertEqual(response.status_code, 200)
+        data = {'first_name': 'FTest', 'last_name': 'LName',
+                'email': 'fake@fake.com', 'username': 'test',
+                'password': 'testpass'}
+        response = self.client.post('/signup/', data)
+        self.assertEqual(response.status_code, 200)
+        key = response.content.strip()
+        try:
+            dev = Developer.objects.get(api_key=key)
+        except ObjectDoesNotExist:
+            self.fail("Returned api key from signup form is invalid")
+        self.assertEqual(dev.first_name, 'FTest')
+        self.assertEqual(dev.last_name, 'LName')
+        self.assertEqual(dev.email, 'fake@fake.com')
+        self.assertEqual(dev.username, 'test')
+        self.assertTrue(dev.check_password('testpass'))
+
+    def test_create_subscription(self):
+        key = Developer.create_api_key()
+        dev = Developer.objects.create(api_key=key, username="dev1",
+                                       password="dev1", email="dev1@dev1.com",
+                                       first_name="John", last_name="Smith")
+        dev.save()
+        data = {'api_key': dev.api_key, 'name': 'testsub',
+                'description': 'this is a test'}
+        response = self.client.post('/createsub/', data)
+        self.assertEqual(response.status_code, 200)
+        sub_id = response.content.strip()
+        try:
+            sub = Subscription.objects.get(id=sub_id)
+        except ObjectDoesNotExist:
+            self.fail("Returned subscription ID from createsub form is invalid")
+        self.assertEqual(sub.owner.api_key, key)
+        self.assertEqual(sub.name, 'testsub')
+        self.assertEqual(sub.description, 'this is a test')
+
+
 class UserTestCase(TestCase):
     def test_creation(self):
         usr = CommonUser.objects.create(username="usr1",
