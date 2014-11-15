@@ -70,6 +70,34 @@ class ViewsTest(TestCase):
         self.assertEqual(sub.name, 'testsub')
         self.assertEqual(sub.description, 'this is a test')
 
+    def test_push_notif(self):
+        key = Developer.create_api_key()
+        dev = Developer.objects.create(api_key=key, username="dev1",
+                                       password="dev1", email="dev1@dev1.com",
+                                       first_name="John", last_name="Smith")
+        dev.save()
+        sub = dev.create_subscription(name='testsub', description='test subscription')
+        sub.save()
+        data = {'api_key': key, 'sub_id': sub.id, 'contents': 'test notif'}
+        response = self.client.post('/pushnotif/', data)
+        self.assertEqual(response.status_code, 200)
+        notif_id = response.content.strip()
+        try:
+            notif = DeveloperNotification.objects.get(id=notif_id)
+        except ObjectDoesNotExist:
+            self.fail("Returned notification ID from pushnotif is invalid")
+        self.assertEqual(notif.subscription.id, sub.id)
+        self.assertEqual(notif.sender.id, dev.id)
+        self.assertEqual(notif.contents, 'test notif')
+
+    def test_list_subs(self):
+        # need to do this - not as simple to test
+        pass
+
+    def test_list_notifs(self):
+        # need to do this - not as simple to test
+        pass
+
 
 class UserTestCase(TestCase):
     def test_creation(self):
