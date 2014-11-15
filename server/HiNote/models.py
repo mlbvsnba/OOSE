@@ -5,11 +5,15 @@ from django.forms import ModelForm
 
 
 class CommonUser(django.contrib.auth.models.User):
+    ## Django's built-in common (non-developer) user.
+    # This user can subscribe to lists and has a SubscriptionSettings object for each list it is subscribed to.
+    #By using the django User base-class, we can have assured security with regards to user authentication.
     pass
 
 
 class SubscriptionSettings(models.Model):
-    #  Many-to-one relationships
+    ## A specific User's settings for a Subscription.
+
     user = models.ForeignKey('CommonUser')
     subscription = models.ForeignKey('Subscription')
     receive_notifications = models.BooleanField(default=True)
@@ -18,24 +22,31 @@ class SubscriptionSettings(models.Model):
 
 
 class Developer(django.contrib.auth.models.User):
+    ## A Developer who can create and push Notifications to Subscriptions that it creates.
     api_key = models.CharField(max_length=43, blank=False)
 
     def verify_api_key(self, api_key):
-        """
-        Verifies a Developer's API key.
-        :param api_key string
-        """
+        ##Verifies a Developer's API key.
+        # @param self The object pointer.
+        # @param api_key string
+        # @return True if they're equal, false otherwise
         assert isinstance(api_key, str)
         return self.api_key == api_key
 
     def create_subscription(self, name, description):
+        ##Creates a Subscription under this Developer.
+        # @param self The object pointer.
+        # @param name the name of the Subscription
+        # @param description the description of this Subscription
         sub = self.subscription_set.create(owner=self, name=name,
                                            description=description)
         return sub
 
     @staticmethod
     def create_api_key():
+        ##Creates a new api key for a new Developer.
         # method from http://jetfar.com/simple-api-key-generation-in-python/
+        # @return the new api key
         import random
         import hashlib
         import base64
@@ -45,6 +56,7 @@ class Developer(django.contrib.auth.models.User):
 
 
 class DeveloperForm(ModelForm):
+    ##Form to create a developer account
     class Meta:
         model = Developer
         fields = ['first_name', 'last_name', 'email', 'username', 'password']
@@ -60,18 +72,22 @@ class DeveloperForm(ModelForm):
 
 
 class Subscription(models.Model):
-    # many-to-one relationship
+    ## A Subscription list which is owned by a Developer and contains Users.
     owner = models.ForeignKey(Developer, editable=False)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
 
     def create_notification(self, contents):
+        ##Creates a Notification
+        # @param self The object pointer.
+        # @param contents the content of the Notification
         notif = self.developernotification_set.create(sender=self.owner, contents=contents)
         return notif
 
 
 class SubscriptionCreationForm(forms.Form):
+    ##A form for a developer to create a subscription
     api_key = forms.CharField(label='Developer API Key:', max_length=43)
     name = forms.CharField(label='Subscription Name', max_length=50)
     description = forms.CharField(label='Subscription Description', max_length=300)
@@ -85,6 +101,7 @@ class SubscriptionCreationForm(forms.Form):
 
 
 class PushNotificationForm(forms.Form):
+    ##Form to push a Notification from Developer to User
     api_key = forms.CharField(label='Developer API Key:', max_length=43)
     sub_id = forms.IntegerField(label='Subscription ID:')
     contents = forms.CharField(max_length=300)
@@ -99,6 +116,8 @@ class PushNotificationForm(forms.Form):
 
 
 class Notification(models.Model):
+    ##The interface of both types of notifications that we have, User and Developer.
+    # This stores the information for a notification sent from a Developer or User to Users.
     sender = models.ForeignKey(django.contrib.auth.models.User)
     contents = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
@@ -116,7 +135,7 @@ class Notification(models.Model):
 
 
 class DeveloperNotification(Notification):
-    # Many-to-One relationship
+    ##A notification sent from a Developer to a User through a Subscription
     subscription = models.ForeignKey(Subscription)
 
     # maybe use a pre-init to verify the sender is a Developer.  Similar to
@@ -125,7 +144,7 @@ class DeveloperNotification(Notification):
 
 
 class UserNotification(Notification):
-    # Many-to-One relationship
+    ##A notification sent from a User to another User through a Subscription
     recipient = models.ForeignKey(CommonUser, related_name='recipient')
 
     pass
