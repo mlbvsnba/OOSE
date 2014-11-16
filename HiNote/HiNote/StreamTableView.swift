@@ -18,10 +18,14 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     var searchResults: [Stream] = []
     var con: UISearchDisplayController = UISearchDisplayController()
     
-
+    var backColor: UIColor = UIColor(red: CGFloat(108/255.0), green: CGFloat(172/255.0), blue: CGFloat(178/255.0), alpha: CGFloat(1.0))
+    var cellColor: UIColor = UIColor(red: CGFloat(200/255.0), green: CGFloat(228/255.0), blue: CGFloat(224/255.0), alpha: CGFloat(1.0))
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
+        
+        cell.backgroundColor = self.cellColor
+        
         if  tableView == self.searchDisplayController!.searchResultsTableView {
             cell.textLabel.text = searchResults[indexPath.row].title
             return cell
@@ -145,10 +149,48 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         return "New"
     }
     
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?{
+        var header: UIView = UIView( frame: CGRectMake(0, 0, tableView.bounds.size.width, 30) )
+        header.backgroundColor = self.backColor
+        
+        var textLabel: UILabel = UILabel( frame: CGRectMake(20, 5, tableView.bounds.size.width - 20 - 10, 15) )
+        
+        textLabel.font = UIFont.boldSystemFontOfSize(16.0)
+        textLabel.textColor = UIColor.blackColor()
+        
+        if section == 0
+        {
+            textLabel.text = "Active"
+        } else if section == 1
+        {
+            textLabel.text =  "Muted"
+        } else {
+            textLabel.text = "New"
+        }
+        
+        header.addSubview(textLabel)
+        
+        return header
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let vc : NotifcationController! = self.storyboard?.instantiateViewControllerWithIdentifier("Notifications") as NotifcationController
         //self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
-        vc.stream = active[indexPath.row]
+        
+        switch( indexPath.section ) {
+        case 0:
+            vc.stream = active[ indexPath.row ]
+            break
+        case 1:
+            vc.stream = self.muted[ indexPath.row ]
+            break
+        case 2:
+            vc.stream = self.newStreams[ indexPath.row ]
+            break
+        default:
+            println("Error, section not found in didSelectRowAtIndexPath")
+        }
+        
         self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
     }
 
@@ -181,8 +223,13 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         self.muted = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
         self.newStreams = [Stream(title: "WompWompWomp"), Stream(title: "CatDog"), Stream(title: "The Rains in Africa")]
 
-        self.searchDisplayController?.displaysSearchBarInNavigationBar = true
+        //Colors:
+        self.view.backgroundColor = self.cellColor //background of view
+        self.navigationController?.navigationBar.barTintColor = self.backColor //background in nav-bar
+        self.navigationController?.navigationBar.tintColor = UIColor.blackColor() //text color in nav-bar
         
+        //Navigation Bar:
+        self.searchDisplayController?.displaysSearchBarInNavigationBar = true
         
         let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Add", style: .Plain, target: self, action: "addStream")
         self.navigationItem.rightBarButtonItem = rightSideButton
