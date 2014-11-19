@@ -93,6 +93,22 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?{
+        
+        var header = tableViewHeader( headerFrame: CGRectMake(0, 0, tableView.bounds.size.width, 30), textFrame: CGRectMake(20, 5, tableView.bounds.size.width - 20 - 10, 15) )
+        
+        switch( section )
+        {
+        case 0:
+            header.setText( "Notification Frequency" )
+            break
+        case 1:
+            header.setText( "Location" )
+            break
+        default:
+            header.setText( "Sounds" )
+        }
+        
+        /*
         var header: UIView = UIView( frame: CGRectMake(0, 0, tableView.bounds.size.width, 30) )
         header.backgroundColor = self.backColor
         
@@ -112,6 +128,7 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
         }
         
         header.addSubview(textLabel)
+        */
         
         return header
     }

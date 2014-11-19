@@ -78,17 +78,10 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?{
-        var header: UIView = UIView( frame: CGRectMake(0, 0, tableView.bounds.size.width, 30) )
-        header.backgroundColor = self.backColor
         
-        var textLabel: UILabel = UILabel( frame: CGRectMake(20, 5, tableView.bounds.size.width - 20 - 10, 15) )
+        var header = tableViewHeader( headerFrame: CGRectMake(0, 0, tableView.bounds.size.width, 30), textFrame: CGRectMake(20, 5, tableView.bounds.size.width - 20 - 10, 15) )
         
-        textLabel.font = UIFont.boldSystemFontOfSize(16.0)
-        textLabel.textColor = UIColor.blackColor()
-        
-        textLabel.text = self.SUBJECT
-        
-        header.addSubview(textLabel)
+        header.setText( self.SUBJECT )
         
         return header
     }

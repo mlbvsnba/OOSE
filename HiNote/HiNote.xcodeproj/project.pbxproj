@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		201A5D5C1A1D1E4D00F771BE /* TableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201A5D5B1A1D1E4D00F771BE /* TableViewHeader.swift */; };
 		3E0CE75D1A0DA4EC00D21101 /* Classes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0CE75C1A0DA4EC00D21101 /* Classes.swift */; };
 		3E95B6D51A0561C600AC73B7 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E95B6D41A0561C600AC73B7 /* SettingsController.swift */; };
 		3EF5F8231A03064500E5B177 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8221A03064500E5B177 /* AppDelegate.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		201A5D5B1A1D1E4D00F771BE /* TableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewHeader.swift; sourceTree = "<group>"; };
 		3E0CE75C1A0DA4EC00D21101 /* Classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Classes.swift; sourceTree = "<group>"; };
 		3E95B6D41A0561C600AC73B7 /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		3EF5F81D1A03064500E5B177 /* HiNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiNote.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +92,7 @@
 				3EF5F8221A03064500E5B177 /* AppDelegate.swift */,
 				3EF5F8241A03064500E5B177 /* ViewController.swift */,
 				3E0CE75C1A0DA4EC00D21101 /* Classes.swift */,
+				201A5D5B1A1D1E4D00F771BE /* TableViewHeader.swift */,
 				3EF5F8261A03064500E5B177 /* Main.storyboard */,
 				3E95B6D41A0561C600AC73B7 /* SettingsController.swift */,
 				3EF5F8421A0308DC00E5B177 /* StreamTableView.swift */,
@@ -231,6 +234,7 @@
 				3EF5F8451A03090900E5B177 /* NotificationTableView.swift in Sources */,
 				3E0CE75D1A0DA4EC00D21101 /* Classes.swift in Sources */,
 				3EF5F8251A03064500E5B177 /* ViewController.swift in Sources */,
+				201A5D5C1A1D1E4D00F771BE /* TableViewHeader.swift in Sources */,
 				3EF5F8471A03105900E5B177 /* notificationCell.swift in Sources */,
 				3EF5F8231A03064500E5B177 /* AppDelegate.swift in Sources */,
 				3EF5F8431A0308DC00E5B177 /* StreamTableView.swift in Sources */,
