@@ -1,0 +1,7 @@
+Group 17,
+
+This was a pretty good presentation.  You did a fine job of summarizing your application's fetures.  It was good to see that you were using diagrams, but your activity diagram syntax is still incorrect (as we informed you for previous iterations).  You were also using a somewhat unusual relational diagram; UML has a standard for that as well.
+
+That said, you had a good live demo and your discussion of your architecture was decent.  You also dealt with the Q&A session quite well.  Overall, good job.  :)
+
+Total Score: 93/100
