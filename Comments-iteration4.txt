@@ -1,0 +1,9 @@
+Group 17,
+
+Congratulations on a successful Iteration 4.  It seems like you met most of your goals for this iteration and that things are progressing nicely.  Your group has been quite successful in assimilating Django and Swift, which are two disparate technologies (one of which is not yet thoroughly documented).  It's also good that, despite the very cavalier nature of Python, you've done well at keeping your code principled and structured.
+
+I have only two complaints about this iteration.  First, Iteration 4 was required to have unit tests; it does not appear that you have any for either the client or the server.  Second, your code is characterized by a complete lack of auto-documentation comments.  You'll want to fix both of these for Iteration 5; the penalty we assign to each of these problems increases with each iteration.
+
+Given where you are, however, it seems that you'll be able to manage this without too much fuss.  Best of luck on your further development.  :)
+
+Total Score: 95/100
