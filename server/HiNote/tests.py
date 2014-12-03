@@ -51,6 +51,26 @@ class ViewsTest(TestCase):
         self.assertEqual(dev.username, 'test')
         self.assertTrue(dev.check_password('testpass'))
 
+    def test_user_signup(self):
+        response = self.client.get('/user_signup/')
+        self.assertEqual(response.status_code, 200)
+        data = {'first_name': 'FTest', 'last_name': 'LName',
+                'email': 'fake@fake.com', 'username': 'test',
+                'password': 'testpass'}
+        response = self.client.post('/user_signup/', data)
+        self.assertEqual(response.status_code, 200)
+        result = response.content.strip()
+        self.assertEqual(result, 'success')
+        try:
+            user = CommonUser.objects.get(username='test')
+        except ObjectDoesNotExist:
+            self.fail("User name lookup for created user failed")
+        self.assertEqual(user.first_name, 'FTest')
+        self.assertEqual(user.last_name, 'LName')
+        self.assertEqual(user.email, 'fake@fake.com')
+        self.assertEqual(user.username, 'test')
+        self.assertTrue(user.check_password('testpass'))
+
     def test_create_subscription(self):
         key = Developer.create_api_key()
         dev = Developer.objects.create(api_key=key, username="dev1",

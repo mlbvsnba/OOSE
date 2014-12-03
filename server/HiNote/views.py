@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from HiNote.models import Developer
 from django.shortcuts import render
 from HiNote.models import DeveloperForm
+from HiNote.models import CommonUserForm
 from HiNote.models import SubscriptionCreationForm
 from HiNote.models import PushNotificationForm
 from HiNote.models import Subscription
@@ -20,6 +21,17 @@ def dev_signup(request):
             return render(request, 'basic_form.html', {'plain_response': dev.api_key})
     else:
         form = DeveloperForm()
+    return render(request, 'basic_form.html', {'form': form})
+
+
+def user_signup(request):
+    if request.method == 'POST':
+        form = CommonUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            return render(request, 'basic_form.html', {'plain_response': 'success'})
+    else:
+       form = CommonUserForm()
     return render(request, 'basic_form.html', {'form': form})
 
 
