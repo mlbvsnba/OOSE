@@ -7,8 +7,13 @@ from django.forms import ModelForm
 class CommonUser(django.contrib.auth.models.User):
     ## Django's built-in common (non-developer) user.
     # This user can subscribe to lists and has a SubscriptionSettings object for each list it is subscribed to.
-    #By using the django User base-class, we can have assured security with regards to user authentication.
+    # By using the django User base-class, we can have assured security with regards to user authentication.
     pass
+
+
+class IOSDevice(models.Model):
+    user = models.ForeignKey(CommonUser)
+    token = models.CharField(max_length=64, blank=False, null=False)
 
 
 class SubscriptionSettings(models.Model):
