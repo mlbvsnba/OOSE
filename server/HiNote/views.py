@@ -31,8 +31,7 @@ def user_signup(request):
             user = form.save()
             return render(request, 'basic_form.html', {'plain_response': 'success'})
     else:
-       form = CommonUserForm()
-    return render(request, 'basic_form.html', {'form': form})
+       return render(request, 'basic_form.html', {'plain_response': 'must be a post request'})
 
 
 def make_subscription(request):
