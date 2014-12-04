@@ -22,6 +22,26 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     var cellColor: UIColor = UIColor(red: CGFloat(200/255.0), green: CGFloat(228/255.0), blue: CGFloat(224/255.0), alpha: CGFloat(1.0))
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell: StreamCell
+        
+        if( tableView == self.searchDisplayController!.searchResultsTableView ) {
+            cell = StreamCell( text: searchResults[ indexPath.row ].title )
+            return cell
+        }
+        
+        switch( indexPath.section )
+        {
+        case 0: cell = StreamCell( text: self.active[ indexPath.row ].title )
+            break
+        case 1: cell = StreamCell( text: self.muted[ indexPath.row ].title )
+            break
+        case 2: cell = StreamCell( text: self.newStreams[ indexPath.row ].title )
+             break
+        default: cell = StreamCell()
+        }
+        
+        return cell
+        /*
         var cell = UITableViewCell()
         
         cell.backgroundColor = self.cellColor
@@ -43,6 +63,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         }
 
         return cell
+        */
     }
     
     func getNotifications(id: String, stream: Stream) {

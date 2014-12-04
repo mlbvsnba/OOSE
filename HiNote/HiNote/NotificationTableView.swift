@@ -13,7 +13,11 @@ import UIKit
 class NotifcationController:  UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate  {
     
     var stream: Stream = Stream()
+    var notificationStream: NotificationStream = NotificationStream()
+    
     var searchResults: [Notification] = []
+    var notificationSearchResults: [NotificationInfo] = []
+    
     //var message: [String] = ["Building Collapse in Towson", "JHU to lay off 2000 employees", "New Bar to open in Remington"]
     //var times: [String] = ["Today, 8:50pm near Towson, MD", "Today, 5:00pm near Baltimore, MD", "Today, 4:49pm near Baltimore, MD"]
     
@@ -30,8 +34,8 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
     
     func filterContentForSearchText(searchText: String) {
         // Filter the array using the filter method
-        self.searchResults = (self.stream.Notifications).filter({( notification: Notification) -> Bool in
-            let stringMatch = notification.title.rangeOfString(searchText)
+        self.notificationSearchResults = (self.notificationStream.getNotifications()).filter({( notificationInfo: NotificationInfo) -> Bool in
+            let stringMatch = notificationInfo.text.rangeOfString(searchText)
             return (stringMatch != nil)
         })
     }
@@ -49,7 +53,11 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        stream.addNotifications([Notification(title: "First", subtitle: "first Note"), Notification(title: "Second", subtitle: "second Note")])
+        //stream.addNotifications([Notification(title: "First", subtitle: "first Note"), Notification(title: "Second", subtitle: "second Note")])
+        
+        self.notificationStream.addNotifications([NotificationInfo(dev: "Matt", notificationText: "One", notificationUrl: "google.com",
+            notificationTime: NSDate()), NotificationInfo(dev: "Cameron", notificationText: "It's ma biffday", notificationUrl: "google.com", notificationTime: NSDate())])
+        
         SUBJECT = stream.title
         self.searchDisplayController?.displaysSearchBarInNavigationBar = true
         let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Settings", style: .Plain, target: self, action: "settings")
@@ -88,6 +96,24 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
+        //var cellText = self.stream.Notifications[indexPath.row].subtitle
+        //var cellSubText = self.stream.Notifications[indexPath.row].subtitle
+        
+        //var currentCellDetails = NotificationInfo(dev: "Matt", notifactionText: cellText, notificationUrl: "www.google.com", notificationTime: NSDate())
+        
+        var currentCellDetails: NotificationInfo
+        
+        if( tableView == self.searchDisplayController!.searchResultsTableView ) {
+            currentCellDetails = self.notificationSearchResults[ indexPath.row ]
+        } else {
+            currentCellDetails = self.notificationStream.getNoticationAtIndex( indexPath.row )
+        }
+        
+        var cell = NotificationCell( style: .Subtitle, reuseIdentifier: "CellSubtitle", info: currentCellDetails )
+        
+        //TODO Search
+        
+        /*
         var cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "CellSubtitle")
         cell.backgroundColor = self.cellColor
         
@@ -96,17 +122,21 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
             cell.detailTextLabel?.text = searchResults[indexPath.row].subtitle
             return cell
         }
+        
         cell.textLabel.text = self.stream.Notifications[indexPath.row].title
         cell.detailTextLabel?.text = self.stream.Notifications[indexPath.row].subtitle
+        return cell
+        */
         return cell
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         if  tableView == self.searchDisplayController!.searchResultsTableView {
-            return self.searchResults.count
+            return self.notificationSearchResults.count
         }
-        return stream.Notifications.count
+        
+        return self.notificationStream.getNotificationCount()
     }
     
     func getNotificationsFromServer()

@@ -1,5 +1,5 @@
 //
-//  notificationCell.swift
+//  NotificationCell.swift
 //  HiNote
 //
 //  Created by cameron on 10/30/14.
@@ -10,23 +10,55 @@ import Foundation
 import UIKit
 
 class NotificationCell: UITableViewCell {
-    let label = UILabel()
+    //let label: UILabel
+    var details: NotificationInfo
+    let colorScheme: ColorScheme
     
     override init() {
+        //self.label = UILabel()
+        self.details = NotificationInfo()
+        self.colorScheme = ColorScheme()
         super.init()
-        label.text = "woo"
-        self.addSubview(label)
     }
 
     required init(coder aDecoder: NSCoder) {
-        super.init()
-        label.text = "woo"
-        self.addSubview(label)
-    }
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        label.text = "woo"
-        self.addSubview(label)
+       // self.label = UILabel()
+        self.details = NotificationInfo()
+        self.colorScheme = ColorScheme()
+        super.init( coder: aDecoder )
     }
     
+    override init(frame: CGRect) {
+      //  self.label = UILabel()
+        self.details = NotificationInfo()
+        self.colorScheme = ColorScheme()
+        super.init( frame: frame )
+    }
+    
+    init( style: UITableViewCellStyle, reuseIdentifier: String, info: NotificationInfo ) {
+        self.details = info
+        self.colorScheme = ColorScheme()
+        super.init( style: style, reuseIdentifier: reuseIdentifier )
+        self.setCellFeatures()
+    }
+    
+    func setDetails(info: NotificationInfo) {
+        self.details = info
+        self.setCellFeatures()
+    }
+    
+    func getDetails() -> NotificationInfo
+    {
+        return self.details
+    }
+    
+    func setCellFeatures()
+    {
+        self.textLabel.text = self.details.text
+        self.detailTextLabel?.text = self.details.subText
+        
+        //colors
+        self.backgroundColor = self.colorScheme.cellColor
+        
+    }
 }
