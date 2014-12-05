@@ -23,14 +23,39 @@ class Notification {
 
 class Stream {
     var title: String
-    var Notifications: [Notification] = []
+    var notifications: [NotificationInfo] = []
     init() {
         self.title = "Stream Title Not Initilized"
     }
     init(title:String) {
         self.title = title
     }
-    func addNotifications(toAdd: [Notification]) {
-        self.Notifications.extend(toAdd)
+    func addNotifications(toAdd: [NotificationInfo]) {
+        self.notifications.extend(toAdd)
     }
+    
+    func getNoticationAtIndex( index: Int ) -> NotificationInfo
+    {
+        if( self.notifications.count < index ) {
+            return NotificationInfo()
+        }
+        
+        return self.notifications[ index ]
+    }
+    
+    func getNotificationCount() -> Int
+    {
+        return self.notifications.count
+    }
+    
+    func getNotifications() -> [NotificationInfo]
+    {
+        return self.notifications
+    }
+    
+    func getTitle() -> String
+    {
+        return self.title
+    }
+
 }

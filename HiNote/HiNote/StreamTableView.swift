@@ -18,9 +18,8 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     var searchResults: [Stream] = []
     var con: UISearchDisplayController = UISearchDisplayController()
     
-    var backColor: UIColor = UIColor(red: CGFloat(108/255.0), green: CGFloat(172/255.0), blue: CGFloat(178/255.0), alpha: CGFloat(1.0))
-    var cellColor: UIColor = UIColor(red: CGFloat(200/255.0), green: CGFloat(228/255.0), blue: CGFloat(224/255.0), alpha: CGFloat(1.0))
-    
+    let colors = ColorScheme()
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: StreamCell
         
@@ -41,29 +40,6 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         }
         
         return cell
-        /*
-        var cell = UITableViewCell()
-        
-        cell.backgroundColor = self.cellColor
-        
-        if  tableView == self.searchDisplayController!.searchResultsTableView {
-            cell.textLabel.text = searchResults[indexPath.row].title
-            return cell
-        }
-        
-        
-        if indexPath.section == 0 {
-        cell.textLabel.text = active[indexPath.row].title
-        }
-        if indexPath.section == 1 {
-            cell.textLabel.text = muted[indexPath.row].title
-        }
-        if indexPath.section == 2 {
-                cell.textLabel.text = newStreams[indexPath.row].title
-        }
-
-        return cell
-        */
     }
     
     func getNotifications(id: String, stream: Stream) {
@@ -77,10 +53,11 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
                 for notification in notificationArray {
                 if let streamJSON = notification as? NSDictionary {
                     if let nextJSON = streamJSON["fields"] as? NSDictionary {
-                        stream.addNotifications( [Notification(title: nextJSON["contents"]as String!, subtitle: "Legit content")])
+                        stream.addNotifications( [NotificationInfo(dev: "Matt", notificationText: nextJSON["contents"]as String!, notificationUrl: "http://www.google.com", notificationTime: NSDate() )])
                     }
                 }
-                }
+                } //dev: String, notificationText: String, notificationUrl: String,
+                //notificationTime: NSDate
             }
     })
     task.resume()
@@ -198,13 +175,13 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         
         switch( indexPath.section ) {
         case 0:
-            vc.stream = active[ indexPath.row ]
+            vc.notificationStream = active[ indexPath.row ]
             break
         case 1:
-            vc.stream = self.muted[ indexPath.row ]
+            vc.notificationStream = self.muted[ indexPath.row ]
             break
         case 2:
-            vc.stream = self.newStreams[ indexPath.row ]
+            vc.notificationStream = self.newStreams[ indexPath.row ]
             break
         default:
             println("Error, section not found in didSelectRowAtIndexPath")
@@ -243,9 +220,9 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         self.newStreams = [Stream(title: "WompWompWomp"), Stream(title: "CatDog"), Stream(title: "The Rains in Africa")]
 
         //Colors:
-        self.view.backgroundColor = self.cellColor //background of view
-        self.navigationController?.navigationBar.barTintColor = self.backColor //background in nav-bar
-        self.navigationController?.navigationBar.tintColor = UIColor.blackColor() //text color in nav-bar
+        self.view.backgroundColor = self.colors.getCellColor() //background of view
+        self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor() //background in nav-bar
+        self.navigationController?.navigationBar.tintColor = self.colors.getTextColor() // UIColor.blackColor() //text color in nav-bar
         
         //Navigation Bar:
         self.searchDisplayController?.displaysSearchBarInNavigationBar = true

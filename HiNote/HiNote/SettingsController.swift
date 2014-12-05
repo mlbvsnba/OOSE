@@ -26,13 +26,15 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
     let FREQUENCY_TAG = 99
     let count: UITextField = UITextField(frame: CGRectMake(0, 0, 40, 40))
     
+    let colors = ColorScheme()
+    
     var backColor: UIColor = UIColor(red: CGFloat(108/255.0), green: CGFloat(172/255.0), blue: CGFloat(178/255.0), alpha: CGFloat(1.0))
     var cellColor: UIColor = UIColor(red: CGFloat(200/255.0), green: CGFloat(228/255.0), blue: CGFloat(224/255.0), alpha: CGFloat(1.0))
     
     /* TableView Functions */
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
-        cell.backgroundColor = self.cellColor
+        cell.backgroundColor = self.colors.getCellColor()
         
         if indexPath.section == 0 {
             if indexPath.row == 0 {
@@ -108,28 +110,6 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
             header.setText( "Sounds" )
         }
         
-        /*
-        var header: UIView = UIView( frame: CGRectMake(0, 0, tableView.bounds.size.width, 30) )
-        header.backgroundColor = self.backColor
-        
-        var textLabel: UILabel = UILabel( frame: CGRectMake(20, 5, tableView.bounds.size.width - 20 - 10, 15) )
-        
-        textLabel.font = UIFont.boldSystemFontOfSize(16.0)
-        textLabel.textColor = UIColor.blackColor()
-        
-        if section == 0
-        {
-            textLabel.text = "Notifcation Frequency"
-        } else if section == 1
-        {
-            textLabel.text =  "Location"
-        } else {
-            textLabel.text = "Sounds"
-        }
-        
-        header.addSubview(textLabel)
-        */
-        
         return header
     }
     
@@ -157,10 +137,10 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
         super.viewDidLoad()
         self.tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 0))
         
-        self.view.backgroundColor = self.cellColor
+        self.view.backgroundColor = self.colors.getCellColor()
         
-        self.navigationController?.navigationBar.barTintColor = self.backColor
-        self.navigationController?.navigationBar.tintColor = UIColor.blackColor() //text color in nav-bar
+        self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor()
+        self.navigationController?.navigationBar.tintColor = self.colors.getTextColor() //text color in nav-bar
         // Do any additional setup after loading the view, typically from a nib.
     }
     

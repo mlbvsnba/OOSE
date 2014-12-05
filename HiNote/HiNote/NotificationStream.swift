@@ -42,4 +42,9 @@ class NotificationStream {
     {
         return self.notifications
     }
+    
+    func getTitle() -> String
+    {
+        return self.title
+    }
 }

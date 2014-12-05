@@ -17,8 +17,8 @@ class StreamCell: UITableViewCell {
         super.init()
     }
     
-    override  init(style style: UITableViewCellStyle,
-        reuseIdentifier reuseIdentifier: String?)    {
+    override  init(#style: UITableViewCellStyle,
+        #reuseIdentifier: String?)    {
         super.init( style: style, reuseIdentifier: reuseIdentifier )
     }
     

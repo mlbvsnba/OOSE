@@ -41,4 +41,9 @@ class NotificationInfo {
         self.subText = self.developer + " at " + timeDescription
     }
     
+    func getUrl() -> String
+    {
+        return self.url
+    }
+    
 }
