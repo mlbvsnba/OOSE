@@ -8,8 +8,10 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
-class StreamController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, NSURLConnectionDelegate  {
+class StreamController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, NSURLConnectionDelegate, CLLocationManagerDelegate  {
+    
     var active: [Stream] = []
     var muted: [Stream] = []
     var newStreams: [Stream] = []
@@ -19,6 +21,8 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     var con: UISearchDisplayController = UISearchDisplayController()
     
     let colors = ColorScheme()
+    
+    var locationManager: CLLocationManager
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: StreamCell
@@ -211,6 +215,12 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         println( "Adding: " + categoryToAdd )
     }
     
+    required init(coder aDecoder: NSCoder) {
+        self.locationManager = CLLocationManager()
+        super.init( coder: aDecoder )
+        //fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getStreams()
@@ -219,6 +229,17 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         self.muted = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
         self.newStreams = [Stream(title: "WompWompWomp"), Stream(title: "CatDog"), Stream(title: "The Rains in Africa")]
 
+        
+        //Location:
+        println("asking for location")
+        self.locationManager = CLLocationManager()
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestAlwaysAuthorization()
+        self.locationManager.startUpdatingLocation()
+        
+        
+        
         //Colors:
         self.view.backgroundColor = self.colors.getCellColor() //background of view
         self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor() //background in nav-bar
@@ -236,6 +257,53 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    //Location Delegate    
+    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        locationManager.stopUpdatingLocation()
+        print( error )
+    }
+    
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        println("updated location")
+        
+        var pastLocations = locations as NSArray
+        var currentLocation = pastLocations.lastObject as CLLocation
+        var coord = currentLocation.coordinate
+            
+        println(coord.latitude)
+        println(coord.longitude)
+        
+        //TODO: get location to server side
+    }
+    
+    /*
+    func locationManager(manager: CLLocationManager!,
+        didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+            var shouldIAllow = false
+            
+            switch status {
+            case CLAuthorizationStatus.Restricted:
+                locationStatus = "Restricted Access to location"
+            case CLAuthorizationStatus.Denied:
+                locationStatus = "User denied access to location"
+            case CLAuthorizationStatus.NotDetermined:
+                locationStatus = "Status not determined"
+            default:
+                locationStatus = "Allowed to location Access"
+                shouldIAllow = true
+            }
+            NSNotificationCenter.defaultCenter().postNotificationName("LabelHasbeenUpdated", object: nil)
+            if (shouldIAllow == true) {
+                NSLog("Location to Allowed")
+                // Start location services
+                locationManager.startUpdatingLocation()
+            } else {
+                NSLog("Denied access: \(locationStatus)")
+            }
+    }
+    */
     
     
 }

@@ -20,7 +20,7 @@ import UIKit
 import Foundation
 import UIKit
 
-class SettingsController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate  {
+class SettingsController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate   {
     
     let FREQUENCY_DATA = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"]
     let FREQUENCY_TAG = 99
@@ -131,12 +131,14 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
     
     func pickerView( pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int ) {
         self.count.text = FREQUENCY_DATA[ row ]
+        //TODO: forward to server side
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 0))
+        self.tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 0)  )
         
+        //colors
         self.view.backgroundColor = self.colors.getCellColor()
         
         self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor()
