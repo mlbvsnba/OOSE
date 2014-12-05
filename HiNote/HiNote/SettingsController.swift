@@ -1,15 +1,4 @@
 //
-//  SettingsController.swift
-//  HiNote
-//
-//  Created by cameron on 11/1/14.
-//  Copyright (c) 2014 cameron. All rights reserved.
-//
-
-import Foundation
-import UIKit
-
-//
 //  StreamTableView.swift
 //  HiNote
 //
@@ -28,8 +17,19 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
     
     let colors = ColorScheme()
     
-    var backColor: UIColor = UIColor(red: CGFloat(108/255.0), green: CGFloat(172/255.0), blue: CGFloat(178/255.0), alpha: CGFloat(1.0))
-    var cellColor: UIColor = UIColor(red: CGFloat(200/255.0), green: CGFloat(228/255.0), blue: CGFloat(224/255.0), alpha: CGFloat(1.0))
+    var unlimitedOnOff: UISwitch
+    var locationOnOff: UISwitch
+    var muteOnOff: UISwitch
+    
+    var picker: UIPickerView
+
+    required init(coder aDecoder: NSCoder) {
+        self.unlimitedOnOff = UISwitch()
+        self.locationOnOff = UISwitch()
+        self.muteOnOff = UISwitch()
+        self.picker = UIPickerView()
+        super.init( coder: aDecoder )
+    }
     
     /* TableView Functions */
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -38,18 +38,19 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
         
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-            cell.textLabel.text = "Unlimited"
-            let UnlimitedOnOff: UISwitch  = UISwitch();
-            cell.accessoryView = UnlimitedOnOff;
+                cell.textLabel.text = "Unlimited"
+                self.unlimitedOnOff  = UISwitch();
+                self.unlimitedOnOff.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+                cell.accessoryView = self.unlimitedOnOff;
             }
             else if indexPath.row == 1 {
                 cell.textLabel.text = "Max Daily Notifications"
                 
                 
-                let picker: UIPickerView = UIPickerView()
+                self.picker = UIPickerView()
                 
-                picker.dataSource = self
-                picker.delegate = self
+                self.picker.dataSource = self
+                self.picker.delegate = self
                 
                 count.tag = FREQUENCY_TAG
                 count.inputView = picker
@@ -60,13 +61,15 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
             
         }
         else if indexPath.section == 1 {
-            let LocationOnOff: UISwitch  = UISwitch();
-            cell.accessoryView = LocationOnOff;
+            self.locationOnOff  = UISwitch();
+            self.locationOnOff.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+            cell.accessoryView = self.locationOnOff;
             cell.textLabel.text = "Allow Location Based Notifications"
         }
         else {
-            let MuteOnOff: UISwitch  = UISwitch();
-            cell.accessoryView = MuteOnOff;
+            self.muteOnOff = UISwitch();
+            self.muteOnOff.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+            cell.accessoryView = self.muteOnOff;
             cell.textLabel.text = "Mute"
         }
         return cell
@@ -131,7 +134,7 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
     
     func pickerView( pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int ) {
         self.count.text = FREQUENCY_DATA[ row ]
-        //TODO: forward to server side
+        self.updatePreferences()
     }
     
     override func viewDidLoad() {
@@ -151,5 +154,32 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
         // Dispose of any resources that can be recreated.
     }
     
+    //Switches
+    func stateChanged(switchState: UISwitch) {
+        if( self.unlimitedOnOff.on )
+        {
+            //Unlimited is on
+            self.count.text = "∞"
+            self.picker.userInteractionEnabled = false
+        } else {
+            self.count.text = "20"
+            self.picker.userInteractionEnabled = true
+        }
+        if( self.locationOnOff.on )
+        {
+            //location on
+        }
+        if( self.muteOnOff.on )
+        {
+            //muted on
+        }
+        
+        self.updatePreferences()
+    }
+    
+    func updatePreferences()
+    {
+        //TODO send preferences to server
+    }
     
 }
