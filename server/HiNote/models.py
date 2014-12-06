@@ -29,6 +29,16 @@ class CommonUserForm(ModelForm):
         return user
 
 
+class RegisterDeviceForm(forms.Form):
+    username = forms.CharField(max_length=30)
+    password = forms.TextField()
+    token = models.CharField(max_length=64)
+
+    def save(self, commit=True):
+        user = CommonUser.objects.get(username=self.cleaned_data['username'])
+
+
+
 class SubscriptionSettings(models.Model):
     ## A specific User's settings for a Subscription.
 

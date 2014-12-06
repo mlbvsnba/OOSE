@@ -53,7 +53,7 @@ class ViewsTest(TestCase):
 
     def test_user_signup(self):
         response = self.client.get('/user_signup/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 405)
         data = {'first_name': 'FTest', 'last_name': 'LName',
                 'email': 'fake@fake.com', 'username': 'test',
                 'password': 'testpass'}
