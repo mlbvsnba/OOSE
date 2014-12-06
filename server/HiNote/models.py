@@ -31,7 +31,7 @@ class CommonUserForm(ModelForm):
 
 class RegisterDeviceForm(forms.Form):
     username = forms.CharField(max_length=30)
-    password = forms.TextField()
+    password = forms.CharField()
     token = models.CharField(max_length=64)
 
     def save(self, commit=True):
