@@ -112,16 +112,18 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         var request = NSMutableURLRequest(URL: NSURL(string: "http://localhost:8000/user_signup/")!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
-        var params = ["username": username_dialog_box!.text!,
-        "password": password_dialog_box!.text!, "email": email_dialog_box!.text!,
-            "first_name": username_dialog_box!.text!, "last_name":"jameson"] as Dictionary<String, String>
         var err: NSError?
-        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-          print(response)
-          print(error)
-          print(params)
+        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! + "&email=" + email_dialog_box!.text! + "&first_name=" + name_dialog_box!.text! + "&last_name=jameson"
+        request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
+        
+        //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+        //print(request.HTTPBody)
+        var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
+          println(response)
+          println(NSString(data: data, encoding: NSUTF8StringEncoding))
+          //println(error)
+            //println(params)
         })
         task.resume()
     }
