@@ -59,7 +59,7 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         email_dialog_box!.borderStyle = UITextBorderStyle.Line
         
         let register = UIButton(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.8, self.view.frame.width*0.5, BOXHEIGHT*2))
-        register.addTarget(self, action: "registerForService", forControlEvents: UIControlEvents.TouchUpInside)
+        register.addTarget(self, action: "seeIfCanMoveOn", forControlEvents: UIControlEvents.TouchUpInside)
         register.setTitle("Register", forState: UIControlState.Normal)
         register.setTitleColor(UIColor(white: 0, alpha: 1), forState: UIControlState.Normal)
         
@@ -95,16 +95,27 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
     }
     
     func emailCheck() -> Bool {
-        return !(email_dialog_box!.text! == "")
+        //emails have atleast 7 letters
+        if(countElements(email_dialog_box!.text!)>7) {
+            //has an at symbol
+        return (email_dialog_box!.text!.rangeOfString("@") != nil)
+        }
+        return false
     }
     
-    func registerForService() {
+    func seeIfCanMoveOn() {
+        if (registerForService()) {
+            pushNext()
+        }
+    }
+    
+    func registerForService() -> Bool {
         if(userNameCheck() && emailCheck() && nameCheck() && passwordCheck()) {
             registerRequest()
+            return true
         }
-        else {
-            error_banner!.text = "Please Check your Boxes"
-        }
+        error_banner!.text = "Please Check your Boxes"
+        return false
     }
     
     
