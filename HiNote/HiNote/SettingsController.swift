@@ -1,15 +1,4 @@
 //
-//  SettingsController.swift
-//  HiNote
-//
-//  Created by cameron on 11/1/14.
-//  Copyright (c) 2014 cameron. All rights reserved.
-//
-
-import Foundation
-import UIKit
-
-//
 //  StreamTableView.swift
 //  HiNote
 //
@@ -20,34 +9,48 @@ import UIKit
 import Foundation
 import UIKit
 
-class SettingsController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate  {
+class SettingsController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate   {
     
     let FREQUENCY_DATA = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"]
     let FREQUENCY_TAG = 99
     let count: UITextField = UITextField(frame: CGRectMake(0, 0, 40, 40))
     
-    var backColor: UIColor = UIColor(red: CGFloat(108/255.0), green: CGFloat(172/255.0), blue: CGFloat(178/255.0), alpha: CGFloat(1.0))
-    var cellColor: UIColor = UIColor(red: CGFloat(200/255.0), green: CGFloat(228/255.0), blue: CGFloat(224/255.0), alpha: CGFloat(1.0))
+    let colors = ColorScheme()
+    
+    var unlimitedOnOff: UISwitch
+    var locationOnOff: UISwitch
+    var muteOnOff: UISwitch
+    
+    var picker: UIPickerView
+
+    required init(coder aDecoder: NSCoder) {
+        self.unlimitedOnOff = UISwitch()
+        self.locationOnOff = UISwitch()
+        self.muteOnOff = UISwitch()
+        self.picker = UIPickerView()
+        super.init( coder: aDecoder )
+    }
     
     /* TableView Functions */
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
-        cell.backgroundColor = self.cellColor
+        cell.backgroundColor = self.colors.getCellColor()
         
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-            cell.textLabel.text = "Unlimited"
-            let UnlimitedOnOff: UISwitch  = UISwitch();
-            cell.accessoryView = UnlimitedOnOff;
+                cell.textLabel.text = "Unlimited"
+                self.unlimitedOnOff  = UISwitch();
+                self.unlimitedOnOff.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+                cell.accessoryView = self.unlimitedOnOff;
             }
             else if indexPath.row == 1 {
                 cell.textLabel.text = "Max Daily Notifications"
                 
                 
-                let picker: UIPickerView = UIPickerView()
+                self.picker = UIPickerView()
                 
-                picker.dataSource = self
-                picker.delegate = self
+                self.picker.dataSource = self
+                self.picker.delegate = self
                 
                 count.tag = FREQUENCY_TAG
                 count.inputView = picker
@@ -58,13 +61,15 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
             
         }
         else if indexPath.section == 1 {
-            let LocationOnOff: UISwitch  = UISwitch();
-            cell.accessoryView = LocationOnOff;
+            self.locationOnOff  = UISwitch();
+            self.locationOnOff.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+            cell.accessoryView = self.locationOnOff;
             cell.textLabel.text = "Allow Location Based Notifications"
         }
         else {
-            let MuteOnOff: UISwitch  = UISwitch();
-            cell.accessoryView = MuteOnOff;
+            self.muteOnOff = UISwitch();
+            self.muteOnOff.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+            cell.accessoryView = self.muteOnOff;
             cell.textLabel.text = "Mute"
         }
         return cell
@@ -108,28 +113,6 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
             header.setText( "Sounds" )
         }
         
-        /*
-        var header: UIView = UIView( frame: CGRectMake(0, 0, tableView.bounds.size.width, 30) )
-        header.backgroundColor = self.backColor
-        
-        var textLabel: UILabel = UILabel( frame: CGRectMake(20, 5, tableView.bounds.size.width - 20 - 10, 15) )
-        
-        textLabel.font = UIFont.boldSystemFontOfSize(16.0)
-        textLabel.textColor = UIColor.blackColor()
-        
-        if section == 0
-        {
-            textLabel.text = "Notifcation Frequency"
-        } else if section == 1
-        {
-            textLabel.text =  "Location"
-        } else {
-            textLabel.text = "Sounds"
-        }
-        
-        header.addSubview(textLabel)
-        */
-        
         return header
     }
     
@@ -151,16 +134,18 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
     
     func pickerView( pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int ) {
         self.count.text = FREQUENCY_DATA[ row ]
+        self.updatePreferences()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 0))
+        self.tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 0)  )
         
-        self.view.backgroundColor = self.cellColor
+        //colors
+        self.view.backgroundColor = self.colors.getCellColor()
         
-        self.navigationController?.navigationBar.barTintColor = self.backColor
-        self.navigationController?.navigationBar.tintColor = UIColor.blackColor() //text color in nav-bar
+        self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor()
+        self.navigationController?.navigationBar.tintColor = self.colors.getTextColor() //text color in nav-bar
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -169,5 +154,32 @@ class SettingsController: UITableViewController, UITableViewDataSource, UITableV
         // Dispose of any resources that can be recreated.
     }
     
+    //Switches
+    func stateChanged(switchState: UISwitch) {
+        if( self.unlimitedOnOff.on )
+        {
+            //Unlimited is on
+            self.count.text = "∞"
+            self.picker.userInteractionEnabled = false
+        } else {
+            self.count.text = "20"
+            self.picker.userInteractionEnabled = true
+        }
+        if( self.locationOnOff.on )
+        {
+            //location on
+        }
+        if( self.muteOnOff.on )
+        {
+            //muted on
+        }
+        
+        self.updatePreferences()
+    }
+    
+    func updatePreferences()
+    {
+        //TODO send preferences to server
+    }
     
 }

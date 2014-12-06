@@ -8,8 +8,10 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
-class StreamController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, NSURLConnectionDelegate  {
+class StreamController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, NSURLConnectionDelegate, CLLocationManagerDelegate  {
+    
     var active: [Stream] = []
     var muted: [Stream] = []
     var newStreams: [Stream] = []
@@ -18,30 +20,29 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     var searchResults: [Stream] = []
     var con: UISearchDisplayController = UISearchDisplayController()
     
-    var backColor: UIColor = UIColor(red: CGFloat(108/255.0), green: CGFloat(172/255.0), blue: CGFloat(178/255.0), alpha: CGFloat(1.0))
-    var cellColor: UIColor = UIColor(red: CGFloat(200/255.0), green: CGFloat(228/255.0), blue: CGFloat(224/255.0), alpha: CGFloat(1.0))
+    let colors = ColorScheme()
     
+    var locationManager: CLLocationManager
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = UITableViewCell()
+        var cell: StreamCell
         
-        cell.backgroundColor = self.cellColor
-        
-        if  tableView == self.searchDisplayController!.searchResultsTableView {
-            cell.textLabel.text = searchResults[indexPath.row].title
+        if( tableView == self.searchDisplayController!.searchResultsTableView ) {
+            cell = StreamCell( text: searchResults[ indexPath.row ].title )
             return cell
         }
         
+        switch( indexPath.section )
+        {
+        case 0: cell = StreamCell( text: self.active[ indexPath.row ].title )
+            break
+        case 1: cell = StreamCell( text: self.muted[ indexPath.row ].title )
+            break
+        case 2: cell = StreamCell( text: self.newStreams[ indexPath.row ].title )
+             break
+        default: cell = StreamCell()
+        }
         
-        if indexPath.section == 0 {
-        cell.textLabel.text = active[indexPath.row].title
-        }
-        if indexPath.section == 1 {
-            cell.textLabel.text = muted[indexPath.row].title
-        }
-        if indexPath.section == 2 {
-                cell.textLabel.text = newStreams[indexPath.row].title
-        }
-
         return cell
     }
     
@@ -56,10 +57,11 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
                 for notification in notificationArray {
                 if let streamJSON = notification as? NSDictionary {
                     if let nextJSON = streamJSON["fields"] as? NSDictionary {
-                        stream.addNotifications( [Notification(title: nextJSON["contents"]as String!, subtitle: "Legit content")])
+                        stream.addNotifications( [NotificationInfo(dev: "Matt", notificationText: nextJSON["contents"]as String!, notificationUrl: "http://www.google.com", notificationTime: NSDate() )])
                     }
                 }
-                }
+                } //dev: String, notificationText: String, notificationUrl: String,
+                //notificationTime: NSDate
             }
     })
     task.resume()
@@ -177,13 +179,13 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         
         switch( indexPath.section ) {
         case 0:
-            vc.stream = active[ indexPath.row ]
+            vc.notificationStream = active[ indexPath.row ]
             break
         case 1:
-            vc.stream = self.muted[ indexPath.row ]
+            vc.notificationStream = self.muted[ indexPath.row ]
             break
         case 2:
-            vc.stream = self.newStreams[ indexPath.row ]
+            vc.notificationStream = self.newStreams[ indexPath.row ]
             break
         default:
             println("Error, section not found in didSelectRowAtIndexPath")
@@ -213,6 +215,12 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         println( "Adding: " + categoryToAdd )
     }
     
+    required init(coder aDecoder: NSCoder) {
+        self.locationManager = CLLocationManager()
+        super.init( coder: aDecoder )
+        //fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getStreams()
@@ -221,10 +229,21 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         self.muted = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
         self.newStreams = [Stream(title: "WompWompWomp"), Stream(title: "CatDog"), Stream(title: "The Rains in Africa")]
 
+        
+        //Location:
+        println("asking for location")
+        self.locationManager = CLLocationManager()
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestAlwaysAuthorization()
+        self.locationManager.startUpdatingLocation()
+        
+        
+        
         //Colors:
-        self.view.backgroundColor = self.cellColor //background of view
-        self.navigationController?.navigationBar.barTintColor = self.backColor //background in nav-bar
-        self.navigationController?.navigationBar.tintColor = UIColor.blackColor() //text color in nav-bar
+        self.view.backgroundColor = self.colors.getCellColor() //background of view
+        self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor() //background in nav-bar
+        self.navigationController?.navigationBar.tintColor = self.colors.getTextColor() // UIColor.blackColor() //text color in nav-bar
         
         //Navigation Bar:
         self.searchDisplayController?.displaysSearchBarInNavigationBar = true
@@ -238,6 +257,53 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    //Location Delegate    
+    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        locationManager.stopUpdatingLocation()
+        print( error )
+    }
+    
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        println("updated location")
+        
+        var pastLocations = locations as NSArray
+        var currentLocation = pastLocations.lastObject as CLLocation
+        var coord = currentLocation.coordinate
+            
+        println(coord.latitude)
+        println(coord.longitude)
+        
+        //TODO: get location to server side
+    }
+    
+    /*
+    func locationManager(manager: CLLocationManager!,
+        didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+            var shouldIAllow = false
+            
+            switch status {
+            case CLAuthorizationStatus.Restricted:
+                locationStatus = "Restricted Access to location"
+            case CLAuthorizationStatus.Denied:
+                locationStatus = "User denied access to location"
+            case CLAuthorizationStatus.NotDetermined:
+                locationStatus = "Status not determined"
+            default:
+                locationStatus = "Allowed to location Access"
+                shouldIAllow = true
+            }
+            NSNotificationCenter.defaultCenter().postNotificationName("LabelHasbeenUpdated", object: nil)
+            if (shouldIAllow == true) {
+                NSLog("Location to Allowed")
+                // Start location services
+                locationManager.startUpdatingLocation()
+            } else {
+                NSLog("Denied access: \(locationStatus)")
+            }
+    }
+    */
     
     
 }

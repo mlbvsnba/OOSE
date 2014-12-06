@@ -1,35 +1,25 @@
 //
-//  NotificationClass.swift
+//  NotificationStream.swift
 //  HiNote
 //
-//  Created by cameron on 11/7/14.
+//  Created by matthijs_tas on 12/4/14.
 //  Copyright (c) 2014 cameron. All rights reserved.
 //
 
 import Foundation
 
-class Notification {
-    var title: String
-    var subtitle: String
-    init() {
-        self.title = "Nothing here"
-        self.subtitle = "blank baby blank"
-    }
-    init(title: String, subtitle: String) {
-        self.title = title
-        self.subtitle = subtitle
-    }
-}
-
-class Stream {
+class NotificationStream {
     var title: String
     var notifications: [NotificationInfo] = []
+    
     init() {
         self.title = "Stream Title Not Initilized"
     }
-    init(title:String) {
+    
+    init(title: String) {
         self.title = title
     }
+    
     func addNotifications(toAdd: [NotificationInfo]) {
         self.notifications.extend(toAdd)
     }
@@ -57,5 +47,4 @@ class Stream {
     {
         return self.title
     }
-
 }
