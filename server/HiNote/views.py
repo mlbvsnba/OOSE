@@ -13,6 +13,7 @@ from django.core.exceptions import ValidationError
 from django.core import serializers
 from django.http import HttpResponse
 from django.http import HttpResponseNotAllowed
+from django.views.decorators.csrf import csrf_exempt
 
 
 def dev_signup(request):
@@ -25,7 +26,7 @@ def dev_signup(request):
         form = DeveloperForm()
     return render(request, 'basic_form.html', {'form': form})
 
-
+@csrf_exempt
 def user_signup(request):
     if request.method == 'POST':
         form = CommonUserForm(request.POST)
@@ -35,7 +36,10 @@ def user_signup(request):
     else:
        return HttpResponseNotAllowed(['POST'])
 
+def check_auth(request):
+    pass
 
+@csrf_exempt
 def register_device(request):
     if request.method == 'POST':
         form = RegisterDeviceForm(request.POST)
