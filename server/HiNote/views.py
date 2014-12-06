@@ -64,7 +64,7 @@ def register_device(request):
         device_token = request.POST['device_token']
     except KeyError:
         return HttpResponseBadRequest('device_token must be sent in POST')
-    if user.register_device(device_token) is not None:
+    if user.register_device(device_token, commit=True) is not None:
         return render(request, 'basic_form.html', {'plain_response': 'success'})
     else:
         return HttpResponseBadRequest('add device failed')
