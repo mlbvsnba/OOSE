@@ -38,6 +38,8 @@ def user_signup(request):
         if form.is_valid():
             user = form.save()
             return render(request, 'basic_form.html', {'plain_response': 'success'})
+        else:
+            return HttpResponseBadRequest('invalid POST request - must define all required parameters')
     else:
         return HttpResponseNotAllowed(['POST'])
 

@@ -71,6 +71,20 @@ class ViewsTest(TestCase):
         self.assertEqual(user.username, 'test')
         self.assertTrue(user.check_password('testpass'))
 
+    def test_user_auth_invalid_params(self):
+        response = self.client.get('/check_auth/')
+        self.assertEqual(response.status_code, 405)
+        response = self.client.post('/check_auth/')
+        self.assertEqual(response.status_code, 400)
+        response = self.client.post('/check_auth/', {'username': 'test'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_user_auth(self):
+        user = CommonUser.objects.create(username="test",password="test",
+                                         email="test@test.com",
+                                         first_name="John", last_name="Smith")
+        user.save()
+
     def test_create_subscription(self):
         key = Developer.create_api_key()
         dev = Developer.objects.create(api_key=key, username="dev1",
