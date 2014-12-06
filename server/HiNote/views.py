@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.forms import ModelForm
 from HiNote.models import Developer
 from django.shortcuts import render
+from HiNote.models import CommonUser
 from HiNote.models import DeveloperForm
 from HiNote.models import CommonUserForm
 from HiNote.models import RegisterDeviceForm
@@ -13,7 +14,10 @@ from django.core.exceptions import ValidationError
 from django.core import serializers
 from django.http import HttpResponse
 from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseBadRequest
+from django.http import HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import *
 
 
 def dev_signup(request):
@@ -26,6 +30,7 @@ def dev_signup(request):
         form = DeveloperForm()
     return render(request, 'basic_form.html', {'form': form})
 
+
 @csrf_exempt
 def user_signup(request):
     if request.method == 'POST':
@@ -34,10 +39,31 @@ def user_signup(request):
             user = form.save()
             return render(request, 'basic_form.html', {'plain_response': 'success'})
     else:
-       return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(['POST'])
 
+
+@csrf_exempt
 def check_auth(request):
-    pass
+    if request.method == 'POST':
+        try:
+            username = request.POST['username']
+            password = request.POST['password']
+        except KeyError:
+            return HttpResponseBadRequest('username and password must be sent in POST')
+        user = None
+        found = False
+        try:
+            user = CommonUser.objects.get(username=username)
+            found = user.check_password(password)
+        except ObjectDoesNotExist:
+            pass
+        if found:
+            return render(request, 'basic_form.html', {'plain_response', 'success'})
+        else:
+            return HttpResponseForbidden('username and/or password are incorrect')
+    else:
+        return HttpResponseNotAllowed(['POST'])
+
 
 @csrf_exempt
 def register_device(request):
