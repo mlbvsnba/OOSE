@@ -39,6 +39,7 @@ def user_signup(request):
             user = form.save()
             return render(request, 'basic_form.html', {'plain_response': 'success'})
         else:
+            # this could also mean the username already exists - must change response to that later on
             return HttpResponseBadRequest('invalid POST request - must define all required parameters')
     else:
         return HttpResponseNotAllowed(['POST'])
@@ -60,7 +61,7 @@ def check_auth(request):
         except ObjectDoesNotExist:
             pass
         if found:
-            return render(request, 'basic_form.html', {'plain_response', 'success'})
+            return render(request, 'basic_form.html', {'plain_response': 'success'})
         else:
             return HttpResponseForbidden('username and/or password are incorrect')
     else:
