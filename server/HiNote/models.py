@@ -8,7 +8,12 @@ class CommonUser(django.contrib.auth.models.User):
     ## Django's built-in common (non-developer) user.
     # This user can subscribe to lists and has a SubscriptionSettings object for each list it is subscribed to.
     # By using the django User base-class, we can have assured security with regards to user authentication.
-    pass
+
+    def register_device(self, device_token, commit=True):
+        device = self.iosdevice_set.create(token=device_token)
+        if commit:
+            device.save()
+        return device
 
 
 class IOSDevice(models.Model):
@@ -27,16 +32,6 @@ class CommonUserForm(ModelForm):
         if commit:
             user.save()
         return user
-
-
-class RegisterDeviceForm(forms.Form):
-    username = forms.CharField(max_length=30)
-    password = forms.CharField()
-    token = models.CharField(max_length=64)
-
-    def save(self, commit=True):
-        user = CommonUser.objects.get(username=self.cleaned_data['username'])
-
 
 
 class SubscriptionSettings(models.Model):
