@@ -2,9 +2,9 @@ from django.http import HttpResponseRedirect
 from django.forms import ModelForm
 from HiNote.models import Developer
 from django.shortcuts import render
+from HiNote.models import CommonUser
 from HiNote.models import DeveloperForm
 from HiNote.models import CommonUserForm
-from HiNote.models import RegisterDeviceForm
 from HiNote.models import SubscriptionCreationForm
 from HiNote.models import PushNotificationForm
 from HiNote.models import Subscription
@@ -13,6 +13,10 @@ from django.core.exceptions import ValidationError
 from django.core import serializers
 from django.http import HttpResponse
 from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseBadRequest
+from django.http import HttpResponseForbidden
+from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import *
 
 
 def dev_signup(request):
@@ -26,24 +30,69 @@ def dev_signup(request):
     return render(request, 'basic_form.html', {'form': form})
 
 
+@csrf_exempt
 def user_signup(request):
     if request.method == 'POST':
         form = CommonUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             return render(request, 'basic_form.html', {'plain_response': 'success'})
-    else:
-       return HttpResponseNotAllowed(['POST'])
+        else:
+            # this could also mean the username already exists - must change response to that later on
+            # return HttpResponseBadRequest('invalid POST request - must define all required parameters')
 
-
-def register_device(request):
-    if request.method == 'POST':
-        form = RegisterDeviceForm(request.POST)
-        if form.is_valid():
-            device = form.save()
-            return render(request, 'basic_form.html', {'plain_response': 'success'})
+            return HttpResponseBadRequest("wrong codes " + form.errors)
     else:
         return HttpResponseNotAllowed(['POST'])
+
+
+@csrf_exempt
+def check_auth(request):
+    user_valid, user, response = auth_user(request)
+    if user_valid:
+        return render(request, 'basic_form.html', {'plain_response': 'success'})
+    else:
+        return response
+
+
+@csrf_exempt
+def register_device(request):
+    user_valid, user, response = auth_user(request)
+    if not user_valid:
+        return response
+    try:
+        device_token = request.POST['device_token']
+    except KeyError:
+        return HttpResponseBadRequest('device_token must be sent in POST')
+    if user.register_device(device_token, commit=True) is not None:
+        return render(request, 'basic_form.html', {'plain_response': 'success'})
+    else:
+        return HttpResponseBadRequest('add device failed')
+
+
+def auth_user(request):
+    # checks for a user given a POST response
+    # returns list of (user_valid [boolean], user [CommonUser object], response [HttpResponse])
+    # response if only returned if user_valid is False
+    if request.method == 'POST':
+        try:
+            username = request.POST['username']
+            password = request.POST['password']
+        except KeyError:
+            return False, None, HttpResponseBadRequest('username and password must be sent in POST')
+        user = None
+        found = False
+        try:
+            user = CommonUser.objects.get(username=username)
+            found = user.check_password(password)
+        except ObjectDoesNotExist:
+            pass
+        if found:
+            return True, user, None
+        else:
+            return False, None, HttpResponseForbidden('username and/or password are incorrect')
+    else:
+        return False, None, HttpResponseNotAllowed(['POST'])
 
 
 def make_subscription(request):
@@ -58,7 +107,7 @@ def make_subscription(request):
 
 
 def push_notification(request):
-    if request.method =='POST':
+    if request.method == 'POST':
         form = PushNotificationForm(request.POST)
         if form.is_valid():
             notif = form.save()
