@@ -69,6 +69,31 @@ def register_device(request):
     else:
         return HttpResponseBadRequest('add device failed')
 
+@csrf_exempt
+def get_user_subscriptions(request):
+    pass
+
+
+
+@csrf_exempt
+def subscribe(request):
+    user_valid, user, response = auth_user(request)
+    if not user_valid:
+        return response
+    try:
+        subscription_id = request.POST['sub_id']
+    except KeyError:
+        return HttpResponseBadRequest('sub_id must be sent in POST')
+    try:
+        subscription = Subscription.objects.get(id=subscription_id)
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest('sub_id was invalid')
+    settings = subscription.add_user(user)
+    if settings is not None:
+        return render(request, 'basic_form.html', {'plain_response': 'success'})
+    else:
+        return HttpResponseBadRequest('subscribe failed')
+
 
 def auth_user(request):
     # checks for a user given a POST response

@@ -4,6 +4,7 @@ import django.contrib.auth.models
 from django.forms import ModelForm
 
 
+
 class CommonUser(django.contrib.auth.models.User):
     ## Django's built-in common (non-developer) user.
     # This user can subscribe to lists and has a SubscriptionSettings object for each list it is subscribed to.
@@ -11,7 +12,7 @@ class CommonUser(django.contrib.auth.models.User):
 
     def register_device(self, device_token, commit=True):
         device = self.iosdevice_set.create(token=device_token)
-        if commit:
+        if commit and device is not None:
             device.save()
         return device
 
@@ -101,8 +102,27 @@ class Subscription(models.Model):
     description = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
 
+    def add_user(self, user, save=True):
+        # Adds a user to this subscriptions list of subscribers
+        # @param user the common user to add
+        if not isinstance(user, CommonUser):
+            raise Exception('must be a CommonUser')
+        settings = None
+        try:
+            settings = SubscriptionSettings.objects.get(
+                subscription=self, user=user)
+        except KeyError:
+            pass
+        if settings is not None:
+            return settings
+        settings = self.subscriptionsettings_set.create(user=user,
+                                                        subscription=self)
+        if save and settings is not None:
+            settings.save()
+        return settings
+
     def create_notification(self, contents):
-        ##Creates a Notification
+        # Creates a Notification
         # @param self The object pointer.
         # @param contents the content of the Notification
         notif = self.developernotification_set.create(sender=self.owner, contents=contents)
@@ -144,6 +164,7 @@ class Notification(models.Model):
     sender = models.ForeignKey(django.contrib.auth.models.User)
     contents = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
+    url = models.URLField(null=True)
 
     def get_actions(self):
         # will be fleshed out later
