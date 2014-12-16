@@ -1,0 +1,13 @@
+Group 17,
+
+Again, it seems that your Iteration 5 work has been fairly effective.  Congratulations.  :)
+
+As with last iteration, your code seems to be largely comment-free.  I did indicate that the penalty for a lack of autodoc comments increases on each iteration; you'll want to document your code by the end of Iteration 6.
+
+In terms of the logic of your application, there is a somewhat concerning issue on your server with regards to security.  You have an action which verifies username and password, but there doesn't seem to be any enforcement of this.  What's to stop me from using curl or netcat to send your server an HTTP POST which indicates that I want to add a notification to someone else's stream?  Although your app may always use the check_auth URL before any of the others, I could write software that doesn't.  Your server needs to verify that the current user has permission to do whatever it is they think they're doing.  If this means sending the username and password on each request, then so be it.  For good reason, most applications avoid this approach, instead using session identifiers.  In that approach, login does not return a boolean; it returns either None (if login failed) or a randomly generated alphanumeric string.  In all further communication, the client sends that string back to the server as a means of identifying the session with which it is associated.  The string is long enough to be unguessable as long as the communication channel is secure (e.g. HTTPS).  Then, if a logged-in user tries to post a notification to someone else's feed, the server's pushnotif handler would reject the request.
+
+Although I'm not going to ask you to switch anything to HTTPS, your application should be able to handle error cases (such as invalid requests).  Please take a look into fixing this for your final iteration.
+
+Otherwise, however, keep up the good work.  :)
+
+Total Score: 91/100
