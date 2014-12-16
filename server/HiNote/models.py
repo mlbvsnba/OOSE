@@ -1,8 +1,9 @@
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 import django.contrib.auth.models
 from django.forms import ModelForm
-
+import pyapns_wrapper
 
 
 class CommonUser(django.contrib.auth.models.User):
@@ -111,7 +112,7 @@ class Subscription(models.Model):
         try:
             settings = SubscriptionSettings.objects.get(
                 subscription=self, user=user)
-        except KeyError:
+        except ObjectDoesNotExist:
             pass
         if settings is not None:
             return settings

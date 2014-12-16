@@ -6,6 +6,7 @@ from HiNote.models import CommonUser
 from HiNote.models import DeveloperForm
 from HiNote.models import CommonUserForm
 from HiNote.models import SubscriptionCreationForm
+from HiNote.models import SubscriptionSettings
 from HiNote.models import PushNotificationForm
 from HiNote.models import Subscription
 from HiNote.models import Developer
@@ -17,6 +18,7 @@ from django.http import HttpResponseBadRequest
 from django.http import HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import *
+import json as pyjson
 
 
 def dev_signup(request):
@@ -69,10 +71,19 @@ def register_device(request):
     else:
         return HttpResponseBadRequest('add device failed')
 
+
 @csrf_exempt
 def get_user_subscriptions(request):
-    pass
-
+    user_valid, user, response = auth_user(request)
+    if not user_valid:
+        return response
+    try:
+        settings_set = SubscriptionSettings.objects.filter(user=user)
+        subscriptions_id = [settings.subscription.id for settings in settings_set]
+    except ObjectDoesNotExist:
+       subscriptions_id = []
+    json = pyjson.dumps(subscriptions_id)
+    return HttpResponse(json, content_type='application/json')
 
 
 @csrf_exempt

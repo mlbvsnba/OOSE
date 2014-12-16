@@ -27,7 +27,6 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -95,3 +94,12 @@ STATIC_URL = '/static/'
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
+
+PYAPNS_NAME = 'HiNote'
+
+PYAPNS_CONFIG = {
+  'HOST': 'http://localhost:8077/',
+  'INITIAL': [
+    (PYAPNS_NAME, 'C:\\Users\\mlbvs_000\\Documents\\oose\\project\\server\\apns-dev.pem', 'sandbox'),
+  ]
+}
