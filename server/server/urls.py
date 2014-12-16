@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from HiNote import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = patterns('',
     # Examples:
@@ -17,5 +19,12 @@ urlpatterns = patterns('',
     url(r'^check_auth/', 'HiNote.views.check_auth'),
     url(r'^register_device/', 'HiNote.views.register_device'),
     url(r'^listsubs/', 'HiNote.views.get_user_subscriptions'),
-    url(r'^subscribe/', 'HiNote.views.subscribe')
+    url(r'^subscribe/', 'HiNote.views.subscribe'),
+    # url(r'^$', 'django.contrib.staticfiles.views.serve', kwargs={
+    #     'path': 'index.html', 'document_root': settings.STATIC_URL})
 )
+urlpatterns += patterns(
+    'django.contrib.staticfiles.views',
+    url(r'^(?:index.html)?$', 'serve', kwargs={'path': 'index.html'})
+)
+# ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
