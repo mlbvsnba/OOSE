@@ -19,6 +19,8 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
     var email_dialog_box: UITextField?
     var error_banner: UILabel?
     
+    let colors = ColorScheme()
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -77,6 +79,9 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         self.view.addSubview(register)
         register.enabled = true
 
+        //set colors
+        self.view.backgroundColor = self.colors.getCellColor()
+        
     }
     func pushNext() {
         let vc : StreamController! = self.storyboard?.instantiateViewControllerWithIdentifier("Streams") as StreamController
@@ -114,7 +119,7 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
             registerRequest()
             return true
         }
-        error_banner!.text = "Please Check your Boxes"
+        error_banner!.text = "Please Check Boxes"
         return false
     }
     
@@ -125,7 +130,14 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         request.HTTPMethod = "POST"
         var err: NSError?
         
-        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! + "&email=" + email_dialog_box!.text! + "&first_name=" + name_dialog_box!.text! + "&last_name=jameson"
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        var deviceToken = appDelegate.deviceTokenData
+        
+        
+        print( "Device toke: \(deviceToken)")
+        
+        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! + "&device_token" + deviceToken!.description + "&email=" + email_dialog_box!.text! + "&first_name=" + name_dialog_box!.text! + "&last_name=jameson"
+        
         request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
         
         //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
