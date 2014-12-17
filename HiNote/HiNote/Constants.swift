@@ -11,21 +11,32 @@ struct Constants {
 static let baseUrl: String = "http://mlbvsnba.no-ip.org:8000/"
 }
 
+func setUsername(username: String) {
+    NSUserDefaults.standardUserDefaults().setObject(username, forKey: "username")
+    NSUserDefaults.standardUserDefaults().synchronize()
+}
+func getUsername() -> String {
+    return NSUserDefaults.standardUserDefaults().objectForKey("username") as String
+}
+
+
 class KeychainAccess: NSObject {
     
     
-    func setPasscodeAndUsername(identifier: String, passcode: String, username: String) {
+    
+    func setPasscode(identifier: String, passcode: String) {
         var dataFromPasscode: NSData = passcode.dataUsingEncoding(NSUTF8StringEncoding)!;
-        var dataFromUsername: NSData = username.dataUsingEncoding(NSUTF8StringEncoding)!;
         var keychainQuery = NSDictionary(
-            objects: [username, kSecClassGenericPassword, identifier, dataFromPasscode],
-            forKeys: [kSecAttrAccount, kSecClass, kSecAttrService, kSecValueData])
+            objects: [kSecClassGenericPassword, identifier, dataFromPasscode],
+            forKeys: [kSecClass, kSecAttrService, kSecValueData])
         
         SecItemDelete(keychainQuery as CFDictionaryRef);
         var status: OSStatus = SecItemAdd(keychainQuery as CFDictionaryRef, nil);
+        
+        print("keychainWorked?: \(status)")
     }
     
-    func getPasscodeAndUsername(identifier: String) -> String? {
+    func getPasscode(identifier: String) -> String? {
         var keychainQuery = NSDictionary(
             objects: [kSecClassGenericPassword, identifier, kCFBooleanTrue, kSecMatchLimitOne],
             forKeys: [kSecClass, kSecAttrService, kSecReturnData, kSecMatchLimit])
@@ -33,7 +44,6 @@ class KeychainAccess: NSObject {
         let status: OSStatus = SecItemCopyMatching(keychainQuery, &dataTypeRef);
         let opaque = dataTypeRef?.toOpaque();
         var passcode: String?;
-        var username: String?;
         if let op = opaque? {
             let retrievedData = Unmanaged<NSData>.fromOpaque(op).takeUnretainedValue();
             passcode = NSString(data: retrievedData, encoding: NSUTF8StringEncoding);
@@ -45,13 +55,13 @@ class KeychainAccess: NSObject {
     }
 }
 
-func setPasscodeAndUsername(passcode: String, username: String) {
+func setPasscode(passcode: String) {
     var keychainAccess = KeychainAccess();
-    keychainAccess.setPasscodeAndUsername("CAMCAMSAPP", passcode:passcode, username: username);
+    keychainAccess.setPasscode("CAMCAMSAPP", passcode:passcode);
 }
 
 
-func getPasscodeAndUsername() -> String {
+func getPasscode() -> String {
     var keychainAccess = KeychainAccess();
-    return keychainAccess.getPasscodeAndUsername("CAMCAMSAPP")!;
+    return keychainAccess.getPasscode("CAMCAMSAPP")!;
 }

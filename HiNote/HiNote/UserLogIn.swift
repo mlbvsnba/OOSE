@@ -78,6 +78,12 @@ class UserLogIn: UIViewController, UITextFieldDelegate {
         self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor() //background in nav-bar
         self.navigationController?.navigationBar.tintColor = self.colors.getTextColor() //
         
+        if(!(getUsername() == "") || (getPasscode() == "")) {
+            username_dialog_box!.text! = getUsername()
+            password_dialog_box!.text = getPasscode()
+            seeIfCanMoveOn()
+        }
+        
     }
     
     
@@ -140,7 +146,7 @@ class UserLogIn: UIViewController, UITextFieldDelegate {
                     self.error_banner!.text = nil
                 }
 
-                if (httpResponse.statusCode == 403) {
+                else if (httpResponse.statusCode == 403) {
                     self.error_banner!.text = "invalid username or password"
                 }
                 else {
