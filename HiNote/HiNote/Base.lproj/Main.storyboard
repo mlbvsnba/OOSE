@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="FzX-jr-4U9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="FzX-jr-4U9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
@@ -30,10 +30,10 @@
             </objects>
             <point key="canvasLocation" x="1933" y="-352"/>
         </scene>
-        <!--User Sign Up-->
+        <!--User Log In-->
         <scene sceneID="PvA-lm-BgT">
             <objects>
-                <viewController id="c7f-ok-u3J" customClass="UserSignUp" customModule="HiNote" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="c7f-ok-u3J" customClass="UserLogIn" customModule="HiNote" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="w04-Eu-DU7"/>
                         <viewControllerLayoutGuide type="bottom" id="6mk-K8-NAL"/>
@@ -47,7 +47,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eGE-c8-eKn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1274" y="758"/>
+            <point key="canvasLocation" x="1242" y="706"/>
         </scene>
         <!--Stream Controller-->
         <scene sceneID="dq8-bN-cId">
