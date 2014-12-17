@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Developer API Documentation</title>
+    <style type="text/css">
+        #main_content {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .highlight_red:hover {
+            color: red;
+            cursor: pointer;
+        }
+
+        .highlight:hover {
+            color: yellow;
+            cursor: pointer;
+        }
+
+        a, a:visited {
+            color: blue;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: red;
+            text-decoration: underline;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        #title {
+            text-align: center;
+            font-size: 4em;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            width: 100%;
+            margin: auto;
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">
+        <span class="highlight_red">H</span><span class="highlight_red">i</span><span class="highlight">N</span><span class="highlight">o</span><span class="highlight">t</span><span class="highlight">e</span>
+    </div>
+    <div id="main_content">
+        <h1>To Signup:</h1>
+            <p class="sub">
+                Use <a href="signup/">Developer Signup Page</a> and <b>STORE YOUR API KEY SAFELY!</b>
+            </p>
+        <h1>To Create a Subscription</h1>
+            <p class="sub">
+                Use <a href="createsub/">This Form</a> or submit a POST request to <a href="createsub/">http://mlbvsnba.no-ip.org:8000/createsub/</a> with:
+                <ul>
+                    <li><b>api_key:</b> string - your api key returned by signup</li>
+                    <li><b>name:</b> the name of the subscription list (limit is 50 chars and must be unique)</li>
+                    <li><b>description:</b> the description of the subscription list (limit is 300 chars)</li>
+                </ul>
+            </p>
+        <h1>To Create/Push a Notification to a Subscription</h1>
+            <p class="sub">
+                Use <a href="pushnotif/">This Form</a> or submit a POST request to <a href="pushnotif/">http://mlbvsnba.no-ip.org:8000/pushnotif/</a> with:
+                <ul>
+                    <li><b>api_key:</b> string - your api key returned by signup</li>
+                    <li><b>sub_id:</b> int - the id of the subscription list that YOU OWN/CREATED and that you want to push the notification to</li>
+                    <li><b>contents:</b> string - the contents of your notification (limit is 300 chars)</li>
+                    <li><b>url:</b> string - optional - the url that should be associated with your notification</li>
+                </ul>
+            </p>
+    </div>
+</body>
+</html>
