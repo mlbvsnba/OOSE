@@ -106,8 +106,8 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         }
         
         var cell = NotificationCell( style: .Subtitle, reuseIdentifier: "CellSubtitle", info: currentCellDetails )
-        
-        /*
+        cell.accessoryType =  UITableViewCellAccessoryType.DisclosureIndicator
+                /*
         var cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "CellSubtitle")
         cell.backgroundColor = self.cellColor
         
@@ -139,9 +139,45 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         UIApplication.sharedApplication().openURL( NSURL( string: selectedNotificationInfo.getUrl() )! )
     }
     
-    func getNotificationsFromServer()
-    {
-        //get the notications from the server. For now hard-coded.
+    func sendToFriend(friend: String) {
+        let url: String = Constants.baseUrl + "forward/"
+        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        var err: NSError?
+        
+        var bodyData = "username=" + getUsername() + "&password=" +  getPasscode() + "&other_username=" + friend
+        
+        
+        request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
+        
+        //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+        //print(request.HTTPBody)
+        var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                  print( "success")
+                }
+            }
+        })
+        task.resume()
     }
+
+    func addStream() {
+        
+        var addCategoryAlert = UIAlertController(title: "Send to Friend", message: "Please enter the username to forward to:", preferredStyle: UIAlertControllerStyle.Alert)
+        addCategoryAlert.addAction(UIAlertAction(title: "Add", style: UIAlertActionStyle.Default,
+            handler: {(alertAction:UIAlertAction!) in
+                let textField = addCategoryAlert.textFields![0] as UITextField
+                self.sendToFriend(textField.text)} ))
+        addCategoryAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
+        addCategoryAlert.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+            textField.placeholder = "Enter hashtag"
+            textField.secureTextEntry = false
+        })
+        self.presentViewController(addCategoryAlert, animated: true, completion: nil)
+        
+    }
+    
 
 }
