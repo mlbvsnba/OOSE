@@ -6,8 +6,47 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+    <style type="text/css">
+        .highlight_red:hover {
+            color: red;
+            cursor: pointer;
+        }
+
+        .highlight:hover {
+            color: yellow;
+            cursor: pointer;
+        }
+
+        a, a:visited {
+            color: blue;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: red;
+            text-decoration: underline;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        #title {
+            text-align: center;
+            font-size: 4em;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            width: 100%;
+            margin: auto;
+            background-color: black;
+            color: white;
+        }
+    </style>
 </head>
 <body>
+    <div id="title">
+        <span class="highlight_red">H</span><span class="highlight_red">i</span><span class="highlight">N</span><span class="highlight">o</span><span class="highlight">t</span><span class="highlight">e</span>
+    </div>
     <form action="" method="post">{% csrf_token %}
         {% csrf_token %}
         {{ form.as_p }}
