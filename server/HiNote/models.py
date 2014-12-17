@@ -143,11 +143,11 @@ class Subscription(models.Model):
             settings.save()
         return settings
 
-    def create_notification(self, contents):
+    def create_notification(self, contents, url=None):
         # Creates a Notification
         # @param self The object pointer.
         # @param contents the content of the Notification
-        notif = self.developernotification_set.create(sender=self.owner, contents=contents)
+        notif = self.developernotification_set.create(sender=self.owner, contents=contents, url=url)
         notif.push()
         return notif
 
@@ -173,13 +173,11 @@ class SubscriptionCreationForm(forms.Form):
     api_key = forms.CharField(label='Developer API Key:', max_length=43)
     name = forms.CharField(label='Subscription Name', max_length=50)
     description = forms.CharField(label='Subscription Description', max_length=300)
-    url = forms.URLField(required=False)
 
     def save(self, commit=True):
         dev = Developer.objects.get(api_key=self.cleaned_data['api_key'])
         sub = dev.create_subscription(name=self.cleaned_data['name'],
-                                      description=self.cleaned_data['description'],
-                                      url=self.cleaned_data['url'])
+                                      description=self.cleaned_data['description'])
         if commit:
             sub.save()
         return sub
@@ -190,11 +188,13 @@ class PushNotificationForm(forms.Form):
     api_key = forms.CharField(label='Developer API Key:', max_length=43)
     sub_id = forms.IntegerField(label='Subscription ID:')
     contents = forms.CharField(max_length=300)
+    url = forms.URLField(required=False)
 
     def save(self, commit=True):
         dev = Developer.objects.get(api_key=self.cleaned_data['api_key'])
         sub = dev.subscription_set.get(id=self.cleaned_data['sub_id'])
-        notif = sub.create_notification(contents=self.cleaned_data['contents'])
+        notif = sub.create_notification(contents=self.cleaned_data['contents'],
+                                        url=self.cleaned_data['url'])
         if commit:
             notif.save()
         return notif
