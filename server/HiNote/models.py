@@ -173,7 +173,7 @@ class SubscriptionCreationForm(forms.Form):
     api_key = forms.CharField(label='Developer API Key:', max_length=43)
     name = forms.CharField(label='Subscription Name', max_length=50)
     description = forms.CharField(label='Subscription Description', max_length=300)
-    url = forms.URLField()
+    url = forms.URLField(required=False)
 
     def save(self, commit=True):
         dev = Developer.objects.get(api_key=self.cleaned_data['api_key'])
