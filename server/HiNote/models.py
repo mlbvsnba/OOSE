@@ -188,7 +188,8 @@ class DeveloperNotification(Notification):
     # http://stackoverflow.com/questions/9415616/adding-to-the-constructor-of-a-django-model
 
     def push(self):
-        users = self.subscription.subscriptionsettings_set.all()
+        settings = self.subscription.subscriptionsettings_set.all()
+        users = [s.commonuser for s in settings]
         tokens = []
         for user in users:
             tokens.extend([str(device.token) for device in user.iosdevice_set.all()])
