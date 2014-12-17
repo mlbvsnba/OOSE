@@ -19,9 +19,8 @@ class CommonUser(django.contrib.auth.models.User):
             device.save()
         return device
 
-    @staticmethod
-    def create_personal_subscription(user):
-        Subscription.create_personal_sub(user)
+    def create_personal_subscription(self):
+        Subscription.create_personal_sub(self)
 
 
 class IOSDevice(models.Model):
