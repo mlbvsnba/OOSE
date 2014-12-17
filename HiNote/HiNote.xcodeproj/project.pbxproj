@@ -11,6 +11,7 @@
 		207F55D41A30F4260010A977 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207F55D31A30F4260010A977 /* ColorScheme.swift */; };
 		207F55D61A3110240010A977 /* StreamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207F55D51A3110240010A977 /* StreamCell.swift */; };
 		209C42AC1A411D5A00E32BF5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8221A03064500E5B177 /* AppDelegate.swift */; };
+		209C42AE1A413C9C00E32BF5 /* UserLogIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209C42AD1A413C9C00E32BF5 /* UserLogIn.swift */; };
 		20BEC9DF1A2F950200C9CAAE /* NotificationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BEC9DE1A2F950200C9CAAE /* NotificationInfo.swift */; };
 		3E0435221A40BDCE00B8540D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0435211A40BDCE00B8540D /* Constants.swift */; };
 		3E0435231A40C42A00B8540D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0435211A40BDCE00B8540D /* Constants.swift */; };
@@ -56,6 +57,7 @@
 		201A5D5B1A1D1E4D00F771BE /* TableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewHeader.swift; sourceTree = "<group>"; };
 		207F55D31A30F4260010A977 /* ColorScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		207F55D51A3110240010A977 /* StreamCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamCell.swift; sourceTree = "<group>"; };
+		209C42AD1A413C9C00E32BF5 /* UserLogIn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLogIn.swift; sourceTree = "<group>"; };
 		20BEC9DE1A2F950200C9CAAE /* NotificationInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationInfo.swift; sourceTree = "<group>"; };
 		3E0435211A40BDCE00B8540D /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3E0CE75C1A0DA4EC00D21101 /* Classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Classes.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			children = (
 				3E0435211A40BDCE00B8540D /* Constants.swift */,
 				3EF5F8221A03064500E5B177 /* AppDelegate.swift */,
+				209C42AD1A413C9C00E32BF5 /* UserLogIn.swift */,
 				3E0CE75C1A0DA4EC00D21101 /* Classes.swift */,
 				3E7F67ED1A1D26FD0038B57C /* UserSignUp.swift */,
 				201A5D5B1A1D1E4D00F771BE /* TableViewHeader.swift */,
@@ -267,6 +270,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				209C42AE1A413C9C00E32BF5 /* UserLogIn.swift in Sources */,
 				3E95B6D51A0561C600AC73B7 /* SettingsController.swift in Sources */,
 				3E7F67EE1A1D26FD0038B57C /* UserSignUp.swift in Sources */,
 				207F55D61A3110240010A977 /* StreamCell.swift in Sources */,
