@@ -206,7 +206,7 @@ class Notification(models.Model):
     sender = models.ForeignKey(django.contrib.auth.models.User)
     contents = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
-    url = models.URLField(null=True)
+    url = models.URLField(default="")
 
     def get_actions(self):
         # will be fleshed out later
