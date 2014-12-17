@@ -3,7 +3,6 @@ from HiNote.models import Developer
 from HiNote.models import CommonUser
 from HiNote.models import Subscription
 from HiNote.models import DeveloperNotification
-from HiNote.models import UserNotification
 from django.core.exceptions import *
 
 from django.contrib.auth import authenticate
@@ -200,20 +199,3 @@ class SubscriptionTestCase(TestCase):
 #         self.assertEquals(devNot.contents, devNot_load.contents)
 #         self.assertEquals(devNot.subscription, devNot_load.subscription)
 #
-# class UserNotificationTestCase(TestCase):
-#     def test_creation(self):
-#         usrSender = CommonUser.objects.create(username="usr1",
-#                                         password="usr11", email="usr1@usr.com",
-#                                        first_name="John", last_name="Smith")
-#         usrSender.save()
-#         usrReceiver = CommonUser.objects.create(username="usr2",
-#                                         password="usr22", email="usr2@usr.com",
-#                                        first_name="Jane", last_name="Doe")
-#         usrReceiver.save()
-#         usrNot = UserNotification.objects.create(sender = usrSender, contents = "this is a notification", receiver = usrReceiver)
-#         usrNot.save()
-#         usrNot_load = UserNotification.objects.get()
-#         self.assertIsNotNone(usrNot_load)
-#         self.assertEquals(usrNot.Sender, usrNot_load.sender)
-#         self.assertEquals(usrNot.contents, usrNot_load.contents)
-#         self.assertEquals(usrNot.receiver, usrNot_load.usrReceiver)
