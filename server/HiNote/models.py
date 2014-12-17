@@ -232,7 +232,8 @@ class DeveloperNotification(Notification):
         for user in users:
             for device in user.iosdevice_set.all():
                 token = str(device.token)
-                notify('HiNote', token, {'aps':{'alert': str(self.contents)}})
+                notify('HiNote', token, {'aps':{'alert': str(self.contents),
+                                                'url': str(self.url)}})
 
 
 class UserNotification(Notification):
