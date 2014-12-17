@@ -44,7 +44,7 @@ class KeychainAccess: NSObject {
 
 func setPasscode(passcode: String) {
     var keychainAccess = KeychainAccess();
-    keychainAccess.setPasscode("CAMCAMSAPP", passcode:passcode);
+   // keychainAccess.setPasscode("CAMCAMSAPP", passcode:passcode);
 }
 
 
