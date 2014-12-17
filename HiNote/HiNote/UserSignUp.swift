@@ -158,15 +158,22 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
                     self.error_banner!.text = nil
-                    setPasscodeAndUsername(self.password_dialog_box!.text!, self.username_dialog_box!.text!)
-                    println(getPasscodeAndUsername())
+                    
+                    setPasscode(self.password_dialog_box!.text!)
+                    println( "password: \(getPasscode())")
+                    setUsername(self.username_dialog_box!.text!)
+                    println( "username: \(getUsername())")
+                
+                    
+                    
+                    
                     self.registerDeviceToken()
                 }
-                if (httpResponse.statusCode == 400) {
+                else if(httpResponse.statusCode == 400) {
                     self.error_banner!.text = "username already registered"
                     //bad request
                 }
-                if (httpResponse.statusCode == 403) {
+                 else if(httpResponse.statusCode == 403) {
                     self.error_banner!.text = "invalid username or password"
                 }
                 else {
