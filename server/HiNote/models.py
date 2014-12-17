@@ -198,7 +198,9 @@ class DeveloperNotification(Notification):
         for user in users:
             tokens.extend([str(device.token) for device in user.iosdevice_set.all()])
         print >>sys.stderr, str(tokens)
+        print >>sys.stderr, str(self.contents)
         pyapns_wrapper.notify(tokens, str(self.contents))
+        print >>sys.stderr, 'done'
 
 
 class UserNotification(Notification):
