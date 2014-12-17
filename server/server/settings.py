@@ -95,9 +95,9 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
 
-PYAPNS_CONFIG = {
-  'HOST': 'http://localhost:7077/',
-  'INITIAL': [
-    ('HiNote', '../apns-dev.pem', 'sandbox'),
-  ]
-}
+# PYAPNS_CONFIG = {
+#   'HOST': 'http://localhost:7077/',
+#   'INITIAL': [
+#     ('HiNote', '../apns-dev.pem', 'sandbox'),
+#   ]
+# }
