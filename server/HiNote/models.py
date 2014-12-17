@@ -155,7 +155,7 @@ class Subscription(models.Model):
     def create_personal_sub(user):
         dev = Developer.get_personal_dev()
         name = "Personal Feed"
-        description = user.first_name + " " + user.last_name + "'s Personal Feed"
+        description = user.first_name + "'s Personal Feed"
         sub = Subscription.objects.create(
             owner=dev, name=name, description=description, is_personal=True, user_id=user.id)
         sub.save()
