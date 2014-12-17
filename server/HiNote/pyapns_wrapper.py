@@ -10,8 +10,9 @@ import logging
 
 log = logging.getLogger('APNS')
 
+
 def notify(apns_token, message, badge=None, sound=None):
-    print apns_token
+    log.info(str(apns_token))
     """Push notification to device with the given message
 
     @param apns_token - The device's APNS-issued unique token
