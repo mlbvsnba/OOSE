@@ -47,9 +47,9 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     }
     
     func getNotifications(id: String, stream: Stream) {
-        let url: NSURL = NSURL(string: "http://localhost:8000/listnotif/?id=" + id)!
+        let stringURL: String = Constants.baseUrl + "listnotif/?id=" + id
+        let url: NSURL = NSURL(string: stringURL)!
         let session = NSURLSession.sharedSession()
-        println("made it")
         let task = session.dataTaskWithURL(url, completionHandler: { data, response, error -> Void in
             var err: NSError?
             let jsonObject : AnyObject! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil)

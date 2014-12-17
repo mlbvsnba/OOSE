@@ -6,6 +6,14 @@
 //  Copyright (c) 2014 cameron. All rights reserved.
 //
 
+//CODE REMOVED
+
+/*
+
+
+
+
+
 import UIKit
 
 class ViewController: UIViewController  {
@@ -66,4 +74,4 @@ class ViewController: UIViewController  {
 
 
 }
-
+*/

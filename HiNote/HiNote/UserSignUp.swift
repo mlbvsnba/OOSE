@@ -9,6 +9,38 @@
 import Foundation
 
 import UIKit
+import Security
+
+class KeychainAccess: NSObject {
+    
+    
+    func setPasscode(identifier: String, passcode: String) {
+        var dataFromString: NSData = passcode.dataUsingEncoding(NSUTF8StringEncoding)!;
+        var keychainQuery = NSDictionary(
+            objects: [kSecClassGenericPassword, identifier, dataFromString],
+            forKeys: [kSecClass, kSecAttrService, kSecValueData])
+        
+        SecItemDelete(keychainQuery as CFDictionaryRef);
+        var status: OSStatus = SecItemAdd(keychainQuery as CFDictionaryRef, nil);
+    }
+    
+    func getPasscode(identifier: String) -> String? {
+        var keychainQuery = NSDictionary(
+            objects: [kSecClassGenericPassword, identifier, kCFBooleanTrue, kSecMatchLimitOne],
+            forKeys: [kSecClass, kSecAttrService, kSecReturnData, kSecMatchLimit])
+        var dataTypeRef :Unmanaged<AnyObject>?;
+        let status: OSStatus = SecItemCopyMatching(keychainQuery, &dataTypeRef);
+        let opaque = dataTypeRef?.toOpaque();
+        var passcode: String?;
+        if let op = opaque? {
+            let retrievedData = Unmanaged<NSData>.fromOpaque(op).takeUnretainedValue();
+            passcode = NSString(data: retrievedData, encoding: NSUTF8StringEncoding);
+        } else {
+            println("Passcode not found. Status code \(status)");
+        }
+        return passcode;
+    }
+}
 
 
 class UserSignUp: UIViewController, UITextFieldDelegate {
@@ -78,6 +110,10 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         register.enabled = true
 
     }
+    
+    
+    
+    
     func pushNext() {
         let vc : StreamController! = self.storyboard?.instantiateViewControllerWithIdentifier("Streams") as StreamController
         self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
@@ -112,7 +148,14 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
     func registerForService() -> Bool {
         if(userNameCheck() && emailCheck() && nameCheck() && passwordCheck()) {
             registerRequest()
-            return true
+            //if it worked return true
+            if (self.error_banner!.text != nil){
+                return false
+                }
+            //if not return false
+            else {
+                return true
+            }
         }
         error_banner!.text = "Please Check your Boxes"
         return false
@@ -120,7 +163,8 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
     
     
     func registerRequest() {
-        var request = NSMutableURLRequest(URL: NSURL(string: "http://localhost:8000/user_signup/")!)
+        let url: String = Constants.baseUrl + "user_signup/"
+        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
         var err: NSError?
@@ -131,15 +175,40 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         //print(request.HTTPBody)
         var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
-          println(response)
-          println(NSString(data: data, encoding: NSUTF8StringEncoding))
-          //println(error)
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    self.error_banner!.text = nil
+                    self.setPasscode("america")
+                    println(self.getPasscode())
+                }
+                if (httpResponse.statusCode == 400) {
+                    self.error_banner!.text = "username already registered"
+                    //bad request
+                }
+                if (httpResponse.statusCode == 403) {
+                    self.error_banner!.text = "invalid username or password"
+                }
+                else {
+                        self.error_banner!.text = "failed to connect to server"
+                }
+            }
+          //println(NSString(data: data, encoding: NSUTF8StringEncoding))
             //println(params)
         })
         task.resume()
     }
-
     
+
+    func setPasscode(passcode: String) {
+        var keychainAccess = KeychainAccess();
+        keychainAccess.setPasscode("CAMCAMSAPP", passcode:passcode);
+    }
+    
+    
+    func getPasscode() -> String {
+        var keychainAccess = KeychainAccess();
+        return keychainAccess.getPasscode("CAMCAMSAPP")!;
+    }
     
     func textFieldDidBeginEditing(textField: UITextField!) {    //delegate method
         

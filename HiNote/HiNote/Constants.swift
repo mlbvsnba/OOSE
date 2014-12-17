@@ -6,4 +6,6 @@
 //  Copyright (c) 2014 cameron. All rights reserved.
 //
 
-import Foundation
+struct Constants {
+static let baseUrl: String = "http://localhost:8000/"
+}
