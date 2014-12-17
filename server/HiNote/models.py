@@ -127,7 +127,7 @@ class Subscription(models.Model):
         # @param self The object pointer.
         # @param contents the content of the Notification
         notif = self.developernotification_set.create(sender=self.owner, contents=contents)
-        # notif.push()
+        notif.push()
         return notif
 
 
@@ -188,11 +188,12 @@ class DeveloperNotification(Notification):
     # http://stackoverflow.com/questions/9415616/adding-to-the-constructor-of-a-django-model
 
     def push(self):
-        users = self.subscription.subscriptionsettings_set.all()
+        settings = self.subscription.subscriptionsettings_set.all()
+        users = [s.commonuser for s in settings]
         tokens = []
         for user in users:
-            for device in user.iosdevice_set.all():
-                pyapns_wrapper.notify(device.token, str(self.contents))
+            tokens.extend([str(device.token) for device in user.iosdevice_set.all()])
+        pyapns_wrapper.notify(tokens, str(self.contents))
 
 
 class UserNotification(Notification):
