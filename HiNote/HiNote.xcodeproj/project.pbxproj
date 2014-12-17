@@ -12,6 +12,8 @@
 		207F55D61A3110240010A977 /* StreamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207F55D51A3110240010A977 /* StreamCell.swift */; };
 		209C42AC1A411D5A00E32BF5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8221A03064500E5B177 /* AppDelegate.swift */; };
 		20BEC9DF1A2F950200C9CAAE /* NotificationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BEC9DE1A2F950200C9CAAE /* NotificationInfo.swift */; };
+		3E0435221A40BDCE00B8540D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0435211A40BDCE00B8540D /* Constants.swift */; };
+		3E0435231A40C42A00B8540D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0435211A40BDCE00B8540D /* Constants.swift */; };
 		3E0CE75D1A0DA4EC00D21101 /* Classes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0CE75C1A0DA4EC00D21101 /* Classes.swift */; };
 		3E4B25811A32ABC100C08A15 /* TestRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4B25801A32ABC100C08A15 /* TestRegistration.swift */; };
 		3E4B25821A32ACBE00C08A15 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8241A03064500E5B177 /* ViewController.swift */; };
@@ -55,6 +57,7 @@
 		207F55D31A30F4260010A977 /* ColorScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		207F55D51A3110240010A977 /* StreamCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamCell.swift; sourceTree = "<group>"; };
 		20BEC9DE1A2F950200C9CAAE /* NotificationInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationInfo.swift; sourceTree = "<group>"; };
+		3E0435211A40BDCE00B8540D /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3E0CE75C1A0DA4EC00D21101 /* Classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Classes.swift; sourceTree = "<group>"; };
 		3E4B25801A32ABC100C08A15 /* TestRegistration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestRegistration.swift; sourceTree = "<group>"; };
 		3E4B258E1A32B44E00C08A15 /* TestNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestNotifications.swift; sourceTree = "<group>"; };
@@ -63,7 +66,7 @@
 		3EF5F81D1A03064500E5B177 /* HiNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiNote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EF5F8211A03064500E5B177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EF5F8221A03064500E5B177 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3EF5F8241A03064500E5B177 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3EF5F8241A03064500E5B177 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = HiNote/ViewController.swift; sourceTree = "<group>"; };
 		3EF5F8271A03064500E5B177 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3EF5F8291A03064500E5B177 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3EF5F82C1A03064500E5B177 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -99,6 +102,7 @@
 				3EF5F81F1A03064500E5B177 /* HiNote */,
 				3EF5F8351A03064500E5B177 /* HiNoteTests */,
 				3EF5F81E1A03064500E5B177 /* Products */,
+				3EF5F8241A03064500E5B177 /* ViewController.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -114,8 +118,8 @@
 		3EF5F81F1A03064500E5B177 /* HiNote */ = {
 			isa = PBXGroup;
 			children = (
+				3E0435211A40BDCE00B8540D /* Constants.swift */,
 				3EF5F8221A03064500E5B177 /* AppDelegate.swift */,
-				3EF5F8241A03064500E5B177 /* ViewController.swift */,
 				3E0CE75C1A0DA4EC00D21101 /* Classes.swift */,
 				3E7F67ED1A1D26FD0038B57C /* UserSignUp.swift */,
 				201A5D5B1A1D1E4D00F771BE /* TableViewHeader.swift */,
@@ -210,6 +214,7 @@
 				TargetAttributes = {
 					3EF5F81C1A03064500E5B177 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = R9AQNA7VXB;
 					};
 					3EF5F8311A03064500E5B177 = {
 						CreatedOnToolsVersion = 6.1;
@@ -269,6 +274,7 @@
 				207F55D41A30F4260010A977 /* ColorScheme.swift in Sources */,
 				3EF5F8451A03090900E5B177 /* NotificationTableView.swift in Sources */,
 				3E0CE75D1A0DA4EC00D21101 /* Classes.swift in Sources */,
+				3E0435221A40BDCE00B8540D /* Constants.swift in Sources */,
 				3EF5F8251A03064500E5B177 /* ViewController.swift in Sources */,
 				201A5D5C1A1D1E4D00F771BE /* TableViewHeader.swift in Sources */,
 				3EF5F8471A03105900E5B177 /* notificationCell.swift in Sources */,
@@ -287,6 +293,7 @@
 				209C42AC1A411D5A00E32BF5 /* AppDelegate.swift in Sources */,
 				3E4B25861A32AEC000C08A15 /* SettingsController.swift in Sources */,
 				3E4B25881A32AEC600C08A15 /* StreamCell.swift in Sources */,
+				3E0435231A40C42A00B8540D /* Constants.swift in Sources */,
 				3E4B25811A32ABC100C08A15 /* TestRegistration.swift in Sources */,
 				3E4B258A1A32AECB00C08A15 /* ColorScheme.swift in Sources */,
 				3E4B25891A32AEC800C08A15 /* NotificationTableView.swift in Sources */,
@@ -412,9 +419,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = HiNote/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -422,9 +432,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = HiNote/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

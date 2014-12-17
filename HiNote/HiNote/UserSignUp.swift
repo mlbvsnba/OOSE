@@ -9,6 +9,8 @@
 import Foundation
 
 import UIKit
+import Security
+
 
 
 class UserSignUp: UIViewController, UITextFieldDelegate {
@@ -83,6 +85,10 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         self.view.backgroundColor = self.colors.getCellColor()
         
     }
+    
+    
+    
+    
     func pushNext() {
         let vc : StreamController! = self.storyboard?.instantiateViewControllerWithIdentifier("Streams") as StreamController
         self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
@@ -117,7 +123,14 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
     func registerForService() -> Bool {
         if(userNameCheck() && emailCheck() && nameCheck() && passwordCheck()) {
             registerRequest()
-            return true
+            //if it worked return true
+            if (self.error_banner!.text != nil){
+                return false
+                }
+            //if not return false
+            else {
+                return true
+            }
         }
         error_banner!.text = "Please Check Boxes"
         return false
@@ -125,32 +138,75 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
     
     
     func registerRequest() {
-        var request = NSMutableURLRequest(URL: NSURL(string: "http://localhost:8000/user_signup/")!)
+        let url: String = Constants.baseUrl + "user_signup/"
+        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        var err: NSError?
+        
+        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! +  "&email=" + email_dialog_box!.text! + "&first_name=" + name_dialog_box!.text! + "&last_name=jameson"
+        request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
+        
+        //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+        //print(request.HTTPBody)
+        var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    self.error_banner!.text = nil
+                    setPasscode(self.password_dialog_box!.text!)
+                    println(getPasscode())
+                    self.registerDeviceToken()
+                }
+                if (httpResponse.statusCode == 400) {
+                    self.error_banner!.text = "username already registered"
+                    //bad request
+                }
+                if (httpResponse.statusCode == 403) {
+                    self.error_banner!.text = "invalid username or password"
+                }
+                else {
+                        self.error_banner!.text = "failed to connect to server"
+                }
+            }
+          //println(NSString(data: data, encoding: NSUTF8StringEncoding))
+            //println(params)
+        })
+        task.resume()
+    }
+    
+    func registerDeviceToken() {
+        let url: String = Constants.baseUrl + "register_device/"
+        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
         var err: NSError?
         
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        var deviceToken = appDelegate.deviceTokenData
+        var deviceToken = appDelegate.getDeviceToken()
         
         
-        print( "Device toke: \(deviceToken)")
+        println( "Device toke: \(deviceToken)")
         
-        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! + "&device_token" + deviceToken!.description + "&email=" + email_dialog_box!.text! + "&first_name=" + name_dialog_box!.text! + "&last_name=jameson"
+        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! +   "&device_token=" + deviceToken
+        
         
         request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
         
         //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         //print(request.HTTPBody)
         var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
-          println(response)
-          println(NSString(data: data, encoding: NSUTF8StringEncoding))
-          //println(error)
-            //println(params)
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    self.error_banner!.text = nil
+                }
+                else {
+                    self.error_banner!.text = "device cant connect to server"
+                    //bad request
+                }
+            }
         })
         task.resume()
     }
-
     
     
     func textFieldDidBeginEditing(textField: UITextField!) {    //delegate method
