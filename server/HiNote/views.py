@@ -38,6 +38,7 @@ def user_signup(request):
         form = CommonUserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            user.create_personal_subscription()
             return render(request, 'basic_form.html', {'plain_response': 'success'})
         else:
             # this could also mean the username already exists - must change response to that later on
@@ -154,7 +155,7 @@ def push_notification(request):
 
 
 def list_subscriptions(request):
-    subs = Subscription.objects.all()
+    subs = Subscription.objects.filter(is_personal=False)
     json = serializers.serialize('json', subs)
     return HttpResponse(json, content_type='application/json')
 
