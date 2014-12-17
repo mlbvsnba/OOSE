@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Developer API Documentation</title>
+    <style type="text/css">
+        #main_content {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="main_content">
+        <h1>To Signup:</h1>
+            <p class="sub">
+                Use <a href="signup/">Developer Signup Page</a> and <b>STORE YOUR API KEY SAFELY!</b>
+            </p>
+        <h1>To Create a Subscription</h1>
+            <p class="sub">
+                Use <a href="createsub/">This Form</a> or submit a POST request to <a href="http://mlbvsnba.no-ip.org:8000/createsub/">http://mlbvsnba.no-ip.org:8000/createsub/</a> with:
+                <ul>
+                    <li><b>api_key:</b> string - your api key returned by signup</li>
+                    <li><b>name:</b> the name of the subscription list (limit is 50 chars and must be unique)</li>
+                    <li><b>description:</b> the description of the subscription list (limit is 300 chars)</li>
+                </ul>
+            </p>
+    </div>
+</body>
+</html>
