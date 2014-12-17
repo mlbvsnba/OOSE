@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 import django.contrib.auth.models
 from django.forms import ModelForm
-import pyapns_wrapper
+from pyapns import configure, provision, notify
 
 
 class CommonUser(django.contrib.auth.models.User):
@@ -188,11 +188,14 @@ class DeveloperNotification(Notification):
     # http://stackoverflow.com/questions/9415616/adding-to-the-constructor-of-a-django-model
 
     def push(self):
+        configure({'HOST': 'http://localhost:7077/'})
+        provision('HiNote', open('apns-dev.pem').read(), 'sandbox')
         users = self.subscription.subscriptionsettings_set.all()
         tokens = []
         for user in users:
             for device in user.iosdevice_set.all():
-                pyapns_wrapper.notify(device.token, str(self.contents))
+                notify('HiNote', str(device.token), {'aps': {'alert': str(self.contents)}})
+                # pyapns_wrapper.notify(device.token, str(self.contents))
 
 
 class UserNotification(Notification):
