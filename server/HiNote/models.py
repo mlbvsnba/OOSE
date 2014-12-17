@@ -126,7 +126,7 @@ class Subscription(models.Model):
         # Creates a Notification
         # @param self The object pointer.
         # @param contents the content of the Notification
-        notif = self.developernotification_set.create(sender=self.owner, contents=contents)
+        notif = self.developernotification_set.create(contents=contents)
         # notif.push()
         return notif
 
