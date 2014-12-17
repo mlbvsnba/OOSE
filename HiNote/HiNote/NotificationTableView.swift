@@ -51,8 +51,6 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
         //stream.addNotifications([Notification(title: "First", subtitle: "first Note"), Notification(title: "Second", subtitle: "second Note")])
         
-        self.notificationStream.addNotifications([NotificationInfo(dev: "Matt", notificationText: "One", notificationUrl: "http://www.google.com",
-            notificationTime: NSDate()), NotificationInfo(dev: "Cameron", notificationText: "It's ma biffday", notificationUrl: "http://www.google.com", notificationTime: NSDate())])
         
         SUBJECT = notificationStream.getTitle()
         self.searchDisplayController?.displaysSearchBarInNavigationBar = true

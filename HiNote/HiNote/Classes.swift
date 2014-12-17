@@ -23,12 +23,15 @@ class Notification {
 
 class Stream {
     var title: String
+    var id: Int
     var notifications: [NotificationInfo] = []
     init() {
         self.title = "Stream Title Not Initilized"
+        self.id = 0
     }
-    init(title:String) {
+    init(title:String, id: Int) {
         self.title = title
+        self.id = id
     }
     func addNotifications(toAdd: [NotificationInfo]) {
         self.notifications.extend(toAdd)

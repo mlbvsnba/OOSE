@@ -53,39 +53,50 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
             let jsonObject : AnyObject! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil)
             if let notificationArray = jsonObject as? NSArray{
                 for notification in notificationArray {
+                    println("die here")
                 if let streamJSON = notification as? NSDictionary {
                     if let nextJSON = streamJSON["fields"] as? NSDictionary {
                         stream.addNotifications( [NotificationInfo(dev: "Matt", notificationText: nextJSON["contents"]as String!, notificationUrl: nextJSON["url"]as String!, notificationTime: NSDate() )])
                     }
+                println("die 2")
                 }
                 } //dev: String, notificationText: String, notificationUrl: String,
                 //notificationTime: NSDate
             }
     })
     task.resume()
+    while (task.state != NSURLSessionTaskState.Completed) {
+            
+        }
     }
     
     func getStreams() {
-        let stringURL: String = Constants.baseUrl + "/listall/"
+        println("dead")
+        let stringURL: String = Constants.baseUrl + "listall/"
         let url: NSURL = NSURL( string: stringURL )!
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithURL(url, completionHandler: { data, response, error -> Void in
             var err: NSError?
+            println("here1")
            let jsonObject : AnyObject! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil)
+                        println("here2")
             if let streamArray = jsonObject as? NSArray{
+                            println("here3")
                 for stream  in streamArray  {
                     if let streamJSON = stream as? NSDictionary {
-                        
+                                    println("here4")
                         if let nextJSON = streamJSON["fields"] as? NSDictionary {
-                            let toAdd = Stream(title: nextJSON["description"]as String!)
+                            let toAdd = Stream(title: nextJSON["name"]as String!, id: streamJSON["pk"] as Int! )
                             if( !self.activeContainsStream( toAdd ) )
                             {
                                 self.otherStreams.append(toAdd)
                             }
-                            
+                                        println("here5")
+                            /*
                             if let id = streamJSON["pk"] as? Int {
                                 self.getNotifications(String(id), stream: toAdd)
                             }
+                            */
                         }
                     }
                 }
@@ -110,10 +121,10 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     
     func getSubscribed()
     {
-        let stringURL: String = Constants.baseUrl + "/listsubs/"
+        let stringURL: String = Constants.baseUrl + "listsubs/"
         var request = NSMutableURLRequest(URL: NSURL(string: stringURL)!)
         let session = NSURLSession.sharedSession()
-        
+        println("cam cam")
         request.HTTPMethod = "POST"
         var err: NSError?
         
@@ -121,23 +132,35 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
         
         var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
-            
+            println("Y")
             let jsonObject : AnyObject! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil)
+            println(jsonObject)
+            println("X")
             if let subscribedArray = jsonObject as? NSArray{
+                println("x2")
                 for subscription in subscribedArray {
                     if let streamJSON = subscription as? NSDictionary {
+                                        println("x3")
                         if let nextJSON = streamJSON["fields"] as? NSDictionary {
-                            let toAdd = Stream(title: nextJSON["description"]as String!)
+                            let toAdd = Stream(title: nextJSON["name"]as String!, id: streamJSON["pk"] as Int!)
                             self.active.append(toAdd)
+                            println("x4")
+                            
                             if let id = streamJSON["pk"] as? Int {
                                 self.getNotifications(String(id), stream: toAdd)
                             }
+                            
                         }
                     }
                 } //dev: String, notificationText: String, notificationUrl: String,
                 //notificationTime: NSDate
             }
         })
+        task.resume()
+        while (task.state != NSURLSessionTaskState.Completed) {
+            
+        }
+        println("made it")
     }
     
     
@@ -271,7 +294,36 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     
     func addStreamToActive( streamToAdd: Stream )
     {
-        println( "Added following stream: " + streamToAdd.getTitle() )
+        let stringURL: String = Constants.baseUrl + "subscribe/"
+        var request = NSMutableURLRequest(URL: NSURL(string: stringURL)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        var err: NSError?
+        
+        var bodyData = "username=" + getUsername() + "&password=" + getPasscode() + "&sub_id=" + String(streamToAdd.id)
+        request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
+        
+        var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
+            /*
+            let vc : StreamController! = self.storyboard?.instantiateViewControllerWithIdentifier("Streams") as StreamController
+            self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
+            */
+        })
+        task.resume()
+        while (task.state != NSURLSessionTaskState.Completed) {
+            
+        }
+        println("made it")
+        self.clearArrays()
+        self.getSubscribed()
+        self.getStreams()
+        
+        self.tableView.reloadData()
+    }
+    
+    func clearArrays() {
+        self.active.removeAll(keepCapacity: false)
+        self.otherStreams.removeAll(keepCapacity: false)
     }
 
     /*
@@ -310,7 +362,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         
         println(self.active)
         //self.active = [Stream(title: "Water"), Stream(title: "Fire"), Stream(title: "Air"), Stream(title: "Blue Sky")]
-        self.otherStreams = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
+        //self.otherStreams = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
 
         
         //Location:
@@ -354,8 +406,8 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         var currentLocation = pastLocations.lastObject as CLLocation
         var coord = currentLocation.coordinate
             
-        println(coord.latitude)
-        println(coord.longitude)
+        //println(coord.latitude)
+        //println(coord.longitude)
         
         //TODO: get location to server side
     }

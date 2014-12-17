@@ -21,7 +21,7 @@ class TestNotifications: XCTestCase {
     }
 
     func testStreamInstatiantes() {
-        let streamForTest = Stream(title: "one stream to rule them all")
+        let streamForTest = Stream(title: "one stream to rule them all", id: 0)
         for i in 0...9 {
             var note = Notification(title: "Test", subtitle: "all tests")
             streamForTest.addNotifications([NotificationInfo(dev: "cam cam", notificationText: "red blue green", notificationUrl: "yahoo.com",
