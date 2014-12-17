@@ -14,7 +14,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     
     var active: [Stream] = []
     var muted: [Stream] = []
-    var newStreams: [Stream] = []
+    //var newStreams: [Stream] = []
     @IBOutlet weak var searchBar: UISearchBar!
     
     var searchResults: [Stream] = []
@@ -38,8 +38,6 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
             break
         case 1: cell = StreamCell( text: self.muted[ indexPath.row ].title )
             break
-        case 2: cell = StreamCell( text: self.newStreams[ indexPath.row ].title )
-             break
         default: cell = StreamCell()
         }
         
@@ -96,7 +94,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     
     func filterContentForSearchText(searchText: String) {
         // Filter the array using the filter method
-        self.searchResults = (self.active + self.muted + self.newStreams).filter({( stream: Stream) -> Bool in
+        self.searchResults = (self.active + self.muted ).filter({( stream: Stream) -> Bool in
             let stringMatch = stream.title.rangeOfString(searchText)
             return (stringMatch != nil)
         })
@@ -123,10 +121,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         }
         if section == 1 {
             return muted.count
-            }
-        if section == 2 {
-            return newStreams.count
-            }
+        }
         return 0
     }
     
@@ -134,37 +129,41 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         if  tableView == self.searchDisplayController!.searchResultsTableView {
             return 1
         }
-        return 3
+        return 2
     }
     
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    if  tableView == self.searchDisplayController!.searchResultsTableView {
-            return "found"
+        if  tableView == self.searchDisplayController!.searchResultsTableView {
+            return "Found"
         }
-    if section == 0 {
-        return "Active"
+        
+        if section == 0 {
+            return "Subscribed"
         }
-    if section == 1 {
-            return "Muted"
+        else if section == 1 {
+            return "Other Streams"
         }
-        return "New"
+        return ""
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?{
         
         var header = tableViewHeader( headerFrame: CGRectMake(0, 0, tableView.bounds.size.width, 30), textFrame: CGRectMake(20, 5, tableView.bounds.size.width - 20 - 10, 15) )
         
+        if( tableView == self.searchDisplayController!.searchResultsTableView ) {
+            header.setText( "Found" )
+            return header
+        }
+
+        
         switch( section )
         {
         case 0:
-            header.setText( "Active" )
+            header.setText( "Subscribed" )
             break
         case 1:
-            header.setText( "Muted" )
-            break
-        case 2:
-            header.setText( "New" )
+            header.setText( "Other Streams" )
             break
         default:
             header.setText( "" )
@@ -183,9 +182,6 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
             break
         case 1:
             vc.notificationStream = self.muted[ indexPath.row ]
-            break
-        case 2:
-            vc.notificationStream = self.newStreams[ indexPath.row ]
             break
         default:
             println("Error, section not found in didSelectRowAtIndexPath")
@@ -227,11 +223,9 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         println(self.active)
         //self.active = [Stream(title: "Water"), Stream(title: "Fire"), Stream(title: "Air"), Stream(title: "Blue Sky")]
         self.muted = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
-        self.newStreams = [Stream(title: "WompWompWomp"), Stream(title: "CatDog"), Stream(title: "The Rains in Africa")]
 
         
         //Location:
-        println("asking for location")
         self.locationManager = CLLocationManager()
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -266,7 +260,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        println("updated location")
+        //println("updated location")
         
         var pastLocations = locations as NSArray
         var currentLocation = pastLocations.lastObject as CLLocation

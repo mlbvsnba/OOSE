@@ -10,6 +10,7 @@
 		201A5D5C1A1D1E4D00F771BE /* TableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201A5D5B1A1D1E4D00F771BE /* TableViewHeader.swift */; };
 		207F55D41A30F4260010A977 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207F55D31A30F4260010A977 /* ColorScheme.swift */; };
 		207F55D61A3110240010A977 /* StreamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207F55D51A3110240010A977 /* StreamCell.swift */; };
+		209C42AC1A411D5A00E32BF5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5F8221A03064500E5B177 /* AppDelegate.swift */; };
 		20BEC9DF1A2F950200C9CAAE /* NotificationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BEC9DE1A2F950200C9CAAE /* NotificationInfo.swift */; };
 		3E0CE75D1A0DA4EC00D21101 /* Classes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0CE75C1A0DA4EC00D21101 /* Classes.swift */; };
 		3E4B25811A32ABC100C08A15 /* TestRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4B25801A32ABC100C08A15 /* TestRegistration.swift */; };
@@ -283,6 +284,7 @@
 				3E4B25851A32AEB900C08A15 /* TableViewHeader.swift in Sources */,
 				3E4B25831A32AD4300C08A15 /* UserSignUp.swift in Sources */,
 				3E4B25821A32ACBE00C08A15 /* ViewController.swift in Sources */,
+				209C42AC1A411D5A00E32BF5 /* AppDelegate.swift in Sources */,
 				3E4B25861A32AEC000C08A15 /* SettingsController.swift in Sources */,
 				3E4B25881A32AEC600C08A15 /* StreamCell.swift in Sources */,
 				3E4B25811A32ABC100C08A15 /* TestRegistration.swift in Sources */,
