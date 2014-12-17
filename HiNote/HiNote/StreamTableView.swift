@@ -55,7 +55,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
                 for notification in notificationArray {
                 if let streamJSON = notification as? NSDictionary {
                     if let nextJSON = streamJSON["fields"] as? NSDictionary {
-                        stream.addNotifications( [NotificationInfo(dev: "Matt", notificationText: nextJSON["contents"]as String!, notificationUrl: "http://www.google.com", notificationTime: NSDate() )])
+                        stream.addNotifications( [NotificationInfo(dev: "Matt", notificationText: nextJSON["contents"]as String!, notificationUrl: nextJSON["url"]as String!, notificationTime: NSDate() )])
                     }
                 }
                 } //dev: String, notificationText: String, notificationUrl: String,
