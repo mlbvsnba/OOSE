@@ -4,7 +4,7 @@ from django.db import models
 import django.contrib.auth.models
 from django.forms import ModelForm
 # import pyapns_wrapper
-# import sys
+import sys
 from pyapns import configure, provision, notify
 
 
@@ -19,6 +19,9 @@ class CommonUser(django.contrib.auth.models.User):
             device.save()
         return device
 
+    def create_personal_subscription(self):
+        Subscription.create_personal_sub(self)
+
 
 class IOSDevice(models.Model):
     user = models.ForeignKey(CommonUser)
@@ -31,8 +34,10 @@ class CommonUserForm(ModelForm):
         fields = ['first_name', 'last_name', 'email', 'username', 'password']
 
     def save(self, commit=True):
-        user = super(CommonUserForm, self).save(commit=False)
+        user = super(CommonUserForm, self).save(commit=commit)
         user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.create_personal_subscription()
         if commit:
             user.save()
         return user
@@ -49,8 +54,20 @@ class SubscriptionSettings(models.Model):
 
 
 class Developer(django.contrib.auth.models.User):
+    PERSONAL_USERNAME = 'PERSONAL_DEV'
     ## A Developer who can create and push Notifications to Subscriptions that it creates.
     api_key = models.CharField(max_length=43, blank=False)
+
+    @staticmethod
+    def get_personal_dev():
+        try:
+            dev = Developer.objects.get(username=Developer.PERSONAL_USERNAME)
+        except ObjectDoesNotExist:
+            dev = Developer.objects.create(api_key=Developer.create_api_key(),
+                                           username=Developer.PERSONAL_USERNAME)
+            dev.set_password(Developer.PERSONAL_USERNAME)
+            dev.save()
+        return dev
 
     def verify_api_key(self, api_key):
         ##Verifies a Developer's API key.
@@ -104,6 +121,8 @@ class Subscription(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
+    is_personal = models.BooleanField(default=False)
+    user_id = models.IntegerField(null=True)
 
     def add_user(self, user, save=True):
         # Adds a user to this subscriptions list of subscribers
@@ -131,6 +150,22 @@ class Subscription(models.Model):
         notif = self.developernotification_set.create(sender=self.owner, contents=contents)
         notif.push()
         return notif
+
+    @staticmethod
+    def create_personal_sub(user):
+        dev = Developer.get_personal_dev()
+        name = "Personal Feed"
+        description = user.first_name + "'s Personal Feed"
+        sub = Subscription.objects.create(
+            owner=dev, name=name, description=description, is_personal=True, user_id=user.id)
+        sub.save()
+        sub.add_user(user)
+        return
+
+    @staticmethod
+    def get_personal_sub(user):
+        dev = Developer.get_personal_dev()
+        return Subscription.objects.get(owner=dev, user_id=user.id)
 
 
 class SubscriptionCreationForm(forms.Form):
@@ -192,20 +227,12 @@ class DeveloperNotification(Notification):
     def push(self):
         configure({'HOST': 'http://localhost:7077/'})
         provision('HiNote', open('apns-dev.pem').read(), 'sandbox')
-        # print >>sys.stderr, 'Here'
         settings = self.subscription.subscriptionsettings_set.all()
-        # print >>sys.stderr, str(settings)
         users = [setting.user for setting in settings]
-        # print >>sys.stderr, str(users)
-        # tokens = []
         for user in users:
             for device in user.iosdevice_set.all():
                 token = str(device.token)
                 notify('HiNote', token, {'aps':{'alert': str(self.contents)}})
-        # print >>sys.stderr, str(tokens)
-        # print >>sys.stderr, str(self.contents)
-
-        # print >>sys.stderr, 'done'
 
 
 class UserNotification(Notification):

@@ -8,6 +8,7 @@ from HiNote.models import CommonUserForm
 from HiNote.models import SubscriptionCreationForm
 from HiNote.models import SubscriptionSettings
 from HiNote.models import PushNotificationForm
+from HiNote.models import DeveloperNotification
 from HiNote.models import Subscription
 from HiNote.models import Developer
 from django.core.exceptions import ValidationError
@@ -55,6 +56,28 @@ def check_auth(request):
         return render(request, 'basic_form.html', {'plain_response': 'success'})
     else:
         return response
+
+
+@csrf_exempt
+def forward_notifcation(request):
+    user_valid, user, response = auth_user(request)
+    if not user_valid:
+        return response
+    try:
+        other_username = request.POST['other_username']
+        notif_id = request.POST['notif_id']
+    except KeyError:
+        return HttpResponseBadRequest('all required parameters must be included')
+    try:
+        other_user = CommonUser.objects.get(username=other_username)
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest('user')
+    try:
+        notification = DeveloperNotification.objects.get(id=notif_id)
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest('notif')
+    personal_sub = Subscription.get_personal_sub(other_user)
+    personal_sub.create_notification(notification.contents)
 
 
 @csrf_exempt
@@ -154,7 +177,7 @@ def push_notification(request):
 
 
 def list_subscriptions(request):
-    subs = Subscription.objects.all()
+    subs = Subscription.objects.filter(is_personal=False)
     json = serializers.serialize('json', subs)
     return HttpResponse(json, content_type='application/json')
 
