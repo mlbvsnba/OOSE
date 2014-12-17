@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^register_device/', 'HiNote.views.register_device'),
     url(r'^listsubs/', 'HiNote.views.get_user_subscriptions'),
     url(r'^subscribe/', 'HiNote.views.subscribe'),
+    url(r'^forward/', 'HiNote.views.forward_notifcation'),
     # url(r'^$', 'django.contrib.staticfiles.views.serve', kwargs={
     #     'path': 'index.html', 'document_root': settings.STATIC_URL})
 )
