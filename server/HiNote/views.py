@@ -106,7 +106,7 @@ def get_user_subscriptions(request):
         subscriptions = [settings.subscription for settings in settings_set]
     except ObjectDoesNotExist:
        subscriptions = []
-    json = pyjson.dumps(subscriptions)
+    json = serializers.serialize('json', subscriptions)
     return HttpResponse(json, content_type='application/json')
 
 
