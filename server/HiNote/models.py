@@ -237,10 +237,3 @@ class DeveloperNotification(Notification):
                 token = str(device.token)
                 notify('HiNote', token, {'aps':{'alert': str(self.contents),
                                                 'url': str(self.url)}})
-
-
-class UserNotification(Notification):
-    ##A notification sent from a User to another User through a Subscription
-    recipient = models.ForeignKey(CommonUser, related_name='recipient')
-
-    pass
