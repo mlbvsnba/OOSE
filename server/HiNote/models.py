@@ -193,9 +193,11 @@ class DeveloperNotification(Notification):
         settings = self.subscription.subscriptionsettings_set.all()
         print >>sys.stderr, str(settings)
         users = [setting.user for setting in settings]
+        print >>sys.stderr, str(users)
         tokens = []
         for user in users:
             tokens.extend([str(device.token) for device in user.iosdevice_set.all()])
+        print >>sys.stderr, str(tokens)
         pyapns_wrapper.notify(tokens, str(self.contents))
 
 
