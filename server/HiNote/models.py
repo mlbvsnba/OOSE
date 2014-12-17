@@ -189,7 +189,7 @@ class DeveloperNotification(Notification):
 
     def push(self):
         settings = self.subscription.subscriptionsettings_set.all()
-        users = [s.commonuser for s in settings]
+        users = [s.user for s in settings]
         tokens = []
         for user in users:
             tokens.extend([str(device.token) for device in user.iosdevice_set.all()])
