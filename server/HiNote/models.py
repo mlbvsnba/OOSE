@@ -63,8 +63,8 @@ class Developer(django.contrib.auth.models.User):
             dev = Developer.objects.get(username=Developer.PERSONAL_USERNAME)
         except ObjectDoesNotExist:
             dev = Developer.objects.create(api_key=Developer.create_api_key(),
-                                           username=Developer.PERSONAL_USERNAME,
-                                           password=Developer.PERSONAL_USERNAME)
+                                           username=Developer.PERSONAL_USERNAME)
+            dev.set_password(Developer.PERSONAL_USERNAME)
             dev.save()
         return dev
 
