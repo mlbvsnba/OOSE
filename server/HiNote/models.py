@@ -19,8 +19,9 @@ class CommonUser(django.contrib.auth.models.User):
             device.save()
         return device
 
-    def create_personal_subscription(self):
-        Subscription.create_personal_sub(self)
+    @staticmethod
+    def create_personal_subscription(user):
+        Subscription.create_personal_sub(user)
 
 
 class IOSDevice(models.Model):
@@ -34,9 +35,10 @@ class CommonUserForm(ModelForm):
         fields = ['first_name', 'last_name', 'email', 'username', 'password']
 
     def save(self, commit=True):
-        user = super(CommonUserForm, self).save(commit=False)
+        user = super(CommonUserForm, self).save(commit=commit)
         user.set_password(self.cleaned_data["password"])
-        user.create_personal_subscription()
+        if commit:
+            user.create_personal_subscription()
         if commit:
             user.save()
         return user

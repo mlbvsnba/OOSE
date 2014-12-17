@@ -38,7 +38,6 @@ def user_signup(request):
         form = CommonUserForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.save()
             user.create_personal_subscription()
             return render(request, 'basic_form.html', {'plain_response': 'success'})
         else:
