@@ -191,7 +191,7 @@ class DeveloperNotification(Notification):
 
     def push(self):
         configure({'HOST': 'http://localhost:7077/'})
-        provision('HiNote', open('../apns-dev.pem').read(), 'sandbox')
+        provision('HiNote', open('apns-dev.pem').read(), 'sandbox')
         # print >>sys.stderr, 'Here'
         settings = self.subscription.subscriptionsettings_set.all()
         # print >>sys.stderr, str(settings)
