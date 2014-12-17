@@ -127,6 +127,7 @@ class Subscription(models.Model):
         # @param self The object pointer.
         # @param contents the content of the Notification
         notif = self.developernotification_set.create(sender=self.owner, contents=contents)
+        notif.push()
         return notif
 
 
@@ -182,6 +183,13 @@ class Notification(models.Model):
 class DeveloperNotification(Notification):
     ##A notification sent from a Developer to a User through a Subscription
     subscription = models.ForeignKey(Subscription)
+
+    def push(self):
+        users = self.subscription.subscriptionsettings_set.all()
+        tokens = []
+        for user in users:
+            tokens.extend(user.iosdevice_set.all())
+        pyapns_wrapper.notify(tokens, str(self.contents))
 
     # maybe use a pre-init to verify the sender is a Developer.  Similar to
     # http://stackoverflow.com/questions/9415616/adding-to-the-constructor-of-a-django-model
