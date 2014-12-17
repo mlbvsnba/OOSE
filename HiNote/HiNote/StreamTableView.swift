@@ -13,7 +13,7 @@ import CoreLocation
 class StreamController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, NSURLConnectionDelegate, CLLocationManagerDelegate  {
     
     var active: [Stream] = []
-    var muted: [Stream] = []
+    var otherStreams: [Stream] = []
     //var newStreams: [Stream] = []
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -36,7 +36,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         {
         case 0: cell = StreamCell( text: self.active[ indexPath.row ].title )
             break
-        case 1: cell = StreamCell( text: self.muted[ indexPath.row ].title )
+        case 1: cell = StreamCell( text: self.otherStreams[ indexPath.row ].title )
             break
         default: cell = StreamCell()
         }
@@ -94,7 +94,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     
     func filterContentForSearchText(searchText: String) {
         // Filter the array using the filter method
-        self.searchResults = (self.active + self.muted ).filter({( stream: Stream) -> Bool in
+        self.searchResults = (self.active + self.otherStreams ).filter({( stream: Stream) -> Bool in
             let stringMatch = stream.title.rangeOfString(searchText)
             return (stringMatch != nil)
         })
@@ -120,7 +120,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
             return active.count
         }
         if section == 1 {
-            return muted.count
+            return otherStreams.count
         }
         return 0
     }
@@ -173,23 +173,28 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let vc : NotifcationController! = self.storyboard?.instantiateViewControllerWithIdentifier("Notifications") as NotifcationController
         //self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
         
         switch( indexPath.section ) {
         case 0:
+            let vc : NotifcationController! = self.storyboard?.instantiateViewControllerWithIdentifier("Notifications") as NotifcationController
             vc.notificationStream = active[ indexPath.row ]
+            self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
             break
         case 1:
-            vc.notificationStream = self.muted[ indexPath.row ]
+            addStreamToActive( self.otherStreams[ indexPath.row ] )
             break
         default:
             println("Error, section not found in didSelectRowAtIndexPath")
         }
-        
-        self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
+    }
+    
+    func addStreamToActive( streamToAdd: Stream )
+    {
+        println( "Added following stream: " + streamToAdd.getTitle() )
     }
 
+    /*
     func addStream() {
         
         var addCategoryAlert = UIAlertController(title: "Add Hashtag", message: "Please enter the hashtag:", preferredStyle: UIAlertControllerStyle.Alert)
@@ -210,6 +215,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     {
         println( "Adding: " + categoryToAdd )
     }
+    */
     
     required init(coder aDecoder: NSCoder) {
         self.locationManager = CLLocationManager()
@@ -222,7 +228,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         getStreams()
         println(self.active)
         //self.active = [Stream(title: "Water"), Stream(title: "Fire"), Stream(title: "Air"), Stream(title: "Blue Sky")]
-        self.muted = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
+        self.otherStreams = [Stream(title: "Breaking Bad"), Stream(title: "Shows You Don't Even Like"),Stream(title: "Funny") ]
 
         
         //Location:
@@ -242,8 +248,8 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
         //Navigation Bar:
         self.searchDisplayController?.displaysSearchBarInNavigationBar = true
         
-        let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Add", style: .Plain, target: self, action: "addStream")
-        self.navigationItem.rightBarButtonItem = rightSideButton
+        //let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Add", style: .Plain, target: self, action: "addStream")
+        //self.navigationItem.rightBarButtonItem = rightSideButton
 
     }
     

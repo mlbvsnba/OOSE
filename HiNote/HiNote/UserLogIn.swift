@@ -12,7 +12,6 @@ import UIKit
 import Security
 
 
-
 class UserLogIn: UIViewController, UITextFieldDelegate {
     
     var username_dialog_box: UITextField?
