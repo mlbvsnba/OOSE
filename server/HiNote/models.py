@@ -189,18 +189,18 @@ class DeveloperNotification(Notification):
     # http://stackoverflow.com/questions/9415616/adding-to-the-constructor-of-a-django-model
 
     def push(self):
-        print >>sys.stderr, 'Here'
+        # print >>sys.stderr, 'Here'
         settings = self.subscription.subscriptionsettings_set.all()
-        print >>sys.stderr, str(settings)
+        # print >>sys.stderr, str(settings)
         users = [setting.user for setting in settings]
-        print >>sys.stderr, str(users)
+        # print >>sys.stderr, str(users)
         tokens = []
         for user in users:
             tokens.extend([str(device.token) for device in user.iosdevice_set.all()])
-        print >>sys.stderr, str(tokens)
-        print >>sys.stderr, str(self.contents)
+        # print >>sys.stderr, str(tokens)
+        # print >>sys.stderr, str(self.contents)
         pyapns_wrapper.notify(tokens, str(self.contents))
-        print >>sys.stderr, 'done'
+        # print >>sys.stderr, 'done'
 
 
 class UserNotification(Notification):
