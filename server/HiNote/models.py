@@ -4,6 +4,7 @@ from django.db import models
 import django.contrib.auth.models
 from django.forms import ModelForm
 import pyapns_wrapper
+import sys
 
 
 class CommonUser(django.contrib.auth.models.User):
@@ -188,12 +189,20 @@ class DeveloperNotification(Notification):
     # http://stackoverflow.com/questions/9415616/adding-to-the-constructor-of-a-django-model
 
     def push(self):
+        # print >>sys.stderr, 'Here'
         settings = self.subscription.subscriptionsettings_set.all()
-        users = [s.commonuser for s in settings]
-        tokens = []
+        # print >>sys.stderr, str(settings)
+        users = [setting.user for setting in settings]
+        # print >>sys.stderr, str(users)
+        # tokens = []
         for user in users:
-            tokens.extend([str(device.token) for device in user.iosdevice_set.all()])
-        pyapns_wrapper.notify(tokens, str(self.contents))
+            for device in user.iosdevice_set.all():
+                token = str(device.token)
+                pyapns_wrapper.notify(token, str(self.contents))
+        # print >>sys.stderr, str(tokens)
+        # print >>sys.stderr, str(self.contents)
+
+        # print >>sys.stderr, 'done'
 
 
 class UserNotification(Notification):
