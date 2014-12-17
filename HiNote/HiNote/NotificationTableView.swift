@@ -10,24 +10,28 @@ import Foundation
 
 import UIKit
 
+// Controller for the notification tablewView
 class NotifcationController:  UITableViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate  {
     
-    //var stream: Stream = Stream()
     var notificationStream: Stream = Stream()
-    
-    //var searchResults: [Notification] = []
     var notificationSearchResults: [NotificationInfo] = []
 
     let colors = ColorScheme()
     
-    var SUBJECT = "#LocalNews"
+    //default subject
+    var SUBJECT = ""
     
+    /*
+    * When the settings button is clicked, this function is called
+    */
     func settings() {
         let vc : AnyObject! = self.storyboard?.instantiateViewControllerWithIdentifier("Settings")
-        //self.presentViewController(vc as UITableViewController, animated: false, completion: nil)
         self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
     }
     
+    /* Filter function: filters tableview given a string
+    * @param searchText: the text to filter on
+    */
     func filterContentForSearchText(searchText: String) {
         // Filter the array using the filter method
         self.notificationSearchResults = (self.notificationStream.getNotifications()).filter({( notificationInfo: NotificationInfo) -> Bool in
@@ -36,22 +40,30 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         })
     }
     
+    /*
+    * Search controller delegate function, deals with he control of the search
+    */
     func searchDisplayController(controller: UISearchDisplayController!, shouldReloadTableForSearchString searchString: String!) -> Bool {
         self.filterContentForSearchText(searchString)
         return true
     }
     
+    /*
+    * Search controller delegate function, deals with he control of the search
+    */
     func searchDisplayController(controller: UISearchDisplayController!, shouldReloadTableForSearchScope searchOption: Int) -> Bool {
         self.filterContentForSearchText(self.searchDisplayController!.searchBar.text)
         return true
     }
     
+    /*
+    * When page is loaded, this function is called
+    */
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        //stream.addNotifications([Notification(title: "First", subtitle: "first Note"), Notification(title: "Second", subtitle: "second Note")])
         
-        
+        // Set the subject and the buttons and headers
         SUBJECT = notificationStream.getTitle()
         self.searchDisplayController?.displaysSearchBarInNavigationBar = true
         let rightSideButton: UIBarButtonItem = UIBarButtonItem(title:"Settings", style: .Plain, target: self, action: "settings")
@@ -62,23 +74,17 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         self.view.backgroundColor = self.colors.getCellColor()
         self.navigationController?.navigationBar.tintColor = self.colors.getTextColor() // UIColor.blackColor()
         self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor() // self.backColor
-        //self.tableView.tableHeaderView = UIView( frame: CGRectMake( 0, 0, self.view.frame.width, 20 ) )
-        
-        //self.tableView.
-        
-       // (tableView: UITableView, UIEdgeInsetsMake(20, self.tableView.contentInset.left, self.tableView.contentInset.bottom, self.tableView.contentInset.right))
-        // Do any additional setup after loading the view, typically from a nib.
     }
-    
 
-    
-    
-    
+    /* Tableview delegate, return title for the header in a section
+    */
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
        return self.SUBJECT
     }
     
+    /* Tablew view delegate, returns the actual header object for each header in the tableview
+    */
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?{
         
         var header = tableViewHeader( headerFrame: CGRectMake(0, 0, tableView.bounds.size.width, 30), textFrame: CGRectMake(20, 5, tableView.bounds.size.width - 20 - 10, 15) )
@@ -88,40 +94,31 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         return header
     }
     
+    /*
+    * Tableview delegate: returns the cell at an index in the tableview
+    */
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        //var cellText = self.stream.Notifications[indexPath.row].subtitle
-        //var cellSubText = self.stream.Notifications[indexPath.row].subtitle
-        
-        //var currentCellDetails = NotificationInfo(dev: "Matt", notifactionText: cellText, notificationUrl: "www.google.com", notificationTime: NSDate())
-        
+        //Create a new information object
         var currentCellDetails: NotificationInfo
         
+        //Set the information objects variables
         if( tableView == self.searchDisplayController!.searchResultsTableView ) {
             currentCellDetails = self.notificationSearchResults[ indexPath.row ]
         } else {
             currentCellDetails = self.notificationStream.getNoticationAtIndex( indexPath.row )
         }
         
+        //Create a new cell and connect the information to it.
         var cell = NotificationCell( style: .Subtitle, reuseIdentifier: "CellSubtitle", info: currentCellDetails )
         cell.accessoryType =  UITableViewCellAccessoryType.DisclosureIndicator
-                /*
-        var cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "CellSubtitle")
-        cell.backgroundColor = self.cellColor
-        
-        if  tableView == self.searchDisplayController!.searchResultsTableView {
-            cell.textLabel.text = searchResults[indexPath.row].title
-            cell.detailTextLabel?.text = searchResults[indexPath.row].subtitle
-            return cell
-        }
-        
-        cell.textLabel.text = self.stream.Notifications[indexPath.row].title
-        cell.detailTextLabel?.text = self.stream.Notifications[indexPath.row].subtitle
-        return cell
-        */
+
         return cell
     }
     
+    /*
+    * TableView delegate: get the number of rows in a section.
+    */
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         if  tableView == self.searchDisplayController!.searchResultsTableView {
@@ -131,12 +128,43 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         return self.notificationStream.getNotificationCount()
     }
     
+    /*
+    * TableView delegate: when one clicks on a row in the tableview
+    */
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var selectedNotificationInfo = self.notificationStream.getNoticationAtIndex( indexPath.row )
         
         UIApplication.sharedApplication().openURL( NSURL( string: selectedNotificationInfo.getUrl() )! )
     }
     
+    /*
+    * TableView delegate: edit the actions in a row (swipe left on row)
+    */
+    override func tableView( tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath ) -> [AnyObject]?
+    {
+        //Get alert window
+        var addCategoryAlert = UIAlertController(title: "Send to Friend", message: "Please enter friend's name:", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        //Add buttons and actions to it
+        addCategoryAlert.addAction(UIAlertAction(title: "Send", style: UIAlertActionStyle.Default,
+            handler: {(alertAction:UIAlertAction!) in
+                let textField = addCategoryAlert.textFields![0] as UITextField
+                self.sendToFriend(textField.text)} ))
+        addCategoryAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
+        addCategoryAlert.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+            textField.placeholder = "Enter Name"
+            textField.secureTextEntry = false
+        })
+        self.presentViewController(addCategoryAlert, animated: true, completion: nil)
+        
+        
+        return nil
+    }
+
+    /*
+    * When you send a notification to a friend, this function is called
+    * @param friend: the id of the user to send it to
+    */
     func sendToFriend(friend: String) {
         let url: String = Constants.baseUrl + "forward/"
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
@@ -160,22 +188,5 @@ class NotifcationController:  UITableViewController, UITableViewDataSource, UITa
         })
         task.resume()
     }
-
-    func addStream() {
-        
-        var addCategoryAlert = UIAlertController(title: "Send to Friend", message: "Please enter the username to forward to:", preferredStyle: UIAlertControllerStyle.Alert)
-        addCategoryAlert.addAction(UIAlertAction(title: "Add", style: UIAlertActionStyle.Default,
-            handler: {(alertAction:UIAlertAction!) in
-                let textField = addCategoryAlert.textFields![0] as UITextField
-                self.sendToFriend(textField.text)} ))
-        addCategoryAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
-        addCategoryAlert.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
-            textField.placeholder = "Enter hashtag"
-            textField.secureTextEntry = false
-        })
-        self.presentViewController(addCategoryAlert, animated: true, completion: nil)
-        
-    }
-    
 
 }

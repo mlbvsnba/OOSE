@@ -11,10 +11,10 @@ import Foundation
 import UIKit
 import Security
 
-
-
+// Class representing the sign up for the user
 class UserSignUp: UIViewController, UITextFieldDelegate {
     
+    // Variables associated with it
     var username_dialog_box: UITextField?
     var password_dialog_box: UITextField?
     var name_dialog_box: UITextField?
@@ -23,11 +23,13 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
     
     let colors = ColorScheme()
     
+    // When page loads, this function is called
     override func viewDidLoad() {
         
         super.viewDidLoad()
         let BOXHEIGHT: CGFloat = 30
         
+        //Set all the boxes, title, etc.
         let username_banner = UILabel(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.1, self.view.frame.width*0.5, BOXHEIGHT))
         username_banner.text = "Username:"
         
@@ -50,13 +52,13 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         
         email_dialog_box = UITextField(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.1 + BOXHEIGHT*10.5, self.view.frame.width*0.5, BOXHEIGHT))
         
-        
+        //Set the delegate of the boxes to self
         password_dialog_box!.delegate = self
         username_dialog_box!.delegate = self
         name_dialog_box!.delegate = self
         email_dialog_box!.delegate = self
         
-        
+        //Set the style
         password_dialog_box!.borderStyle = UITextBorderStyle.Line
         username_dialog_box!.borderStyle = UITextBorderStyle.Line
         name_dialog_box!.borderStyle = UITextBorderStyle.Line
@@ -67,6 +69,7 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         register.setTitle("Register", forState: UIControlState.Normal)
         register.setTitleColor(UIColor(white: 0, alpha: 1), forState: UIControlState.Normal)
         
+        //Add the boxes to the subview
         self.view.addSubview(username_banner)
         self.view.addSubview(password_banner)
         self.view.addSubview(name_banner)
@@ -88,25 +91,38 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         
     }
     
-    
-    
-    
+    /*
+    * Push to the next page in the navigation controller
+    */
     func pushNext() {
         let vc : StreamController! = self.storyboard?.instantiateViewControllerWithIdentifier("Streams") as StreamController
         self.navigationController?.pushViewController(vc as UITableViewController, animated: true)
     }
     
+    /*
+    * Check if the password box is non-empty
+    */
     func passwordCheck() -> Bool {
         return !(password_dialog_box!.text! == "")
     }
+    
+    /*
+    * Check if the username box is non-empty
+    */
     func userNameCheck() -> Bool {
         return !(username_dialog_box!.text! == "")
     }
     
+    /*
+    * Check if the name box is non-empty
+    */
     func nameCheck() -> Bool {
         return !(username_dialog_box!.text! == "")
     }
     
+    /*
+    * Check if the e-mail box is non-empty
+    */
     func emailCheck() -> Bool {
         //emails have atleast 7 letters
         if(countElements(email_dialog_box!.text!)>7) {
@@ -116,13 +132,22 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         return false
     }
     
+    /*
+    * Check if we can move to the next page. We can do that if we successfully registered
+    * with the server
+    */
     func seeIfCanMoveOn() {
         if (registerForService()) {
             pushNext()
         }
     }
     
+    /*
+    * Register for the server
+    * @return: true if success, false otherwise
+    */
     func registerForService() -> Bool {
+        //checkk all boxes
         if(userNameCheck() && emailCheck() && nameCheck() && passwordCheck()) {
             registerRequest()
             //if it worked return true
@@ -131,9 +156,6 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
                 }
             //if not return false
             else {
-                
-                
-                
                 return true
             }
         }
@@ -141,21 +163,25 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         return false
     }
     
-    
+    /*
+    * Make a request to the server to try to register
+    */
     func registerRequest() {
+        //Set the URL
         let url: String = Constants.baseUrl + "user_signup/"
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
         var err: NSError?
         
+        //Create the Data
         var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! +  "&email=" + email_dialog_box!.text! + "&first_name=" + name_dialog_box!.text! + "&last_name=jameson"
         request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
         
-        //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
-        //print(request.HTTPBody)
+        // Get the response
         var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
+                //If invalid, act accordingly
                 if (httpResponse.statusCode == 200) {
                     self.error_banner!.text = nil
                     
@@ -186,26 +212,28 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         task.resume()
     }
     
+    /*
+    * Register the device token for push notifications
+    */
     func registerDeviceToken() {
+        //Create the URL
         let url: String = Constants.baseUrl + "register_device/"
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
         var err: NSError?
         
+        //Get the device token
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         var deviceToken = appDelegate.getDeviceToken()
         
-        
-        println( "Device toke: \(deviceToken)")
-        
+        //Create the request body
         var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! +   "&device_token=" + deviceToken
         
-        
+        //make request
         request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
         
-        //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
-        //print(request.HTTPBody)
+        //Get response
         var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
@@ -220,20 +248,23 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         task.resume()
     }
     
-    
+    // TextField delegate method
     func textFieldDidBeginEditing(textField: UITextField!) {    //delegate method
         
     }
     
+    // TextField delegate method
     func textFieldShouldEndEditing(textField: UITextField!) -> Bool {  //delegate method
         return true
     }
     
+    // TextField delegate method
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
+    // Textfield delegate method
     override func resignFirstResponder() -> Bool {
         return true
     }
