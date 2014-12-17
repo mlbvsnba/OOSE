@@ -14,11 +14,11 @@ static let baseUrl: String = "http://mlbvsnba.no-ip.org:8000/"
 class KeychainAccess: NSObject {
     
     
-    func setPasscode(identifier: String, passcode: String) {
+    func setPasscodeAndUsername(identifier: String, passcode: String, username: String) {
         var dataFromString: NSData = passcode.dataUsingEncoding(NSUTF8StringEncoding)!;
         var keychainQuery = NSDictionary(
             objects: [kSecClassGenericPassword, identifier, dataFromString],
-            forKeys: [kSecClass, kSecAttrService, kSecValueData])
+            forKeys: [kSecAttrAccount, kSecClass, kSecAttrService, kSecValueData])
         
         SecItemDelete(keychainQuery as CFDictionaryRef);
         var status: OSStatus = SecItemAdd(keychainQuery as CFDictionaryRef, nil);

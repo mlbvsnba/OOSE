@@ -76,6 +76,8 @@ class UserLogIn: UIViewController, UITextFieldDelegate {
         
         //set colors
         self.view.backgroundColor = self.colors.getCellColor()
+        self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor() //background in nav-bar
+        self.navigationController?.navigationBar.tintColor = self.colors.getTextColor() //
         
     }
     
@@ -105,7 +107,7 @@ class UserLogIn: UIViewController, UITextFieldDelegate {
     
     func registerForService() -> Bool {
         if(userNameCheck() && passwordCheck()) {
-            registerRequest()
+            login()
             //if it worked return true
             if (self.error_banner!.text != nil){
                 return false
@@ -120,7 +122,7 @@ class UserLogIn: UIViewController, UITextFieldDelegate {
     }
     
     
-    func registerRequest() {
+    func login() {
         let url: String = Constants.baseUrl + "check_auth/"
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
@@ -137,9 +139,6 @@ class UserLogIn: UIViewController, UITextFieldDelegate {
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
                     self.error_banner!.text = nil
-                    setPasscode(self.password_dialog_box!.text!)
-                    println(getPasscode())
-                    self.registerDeviceToken()
                 }
 
                 if (httpResponse.statusCode == 403) {
@@ -147,34 +146,6 @@ class UserLogIn: UIViewController, UITextFieldDelegate {
                 }
                 else {
                     self.error_banner!.text = "failed to connect to server"
-                }
-            }
-        })
-        task.resume()
-    }
-    
-    func registerDeviceToken() {
-        let url: String = Constants.baseUrl + "register_device/"
-        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        var session = NSURLSession.sharedSession()
-        request.HTTPMethod = "POST"
-        var err: NSError?
-        
-        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text!
-        
-        
-        request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
-        
-        //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
-        //print(request.HTTPBody)
-        var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
-            if let httpResponse = response as? NSHTTPURLResponse {
-                if (httpResponse.statusCode == 200) {
-                    self.error_banner!.text = nil
-                }
-                else {
-                    self.error_banner!.text = "device cant connect to server"
-                    //bad request
                 }
             }
         })

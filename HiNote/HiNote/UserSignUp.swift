@@ -83,6 +83,8 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
 
         //set colors
         self.view.backgroundColor = self.colors.getCellColor()
+        self.navigationController?.navigationBar.barTintColor = self.colors.getBackGroundColor() //background in nav-bar
+        self.navigationController?.navigationBar.tintColor = self.colors.getTextColor() //
         
     }
     
