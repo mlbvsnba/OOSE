@@ -78,6 +78,7 @@ def forward_notifcation(request):
         return HttpResponseBadRequest('notif')
     personal_sub = Subscription.get_personal_sub(other_user)
     personal_sub.create_notification(notification.contents)
+    return render(request, 'basic_form.html', {'plain_response': 'success'})
 
 
 @csrf_exempt
