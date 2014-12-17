@@ -152,7 +152,6 @@ class Subscription(models.Model):
 
     @staticmethod
     def create_personal_sub(user):
-        print >>sys.stderr, user.id
         dev = Developer.get_personal_dev()
         name = "Personal Feed"
         description = user.first_name + " " + user.last_name + "'s Personal Feed"
