@@ -98,8 +98,8 @@ TEMPLATE_DIRS = (
 PYAPNS_NAME = 'HiNote'
 
 PYAPNS_CONFIG = {
-  'HOST': 'http://localhost:8077/',
+  'HOST': 'http://localhost:7077/',
   'INITIAL': [
-    (PYAPNS_NAME, 'C:\\Users\\mlbvs_000\\Documents\\oose\\project\\server\\apns-dev.pem', 'sandbox'),
+    (PYAPNS_NAME, 'apns-dev.pem', 'sandbox'),
   ]
 }
