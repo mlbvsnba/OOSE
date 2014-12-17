@@ -103,11 +103,31 @@ class Subscription(models.Model):
     description = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
 
+    def add_user(self, user, save=True):
+        # Adds a user to this subscriptions list of subscribers
+        # @param user the common user to add
+        if not isinstance(user, CommonUser):
+            raise Exception('must be a CommonUser')
+        settings = None
+        try:
+            settings = SubscriptionSettings.objects.get(
+                subscription=self, user=user)
+        except ObjectDoesNotExist:
+            pass
+        if settings is not None:
+            return settings
+        settings = self.subscriptionsettings_set.create(user=user,
+                                                        subscription=self)
+        if save and settings is not None:
+            settings.save()
+        return settings
+
     def create_notification(self, contents):
-        ##Creates a Notification
+        # Creates a Notification
         # @param self The object pointer.
         # @param contents the content of the Notification
         notif = self.developernotification_set.create(sender=self.owner, contents=contents)
+        # notif.push()
         return notif
 
 
@@ -146,7 +166,7 @@ class Notification(models.Model):
     sender = models.ForeignKey(django.contrib.auth.models.User)
     contents = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
-    # url = models.URLField(null=True)
+    url = models.URLField(null=True)
 
     def get_actions(self):
         # will be fleshed out later
@@ -166,7 +186,13 @@ class DeveloperNotification(Notification):
 
     # maybe use a pre-init to verify the sender is a Developer.  Similar to
     # http://stackoverflow.com/questions/9415616/adding-to-the-constructor-of-a-django-model
-    pass
+
+    def push(self):
+        users = self.subscription.subscriptionsettings_set.all()
+        tokens = []
+        for user in users:
+            tokens.extend(user.iosdevice_set.all())
+        pyapns_wrapper.notify(tokens, str(self.contents))
 
 
 class UserNotification(Notification):
