@@ -4,7 +4,7 @@ from django.db import models
 import django.contrib.auth.models
 from django.forms import ModelForm
 # import pyapns_wrapper
-# import sys
+import sys
 from pyapns import configure, provision, notify
 
 
@@ -151,7 +151,10 @@ class Subscription(models.Model):
 
     @staticmethod
     def create_personal_sub(user):
+        print >>sys.stderr, user.id
+
         dev = Developer.get_personal_dev()
+        print >>sys.stderr, dev.id
         name = "Personal Feed"
         description = user.first_name + " " + user.last_name + "'s Personal Feed"
         sub = Subscription.objects.create(
