@@ -157,6 +157,7 @@ class Subscription(models.Model):
         sub = Subscription.objects.create(
             owner=dev, name=name, description=description, is_personal=True)
         sub.save()
+        sub.add_user(user)
         return
 
 
