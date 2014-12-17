@@ -41,17 +41,23 @@
             background-color: black;
             color: white;
         }
+
+        form {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div id="title">
         <span class="highlight_red">H</span><span class="highlight_red">i</span><span class="highlight">N</span><span class="highlight">o</span><span class="highlight">t</span><span class="highlight">e</span>
     </div>
-    <form action="" method="post">{% csrf_token %}
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit" />
-    </form>
+    <div id="main_content">
+        <form action="" method="post">{% csrf_token %}
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
 </body>
 </html>
 {% endif %}

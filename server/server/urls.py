@@ -28,4 +28,9 @@ urlpatterns += patterns(
     'django.contrib.staticfiles.views',
     url(r'^(?:index.html)?$', 'serve', kwargs={'path': 'index.html'})
 )
+urlpatterns += patterns(
+    'django.contrib.staticfiles.views',
+    url(r'^api.html', 'serve', kwargs={'path': 'api.html'})
+)
+
 # ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
