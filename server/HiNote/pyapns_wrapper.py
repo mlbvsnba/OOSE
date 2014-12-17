@@ -25,7 +25,7 @@ def notify(apns_token, message, badge=None, sound=None):
         notification['aps']['sound'] = str(sound)
     for attempt in range(4):
         try:
-            pyapns.client.notify('MyAppId', apns_token,
+            pyapns.client.notify('HiNote', apns_token,
                                  notification)
             break
         except (pyapns.client.UnknownAppID,
