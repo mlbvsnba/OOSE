@@ -15,16 +15,17 @@ class KeychainAccess: NSObject {
     
     
     func setPasscodeAndUsername(identifier: String, passcode: String, username: String) {
-        var dataFromString: NSData = passcode.dataUsingEncoding(NSUTF8StringEncoding)!;
+        var dataFromPasscode: NSData = passcode.dataUsingEncoding(NSUTF8StringEncoding)!;
+        var dataFromUsername: NSData = username.dataUsingEncoding(NSUTF8StringEncoding)!;
         var keychainQuery = NSDictionary(
-            objects: [kSecClassGenericPassword, identifier, dataFromString],
+            objects: [username, kSecClassGenericPassword, identifier, dataFromPasscode],
             forKeys: [kSecAttrAccount, kSecClass, kSecAttrService, kSecValueData])
         
         SecItemDelete(keychainQuery as CFDictionaryRef);
         var status: OSStatus = SecItemAdd(keychainQuery as CFDictionaryRef, nil);
     }
     
-    func getPasscode(identifier: String) -> String? {
+    func getPasscodeAndUsername(identifier: String) -> String? {
         var keychainQuery = NSDictionary(
             objects: [kSecClassGenericPassword, identifier, kCFBooleanTrue, kSecMatchLimitOne],
             forKeys: [kSecClass, kSecAttrService, kSecReturnData, kSecMatchLimit])
@@ -32,9 +33,11 @@ class KeychainAccess: NSObject {
         let status: OSStatus = SecItemCopyMatching(keychainQuery, &dataTypeRef);
         let opaque = dataTypeRef?.toOpaque();
         var passcode: String?;
+        var username: String?;
         if let op = opaque? {
             let retrievedData = Unmanaged<NSData>.fromOpaque(op).takeUnretainedValue();
             passcode = NSString(data: retrievedData, encoding: NSUTF8StringEncoding);
+            println(passcode)
         } else {
             println("Passcode not found. Status code \(status)");
         }
@@ -42,13 +45,13 @@ class KeychainAccess: NSObject {
     }
 }
 
-func setPasscode(passcode: String) {
+func setPasscodeAndUsername(passcode: String, username: String) {
     var keychainAccess = KeychainAccess();
-    keychainAccess.setPasscode("CAMCAMSAPP", passcode:passcode);
+    keychainAccess.setPasscodeAndUsername("CAMCAMSAPP", passcode:passcode, username: username);
 }
 
 
-func getPasscode() -> String {
+func getPasscodeAndUsername() -> String {
     var keychainAccess = KeychainAccess();
-    return keychainAccess.getPasscode("CAMCAMSAPP")!;
+    return keychainAccess.getPasscodeAndUsername("CAMCAMSAPP")!;
 }

@@ -158,8 +158,8 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
                     self.error_banner!.text = nil
-                    setPasscode(self.password_dialog_box!.text!)
-                    println(getPasscode())
+                    setPasscodeAndUsername(self.password_dialog_box!.text!, self.username_dialog_box!.text!)
+                    println(getPasscodeAndUsername())
                     self.registerDeviceToken()
                 }
                 if (httpResponse.statusCode == 400) {
