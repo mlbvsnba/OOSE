@@ -122,6 +122,7 @@ class Subscription(models.Model):
     description = models.CharField(max_length=300)
     creation_date = models.DateTimeField('date created', auto_now_add=True, editable=False)
     is_personal = models.BooleanField(default=False)
+    user_id = models.IntegerField(null=True)
 
     def add_user(self, user, save=True):
         # Adds a user to this subscriptions list of subscribers
@@ -156,10 +157,15 @@ class Subscription(models.Model):
         name = "Personal Feed"
         description = user.first_name + " " + user.last_name + "'s Personal Feed"
         sub = Subscription.objects.create(
-            owner=dev, name=name, description=description, is_personal=True)
+            owner=dev, name=name, description=description, is_personal=True, user_id=user.id)
         sub.save()
         sub.add_user(user)
         return
+
+    @staticmethod
+    def get_personal_sub(user):
+        dev = Developer.get_personal_dev()
+        return Subscription.objects.get(owner=dev, user_id=user.id)
 
 
 class SubscriptionCreationForm(forms.Form):
