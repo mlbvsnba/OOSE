@@ -11,36 +11,6 @@ import Foundation
 import UIKit
 import Security
 
-class KeychainAccess: NSObject {
-    
-    
-    func setPasscode(identifier: String, passcode: String) {
-        var dataFromString: NSData = passcode.dataUsingEncoding(NSUTF8StringEncoding)!;
-        var keychainQuery = NSDictionary(
-            objects: [kSecClassGenericPassword, identifier, dataFromString],
-            forKeys: [kSecClass, kSecAttrService, kSecValueData])
-        
-        SecItemDelete(keychainQuery as CFDictionaryRef);
-        var status: OSStatus = SecItemAdd(keychainQuery as CFDictionaryRef, nil);
-    }
-    
-    func getPasscode(identifier: String) -> String? {
-        var keychainQuery = NSDictionary(
-            objects: [kSecClassGenericPassword, identifier, kCFBooleanTrue, kSecMatchLimitOne],
-            forKeys: [kSecClass, kSecAttrService, kSecReturnData, kSecMatchLimit])
-        var dataTypeRef :Unmanaged<AnyObject>?;
-        let status: OSStatus = SecItemCopyMatching(keychainQuery, &dataTypeRef);
-        let opaque = dataTypeRef?.toOpaque();
-        var passcode: String?;
-        if let op = opaque? {
-            let retrievedData = Unmanaged<NSData>.fromOpaque(op).takeUnretainedValue();
-            passcode = NSString(data: retrievedData, encoding: NSUTF8StringEncoding);
-        } else {
-            println("Passcode not found. Status code \(status)");
-        }
-        return passcode;
-    }
-}
 
 
 class UserSignUp: UIViewController, UITextFieldDelegate {
@@ -174,14 +144,7 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         request.HTTPMethod = "POST"
         var err: NSError?
         
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        var deviceToken = appDelegate.deviceTokenData
-        
-        
-        print( "Device toke: \(deviceToken)")
-        
-        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! + "&device_token" + deviceToken!.description + "&email=" + email_dialog_box!.text! + "&first_name=" + name_dialog_box!.text! + "&last_name=jameson"
-        
+        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! +  "&email=" + email_dialog_box!.text! + "&first_name=" + name_dialog_box!.text! + "&last_name=jameson"
         request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
         
         //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
@@ -190,8 +153,9 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
                     self.error_banner!.text = nil
-                    self.setPasscode("america")
-                    println(self.getPasscode())
+                    setPasscode(self.password_dialog_box!.text!)
+                    println(getPasscode())
+                    self.registerDeviceToken()
                 }
                 if (httpResponse.statusCode == 400) {
                     self.error_banner!.text = "username already registered"
@@ -210,17 +174,40 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         task.resume()
     }
     
-
-    func setPasscode(passcode: String) {
-        var keychainAccess = KeychainAccess();
-        keychainAccess.setPasscode("CAMCAMSAPP", passcode:passcode);
+    func registerDeviceToken() {
+        let url: String = Constants.baseUrl + "register_device/"
+        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        var err: NSError?
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        var deviceToken = appDelegate.getDeviceToken()
+        
+        
+        println( "Device toke: \(deviceToken)")
+        
+        var bodyData = "username=" + username_dialog_box!.text! + "&password=" +  password_dialog_box!.text! +   "&device_token=" + deviceToken
+        
+        
+        request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
+        
+        //request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+        //print(request.HTTPBody)
+        var task = session.dataTaskWithRequest((request), completionHandler: {data, response, error -> Void in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    self.error_banner!.text = nil
+                }
+                else {
+                    self.error_banner!.text = "device cant connect to server"
+                    //bad request
+                }
+            }
+        })
+        task.resume()
     }
     
-    
-    func getPasscode() -> String {
-        var keychainAccess = KeychainAccess();
-        return keychainAccess.getPasscode("CAMCAMSAPP")!;
-    }
     
     func textFieldDidBeginEditing(textField: UITextField!) {    //delegate method
         
