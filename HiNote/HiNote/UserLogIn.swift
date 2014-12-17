@@ -54,10 +54,10 @@ class UserLogIn: UIViewController, UITextFieldDelegate {
         logIn.setTitle("Log In", forState: UIControlState.Normal)
         logIn.setTitleColor(UIColor(white: 0, alpha: 1), forState: UIControlState.Normal)
         
-        let register = UIButton(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.8, self.view.frame.width*0.5, BOXHEIGHT*2))
-        logIn.addTarget(self, action: "registerUser", forControlEvents: UIControlEvents.TouchUpInside)
-        logIn.setTitle("Register As A New User", forState: UIControlState.Normal)
-        logIn.setTitleColor(UIColor(white: 0, alpha: 1), forState: UIControlState.Normal)
+        let register = UIButton(frame: CGRectMake(self.view.frame.width*0.166, self.view.frame.height*0.7, self.view.frame.width*0.66, BOXHEIGHT*2))
+        register.addTarget(self, action: "registerUser", forControlEvents: UIControlEvents.TouchUpInside)
+        register.setTitle("Register As A New User", forState: UIControlState.Normal)
+        register.setTitleColor(UIColor(white: 0, alpha: 1), forState: UIControlState.Normal)
         
         self.view.addSubview(username_banner)
         self.view.addSubview(password_banner)
