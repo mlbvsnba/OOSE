@@ -23,6 +23,13 @@ import json as pyjson
 
 
 def dev_signup(request):
+    """
+    The view for a Developer signup which uses DeveloperForm.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     if request.method == 'POST':
         form = DeveloperForm(request.POST)
         if form.is_valid():
@@ -35,15 +42,19 @@ def dev_signup(request):
 
 @csrf_exempt
 def user_signup(request):
+    """
+    The view for CommonUser signup which uses CommonUserForm.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     if request.method == 'POST':
         form = CommonUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             return render(request, 'basic_form.html', {'plain_response': 'success'})
         else:
-            # this could also mean the username already exists - must change response to that later on
-            # return HttpResponseBadRequest('invalid POST request - must define all required parameters')
-
             return HttpResponseBadRequest("wrong codes " + form.errors)
     else:
         return HttpResponseNotAllowed(['POST'])
@@ -51,6 +62,13 @@ def user_signup(request):
 
 @csrf_exempt
 def check_auth(request):
+    """
+    A view to authenticate an already registered CommonUser.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     user_valid, user, response = auth_user(request)
     if user_valid:
         return render(request, 'basic_form.html', {'plain_response': 'success'})
@@ -60,6 +78,13 @@ def check_auth(request):
 
 @csrf_exempt
 def forward_notifcation(request):
+    """
+    A view to forward a notification from one CommonUser to another.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     user_valid, user, response = auth_user(request)
     if not user_valid:
         return response
@@ -83,6 +108,13 @@ def forward_notifcation(request):
 
 @csrf_exempt
 def register_device(request):
+    """
+    A view to register an IOSDevice to a CommonUser.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     user_valid, user, response = auth_user(request)
     if not user_valid:
         return response
@@ -98,6 +130,13 @@ def register_device(request):
 
 @csrf_exempt
 def get_user_subscriptions(request):
+    """
+    A view to return a list of an authenticated CommonUser's subscriptions.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     user_valid, user, response = auth_user(request)
     if not user_valid:
         return response
@@ -112,6 +151,13 @@ def get_user_subscriptions(request):
 
 @csrf_exempt
 def subscribe(request):
+    """
+    A view to subscribe an authenticated CommonUser to a Subscription list (represented by its ID).
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     user_valid, user, response = auth_user(request)
     if not user_valid:
         return response
@@ -131,9 +177,13 @@ def subscribe(request):
 
 
 def auth_user(request):
-    # checks for a user given a POST response
-    # returns list of (user_valid [boolean], user [CommonUser object], response [HttpResponse])
-    # response if only returned if user_valid is False
+    """
+    Checks if an HTML request properly authenticates a CommonUser.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: list of: true if user/pass is valid, user object (if valid, else None), and response (if lookup failed, else None)
+    :rtype: list of (bool, CommonUser, HttpResponse)
+    """
     if request.method == 'POST':
         try:
             username = request.POST['username']
@@ -156,6 +206,13 @@ def auth_user(request):
 
 
 def make_subscription(request):
+    """
+    A view to create a Subscription for a Developer.  Part of DEV API.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     if request.method == 'POST':
         form = SubscriptionCreationForm(request.POST)
         if form.is_valid():
@@ -167,6 +224,13 @@ def make_subscription(request):
 
 
 def push_notification(request):
+    """
+    A view to push a new Notification to a Developer's Subscription list.  Part of DEV API.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     if request.method == 'POST':
         form = PushNotificationForm(request.POST)
         if form.is_valid():
@@ -178,12 +242,26 @@ def push_notification(request):
 
 
 def list_subscriptions(request):
+    """
+    A view to provide a JSON encoded list of all possible/created Subscription lists (not including personal lists).
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     subs = Subscription.objects.filter(is_personal=False)
     json = serializers.serialize('json', subs)
     return HttpResponse(json, content_type='application/json')
 
 
 def list_notifications(request):
+    """
+    A view to provide all notifications in JSON encoding from a given Subscription list.
+    :param request: the HTML request
+    :type request: django.http.HttpRequest
+    :return: HttpResponse object
+    :rtype: HttpResponse
+    """
     if 'id' in request.GET:
         id = request.GET['id']
         sub = Subscription.objects.get(id=id)
