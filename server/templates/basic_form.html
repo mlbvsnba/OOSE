@@ -1,64 +1,66 @@
 {% if plain_response %}
     {{ plain_response }}
 {% elif form %}
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-    <style type="text/css">
-        .highlight_red:hover {
-            color: red;
-            cursor: pointer;
-        }
+    <!DOCTYPE html>
+    <html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>{{ title }}</title>
+        <style type="text/css">
+            .highlight_red:hover {
+                color: red;
+                cursor: pointer;
+            }
 
-        .highlight:hover {
-            color: yellow;
-            cursor: pointer;
-        }
+            .highlight:hover {
+                color: yellow;
+                cursor: pointer;
+            }
 
-        a, a:visited {
-            color: blue;
-            text-decoration: none;
-        }
+            a, a:visited {
+                color: blue;
+                text-decoration: none;
+            }
 
-        a:hover {
-            color: red;
-            text-decoration: underline;
-        }
+            a:hover {
+                color: red;
+                text-decoration: underline;
+            }
 
-        html, body {
-            margin: 0;
-            padding: 0;
-        }
-        #title {
-            text-align: center;
-            font-size: 4em;
-            padding-top: 1em;
-            padding-bottom: 1em;
-            width: 100%;
-            margin: auto;
-            background-color: black;
-            color: white;
-        }
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
 
-        #main_content {
-            margin-top: 40px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
+            #title {
+                text-align: center;
+                font-size: 4em;
+                padding-top: 1em;
+                padding-bottom: 1em;
+                width: 100%;
+                margin: auto;
+                background-color: black;
+                color: white;
+            }
+
+            #main_content {
+                margin-top: 40px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
     <div id="title">
-        <span class="highlight_red">H</span><span class="highlight_red">i</span><span class="highlight">N</span><span class="highlight">o</span><span class="highlight">t</span><span class="highlight">e</span>
+        <span class="highlight_red">H</span><span class="highlight_red">i</span><span class="highlight">N</span><span
+            class="highlight">o</span><span class="highlight">t</span><span class="highlight">e</span>
     </div>
     <div id="main_content">
         <form action="" method="post">{% csrf_token %}
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Submit"/>
         </form>
     </div>
-</body>
-</html>
+    </body>
+    </html>
 {% endif %}

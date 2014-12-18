@@ -1,15 +1,13 @@
 from django.test import TestCase
+from django.core.exceptions import *
+
 from HiNote.models import Developer
 from HiNote.models import CommonUser
 from HiNote.models import Subscription
 from HiNote.models import DeveloperNotification
-from django.core.exceptions import *
-
-from django.contrib.auth import authenticate
 
 
 class DeveloperTestCase(TestCase):
-
     def test_creation(self):
         key = Developer.create_api_key()
         dev = Developer.objects.create(api_key=key, username="dev1",
@@ -30,7 +28,6 @@ class DeveloperTestCase(TestCase):
 
 
 class ViewsTest(TestCase):
-
     def test_developer_signup(self):
         response = self.client.get('/signup/')
         self.assertEqual(response.status_code, 200)
@@ -80,8 +77,8 @@ class ViewsTest(TestCase):
 
     def test_user_auth(self):
         user = CommonUser.objects.create_user(username="test", password="test",
-                                         email="test@test.com",
-                                         first_name="John", last_name="Smith")
+                                              email="test@test.com",
+                                              first_name="John", last_name="Smith")
         user.save()
         data = {'username': user.get_username(), 'password': 'test'}
         response = self.client.post('/check_auth/', data)
@@ -183,7 +180,7 @@ class SubscriptionTestCase(TestCase):
 
 
 # class DeveloperNotificationTestCase(TestCase):
-#     def test_creation(self):
+# def test_creation(self):
 #         key = Developer.create_api_key()
 #         dev = Developer.objects.create(api_key=key, username="dev1",
 #                                        password="dev1", email="dev1@dev1.com",

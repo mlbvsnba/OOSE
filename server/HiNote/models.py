@@ -1,12 +1,13 @@
+import random
+import hashlib
+import base64
+
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 import django.contrib.auth.models
 from django.forms import ModelForm
 from pyapns import configure, provision, notify
-import random
-import hashlib
-import base64
 
 
 class CommonUser(django.contrib.auth.models.User):

@@ -1,17 +1,5 @@
-from django.http import HttpResponseRedirect
-from django.forms import ModelForm
-from HiNote.models import Developer
 from django.shortcuts import render
-from HiNote.models import CommonUser
-from HiNote.models import DeveloperForm
-from HiNote.models import CommonUserForm
-from HiNote.models import SubscriptionCreationForm
-from HiNote.models import SubscriptionSettings
-from HiNote.models import PushNotificationForm
-from HiNote.models import DeveloperNotification
-from HiNote.models import Subscription
-from HiNote.models import Developer
-from django.core.exceptions import ValidationError
+
 from django.core import serializers
 from django.http import HttpResponse
 from django.http import HttpResponseNotAllowed
@@ -19,7 +7,16 @@ from django.http import HttpResponseBadRequest
 from django.http import HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import *
-import json as pyjson
+
+from HiNote.models import CommonUser
+
+from HiNote.models import DeveloperForm
+from HiNote.models import CommonUserForm
+from HiNote.models import SubscriptionCreationForm
+from HiNote.models import SubscriptionSettings
+from HiNote.models import PushNotificationForm
+from HiNote.models import DeveloperNotification
+from HiNote.models import Subscription
 
 
 def dev_signup(request):
@@ -144,7 +141,7 @@ def get_user_subscriptions(request):
         settings_set = SubscriptionSettings.objects.filter(user=user)
         subscriptions = [settings.subscription for settings in settings_set]
     except ObjectDoesNotExist:
-       subscriptions = []
+        subscriptions = []
     json = serializers.serialize('json', subscriptions)
     return HttpResponse(json, content_type='application/json')
 
@@ -181,7 +178,8 @@ def auth_user(request):
     Checks if an HTML request properly authenticates a CommonUser.
     :param request: the HTML request
     :type request: django.http.HttpRequest
-    :return: list of: true if user/pass is valid, user object (if valid, else None), and response (if lookup failed, else None)
+    :return: list of: true if user/pass is valid, user object (if valid, else None), and response (if lookup failed,
+    else None)
     :rtype: list of (bool, CommonUser, HttpResponse)
     """
     if request.method == 'POST':
