@@ -9,11 +9,13 @@
 import Foundation
 import UIKit
 
+//Custom cell for the notification view
 class NotificationCell: UITableViewCell {
     //let label: UILabel
     var details: NotificationInfo
     let colorScheme: ColorScheme
     
+    //default constructors
     override init() {
         //self.label = UILabel()
         self.details = NotificationInfo()
@@ -35,6 +37,11 @@ class NotificationCell: UITableViewCell {
         super.init( frame: frame )
     }
     
+    /* Custom constructor
+    * @param style: the style
+    * @param reuseIdentifier: the reuseIdentifier
+    * @param info: the info associated with this cell
+    */
     init( style: UITableViewCellStyle, reuseIdentifier: String, info: NotificationInfo ) {
         self.details = info
         self.colorScheme = ColorScheme()
@@ -42,16 +49,19 @@ class NotificationCell: UITableViewCell {
         self.setCellFeatures()
     }
     
+    // Set the details part of the notification cell
     func setDetails(info: NotificationInfo) {
         self.details = info
         self.setCellFeatures()
     }
     
+    //Get the details of the notificaion cell
     func getDetails() -> NotificationInfo
     {
         return self.details
     }
     
+    //Set the features (color and text) of the notification cell
     func setCellFeatures()
     {
         self.textLabel.text = self.details.text

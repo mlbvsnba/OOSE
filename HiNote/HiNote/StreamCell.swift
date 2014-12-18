@@ -9,10 +9,12 @@
 import Foundation
 import UIKit
 
+// Class representing a cell of a stream in the tableview
 class StreamCell: UITableViewCell {
     
     let colorScheme = ColorScheme()
     
+    //default constructors:
     override init() {
         super.init()
     }
@@ -32,6 +34,7 @@ class StreamCell: UITableViewCell {
         self.backgroundColor = self.colorScheme.getCellColor()
     }
     
+    //custom constructor that takes in the text to display.
     init(text: String) {
         super.init()
         self.textLabel.text = text

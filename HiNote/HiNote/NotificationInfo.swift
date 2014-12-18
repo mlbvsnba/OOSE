@@ -8,7 +8,10 @@
 
 import Foundation
 
+// Class representing the notification information per notification
 class NotificationInfo {
+    
+    //Variables
     let developer: String
     let text: String
     let subText: String
@@ -17,6 +20,7 @@ class NotificationInfo {
     
     let time: NSDate
     
+    // Empty constructor
     init()
     {
         self.developer = ""
@@ -26,6 +30,12 @@ class NotificationInfo {
         self.time = NSDate()
     }
     
+    /* Custom constructor
+    * @param dev: the develor
+    * @param notificationText: the notification text
+    * @param notiicationURL: the notification URL
+    * @param notificationTime: the time of the notification
+    */
     init( dev: String, notificationText: String, notificationUrl: String,
         notificationTime: NSDate )
     {
@@ -41,6 +51,10 @@ class NotificationInfo {
         self.subText = self.developer + " at " + timeDescription
     }
     
+    /*
+    * Get the URL related to this info
+    * @return the url
+    */
     func getUrl() -> String
     {
         return self.url
