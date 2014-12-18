@@ -24,11 +24,13 @@ class CommonUser(django.contrib.auth.models.User):
 
 
 class IOSDevice(models.Model):
+    ## A specific users ios device
     user = models.ForeignKey(CommonUser)
     token = models.CharField(max_length=64, blank=False, null=False)
 
 
 class CommonUserForm(ModelForm):
+    ## form for a common user
     class Meta:
         model = CommonUser
         fields = ['first_name', 'last_name', 'email', 'username', 'password']
