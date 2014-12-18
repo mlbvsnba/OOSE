@@ -189,7 +189,7 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
     func registerDeviceToken() {
         let url: String = Constants.baseUrl + "register_device/"
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        var session = NSURLSession.sharedSession()
+        var    session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
         var err: NSError?
         

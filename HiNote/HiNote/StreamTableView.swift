@@ -65,9 +65,6 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
             }
     })
     task.resume()
-    while (task.state != NSURLSessionTaskState.Completed) {
-            
-        }
     }
     
     func getStreams() {
