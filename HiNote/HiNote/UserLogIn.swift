@@ -41,10 +41,14 @@ class UserLogIn: UIViewController, UITextFieldDelegate {
         username_dialog_box = UITextField(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.1 + BOXHEIGHT*1.5, self.view.frame.width*0.5, BOXHEIGHT))
         
         password_dialog_box = UITextField(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.1 + BOXHEIGHT*4.5, self.view.frame.width*0.5, BOXHEIGHT))
+        password_dialog_box?.secureTextEntry = true;
         
         // set delegates to self
         password_dialog_box!.delegate = self
         username_dialog_box!.delegate = self
+        
+        password_dialog_box!.autocapitalizationType = .None
+        username_dialog_box!.autocapitalizationType = .None
 
         // set style
         password_dialog_box!.borderStyle = UITextBorderStyle.Line

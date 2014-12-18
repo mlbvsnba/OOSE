@@ -376,6 +376,7 @@ class StreamController: UITableViewController, UITableViewDataSource, UITableVie
     */
     required init(coder aDecoder: NSCoder) {
         self.locationManager = CLLocationManager()
+        self.tryingToGetSubscribed =  true
         super.init( coder: aDecoder )
         //fatalError("init(coder:) has not been implemented")
     }

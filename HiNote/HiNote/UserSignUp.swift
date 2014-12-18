@@ -47,6 +47,8 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         username_dialog_box = UITextField(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.1 + BOXHEIGHT*1.5, self.view.frame.width*0.5, BOXHEIGHT))
         
         password_dialog_box = UITextField(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.1 + BOXHEIGHT*4.5, self.view.frame.width*0.5, BOXHEIGHT))
+        password_dialog_box?.secureTextEntry = true;
+
         
         name_dialog_box = UITextField(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.1 + BOXHEIGHT*7.5, self.view.frame.width*0.5, BOXHEIGHT))
         
@@ -63,6 +65,12 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
         username_dialog_box!.borderStyle = UITextBorderStyle.Line
         name_dialog_box!.borderStyle = UITextBorderStyle.Line
         email_dialog_box!.borderStyle = UITextBorderStyle.Line
+        
+        password_dialog_box!.autocapitalizationType = .None
+        username_dialog_box!.autocapitalizationType = .None
+        name_dialog_box!.autocapitalizationType = .None
+        email_dialog_box!.autocapitalizationType = .None
+
         
         let register = UIButton(frame: CGRectMake(self.view.frame.width*0.25, self.view.frame.height*0.8, self.view.frame.width*0.5, BOXHEIGHT*2))
         register.addTarget(self, action: "seeIfCanMoveOn", forControlEvents: UIControlEvents.TouchUpInside)
@@ -206,6 +214,9 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
                         self.error_banner!.text = "failed to connect to server"
                 }
             }
+            else {
+                self.error_banner!.text = "failed to connect to server"
+            }
           //println(NSString(data: data, encoding: NSUTF8StringEncoding))
             //println(params)
         })
@@ -243,6 +254,9 @@ class UserSignUp: UIViewController, UITextFieldDelegate {
                     self.error_banner!.text = "device cant connect to server"
                     //bad request
                 }
+            }
+            else {
+                self.error_banner!.text = "failed to connect to server"
             }
         })
         task.resume()

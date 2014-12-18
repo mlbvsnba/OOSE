@@ -1,2 +1,5 @@
 * Fixed Comments
 * Fixed issue with tableview not populating when stream added to subscribed streams
+* Fixed Capitialization of input fields
+* Fixed no response from server to show error message
+* Fix of no response should mean that if Non-KOsher inputs are passed to server, they will not accept and move on to next screen
