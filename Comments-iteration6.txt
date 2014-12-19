@@ -1,0 +1,12 @@
+Group 17,
+
+Congratulations on a job well done.  You gave a good presentation of a
+well-architected system and it seems you have a working beta of solution to a
+real-world problem.  In future presentations, though, make sure to own up to
+things that can be improved; your API key generation, for instance, was simply
+arbitrary and no one would tell me that.  :)  You did a good job of picking up
+several technologies and using them in a heterogeneous environment and your
+final product is quite polished (with the exception of the pages which give the
+IDs for developer streams and the like).
+
+Total Score: 96/100
