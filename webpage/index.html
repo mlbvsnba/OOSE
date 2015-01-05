@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>OOSE Group #17 - Notify</title>
+        <link rel="stylesheet" type="text/css" href="css/main.css" />
+    </head>
+    <body>
+        <a name="top" />
+        <h1>Notify</h1>
+        <h2>Group #17</h2>
+        <h3 id="members">
+            Cameron Oleary<br />
+            Richard Mishaan<br />
+            Michael Stewart<br />
+            Matthijs Taselaar
+        </h3>
+        <hr />
+        <h2 class="section_heading">Contents</h2>
+        <ul id="contents_list">
+            <li><a href="#vision_statement">Vision Statement</a></li>
+            <li><a href="#feature_list">Feature List</a></li>
+            <li><a href="#gui">GUI Sketches</a></li>
+            <li><a href="#domain_model">Domain Model</a></li>
+            <li><a href="#deployment">Deployment Diagram</a></li>
+            <li><a href="#actors">Actors</a></li>
+            <li><a href="#use-cases">Use-cases</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#resources">Resources</a></li>
+            <li><a href="doc/index.html">Documentation</a></li>
+            <li><a href="#iteration_plan">Iteration Plan</a></li>
+        </ul>
+        <hr />
+        <h2 class="section_heading">
+            <a name="vision_statement">Vision Statement</a>
+        </h2>
+        <div class="section">
+            <p>
+                Our app sends notifications. The idea is based on the concept that if you can unpack notifications from the app package you can send notifications as a developer or receive them as a user without downloading an app. In addition you can bring a singular paradigm for turning up or down the frequency of notifications received.
+            </p><p>
+                The idea is the create a relay app where users can sign up for notifications from various 3rd party notifiers. On a developer side we can include many of the things that make their app relevant for their users already, or their potential users. For instance we can request location access at a macro level and give access to it for notification senders. The idea is that our server will intercept notifications from the 3rd part developers, vet them to make sure we reduce spam and send them to users. We can also allow for algorithmic curating, such as a parring the number of notifications a user gets if they don't click on many of them. 
+            </p><p>
+                In addition we would love to have the ability to send notifications between users/friends and to allow for interaction with notifications with iOS's new interactive notifications. 
+            </p>
+        </div>
+        <hr />
+        <h2 class="section_heading">
+            <a name="feature_list">Feature List</a>
+        </h2>
+        <div class="section">
+            <ol>
+                <li>Our Framework provides an app through which users can sign up for our services.</li>
+                <li>Our Framework provides assignment of API keys to third parties so third-parties can use our services.</li>
+                <li>Our Framework supports two different types of notifications UserNotifications and DeveloperNotifications.</li>
+                <li>Our Framework allows both notification types to be pushed to the receiving users' phones and show up in the receiving users' apps.</li>
+                <li>Through the assigned API key, our Framework allows third party developers to send a DeveloperNotification to users by making a JSON request to our servers.</li>
+                <li>Our Framework requires DeveloperNotification to be labeled with at least one hashtag and will forward the notification to the user base of each hashtag.</li>
+                <li>Our Framework allows third parties to send notifications with different level of priority.</li>
+                <li>Through the provided app, our framework allows users to sign up for notificiation from certain hashtags</li>
+                <li>Through the provided app, our Framework allows users to forward (or send)  notification, and so creating a UserNotification, to other "trusted" users.</li>
+                <li>Through the provided app, our Framework allows users to add users as "trusted" as well as delete users from their "trusted" list through.</li>
+                <li>Through the provided app, our Framework allows users to limit the number of notification based on priority levels and/or location ranges.</li>
+                <li>Through the provided app, our Framework allows users to modify notification sound per notification.</li>
+                <li>Our Framework supports tracking of whether or not a user opened notifications.</li>
+            </ol>
+            <h3>Expanded Features</h3>
+            <ol>
+                <li>Our Framework would allow specific sponsor notifications</li>
+                <li>Our Framework would support combined notifications of distinct third party users</li>
+                <li>Our Framework would allow third parties to send notification if users trip a geo-wire</li>
+                <li>Through the provided app, our Framework allows users to add additional text or buttons to a forwarded notification when creating a UserNotification.</li>
+                <li>Our Framework would display opening/closing statistics to third parties which third parties could use to improve their notifications.</li>
+            </ol>
+        </div>
+        <hr />
+        <h2 class="section_heading">
+            <a name="gui">GUI Sketches</a>
+        </h2>
+        <img class="border" src="images/layout_0.png" />
+        <img class="border" src="images/layout_1.png" /><br />
+        <img class="border" src="images/layout_2.png" />
+        <img class="border" src="images/layout_3.png" /><br />
+        <img class="border" src="images/layout_4.png" />
+        <img class="border" src="images/layout_5.png" /><br />
+        <img class="border" src="images/layout_6.png" />
+        <img class="border" src="images/layout_7.png" /><br />
+        <img class="border" src="images/layout_8.png" />
+        <img class="border" src="images/layout_9.png" />
+        <hr />
+        <h2 class="section_heading">
+            <a name="domain_model">Domain Model</a>
+        </h2>
+        <div class="section">
+            <p>
+                Our application's front-end will be in the form of an iOS application.  Our server will serve as a front-end for developers from which they can create accounts, create and edit subscription lists, and view statistics for their subscription lists.
+            </p>
+            <p>
+                Below is a UML Class diagram for our developer-centric server.
+            </p>
+        </div>
+        <img src="images/uml_class_diagram.png" />
+        <hr />
+        <!-- <h2 class="section_heading">
+            <a name="model_visualization">Django Model Visualization</a>
+        </h2>
+        <p class="note">Note: This is slightly outdated</p>
+        <img src="images/model_visualization.png" />
+        <hr />-->
+        <h2 class="section_heading">
+            <a name="deployment">Deployment Diagram</a>
+        </h2>
+        <img src="images/deployment_diagram.png" height="587" width="1260" />
+        <hr />
+        <h2 class="section_heading">
+            <a name="actors">Actors</a>
+        </h2>
+        <h3>Developer</h3>
+        <ul>
+            <li>Create one or many subscription lists</li>
+            <li>Push a notification to subscribed users for any list</li>
+        </ul>
+        <img src="images/acitvity_diagram_developer.png" />
+        <h3>Common User</h3>
+        <ul>
+            <li>Recieve notifications from an iOS app</li>
+            <li>Subscribe to any list they want</li>
+            <li>Push simple notifications to other users</li>
+            <li>Filter incoming notifications with personal settings</li>
+        </ul>
+        <hr />
+        <h2 class="section_heading">
+            <a name="use-cases">Use-cases</a>
+        </h2>
+        <div class="section">
+        <h3>Title</h3>
+        <p>Positing a notification</p>
+        <h3>Primary Actor</h3>
+        <p>Developer, posts a notification to his user base</p>
+        <h3>Second Actor</h3>
+        <p>Users, the users that recieve the developer's notification</p>
+        <h3>Pre-condition</h3>
+        <p>For the notification to be pushed the developer should have an event he send users notifications for.</p>
+        <p>If that event happens then he notifies the users of its occurrence.</p>
+        <h3>Main Path</h3>
+        <ol>
+            <li>Developer pushes notification to our server</li>
+            <li>Verify the API key.  If key is incorrect then go to alternate path #2</li>
+            <li>We update each of the relevant users profiles to include the pushed notification extended</li>
+            <li>If the priority of the notification is high enough we may push a system wide notification to the iOS device. (OS widenotificationn rather than a listed notification inside the application</li>
+        </ol>
+        <h3>Alternate Path #1</h3>
+        <ol>
+            <li>A user posts a notification to another user</li>
+            <li>Our server takes this request and dispatches this out if allowed</li>
+            <li>If not allowed it will notify the original user of this fact.</li>
+        </ol>
+        <h3>Alternate Path #2</h3>
+        <ol>
+            <li>Do not allow Developer to push notification</li>
+        </ol>
+        <hr />
+        <h3>Title</h3>
+        <p>Receive a notification</p>
+        <h3>Primary Actor</h3>
+        <p>User</p>
+        <h3>Secondary Actor</h3>
+        <p>Developer</p>
+        <h3>Goal</h3>
+        <p>Allow the ability for users to receive notifications from Developers or other Users</p>
+        <h3>Pre-Condition</h3>
+        <p>A notification must be sent or posted from a developer or initial user in order for other users to receive notifications.</p>
+        <h3>Main Path</h3>
+        <ol>
+            <li>user subscribes to a developer's subscription</li>
+            <li>notification is created by a developer</li>
+            <li>notification is pushed to the developers subscription list</li>
+            <li>notification is sent to all of the subscriptions subscribers, i.e., other users</li>
+            <li>notification is received by a user</li>
+        </ol>
+        <h3>Alternate Path</h3>
+        <ol>
+            <li>notification is created by a user</li>
+            <li>notification is pushed to another user</li>
+            <li>notification is received by a user</li>
+        </ol>
+        <hr />
+        <h3>Title</h3>
+        <p>Change Setting</p>
+        <h3>Primary Actor</h3>
+        <p>User</p>
+        <h3>Secondary Actor</h3>
+        <p>Developer</p>
+        <h3>Goal</h3>
+        <p>A user will be able to adjust his/her application preferences</p>
+        <h3>Pre-Condition</h3>
+        <p>A user wants to change the way he/she interacts with the application</p>        
+        <h3>Main Path</h3>
+        <ol>
+            <li>User is wants to change preferences</li>
+            <li>User opens up the settings tab in the application</li>
+            <li>User can change settings, which may include:</li>
+            <ol>
+                <li>frequency of notifications</li>
+                <li>only receive a certain priority level</li>
+                <li>unsubscribe from certain subscriptions</li>
+            </ol>
+            <li>If the user unsubscribes, he/she will be removed from appropriate developers subscription list.</li>
+        </ol>
+        <hr />
+        <h3>Title</h3>
+        <p>Developer Sign Up</p>
+        <h3>Primary Actor</h3>
+        <p>Developer</p>
+        <h3>Secondary Actor</h3>
+        <p>Us, Allowing developer sign up</p>
+        <h3>Goal</h3>
+        <p>Is to get a developer an API key for his new list, allowing Users to sign up to receive his notifications.</p>
+        <h3>Pre-Condition</h3>
+        <p>No real pre conditions except a willingness to send notifications to subscribed users</p>        
+        <h3>Main Path</h3>
+        <ol>
+            <li>Developer visits our website and fills out the sign up sheet, giving us an email and a requested stream title</li>
+            <li>After verifying email and making sure the stream title is not taken already we give them an api key to send their notifications too</li>
+            <li>We also add their stream title to the subscribable list for users</li>
+            <li>They can add a sub title to their stream, to provide more information about what they provide for users</li>
+            <li>from there on out they can send notifications to all subscribed users by sending an API call.</li>
+        </ol>
+        <hr />
+
+        <h3>Title</h3>
+        <p>List Received Notification</p>
+        <h3>Primary Actor</h3>
+        <p>User</p>
+        <h3>Goal</h3>
+        <p>A User wants to see a list of all of the notifications he/she received</p>
+        <h3>Pre-Condition</h3>
+        <p>No real pre-condition</p>        
+        <h3>Main Path</h3>
+        <ol>
+            <li>User goes to Settings section</li>
+            <li>User requests to see all of the Notifications he/she received</li>
+            <li>Return a list of all Notifications received</li>
+        </ol>
+        <h3>Alternate Path</h3>
+        <ol>
+            <li>If no Notifications have been received User gets an empty list</li>
+            <li>User gets a message saying "no notifications received"</li>
+        </ol>
+        <hr />
+        <h3>Title</h3>
+        <p>Un/Subscribe</p>
+        <h3>Primary Actor</h3>
+        <p>User</p>
+        <h3>Secondary Actor</h3>
+        <p>Developer</p>
+        <h3>Goal</h3>
+        <p>Change a subscriptions list of subscribers if a new User subscribes or unsubscribes</p>
+        <h3>Pre-Condition</h3>
+        <p>The subscription being Un/Subscribed must exist</p>
+        <h3>Main Path</h3>
+        <ol>
+            <li>A user Subscribes to a Developers Subscription</li>
+            <li>The User is added to the Developer's Subscription's list</li>
+            <li>The Developer will send Notifications to this User from now on</li>
+        </ol>
+        <h3>Alternate Path</h3>
+        <ol>
+            <li>A user unSubscribes to a Developers Subscription</li>
+            <li>The User is removed to the Developer's Subscription's list</li>
+            <li>The Developer will no longer send Notifications to this User</li>
+        </ol>
+        </div>
+        <hr />
+        <h2 class="section_heading">
+            <a name="architecture">Architecture</a>
+        </h2>
+        <div class="section">
+            <p>
+                We will use iOS front end for user interaction and most likely a web front end for Developer interaction. Django/JSON something of that sort, the developer site will be simple since it will just be a sign up sheet to get an API token. On the backend we will use a server and a database. The server will receive and send notifications with the database storing user information.
+            </p>
+        </div>
+        <hr />
+        <h2 class="section_heading">
+            <a name="resources">Resources</a>
+        </h2>
+        <ul>
+            <li>Xcode (Swift)</li>
+            <li>MongoDB</li>
+            <li>MongoEngine</li>
+            <li>Django</li>
+            <li>Apple Push Notification Service</li>
+        </ul>
+        <hr>
+        <h2 class="section_heading">
+            <a name="iteration_plan">Iteration Plan</a>
+        </h2>
+        <div class="section">
+            <h3>Iteration 3</h3>
+                <h4>Server</h4>
+                <ul class="bullets">
+                    <li>Compared various database solutions that are compatible with django and feasible to run</li>
+                    <li>Created local development as well as always-on/accessible production server environments with python/django and mysql up and running</li>
+                    <li>Created majority of the django models that will be needed - this means that nearly all data can now be stored and/or retrieved although controlling code/methods have not fully been written</li>
+                    <li>Created some unit tests and ran them (successfully) to verify that the django environments are properly configured</li>
+                </ul>
+                <h4>iOS</h4>
+                <ul class="bullets">
+                    <li>GUI Sketch metting</li>
+                    <li>XCode/Apple Developer Account information</li>
+                    <li>General iOS development knowledge (Swift, tools available, etc.)</li>
+                    <li>
+                        Initial ground work laid for the app with the stream
+                        list notificaionts list and the settings page created
+                        and the beginning of the cells created
+                    </li>
+                    <li>We have a print out of JSON parsing from a webserver but have no meaningful connection to the server yet</li>
+                </ul>
+            <h3>Iteration 4</h3>
+                <h4>Server</h4>
+                <ul class="bullets">
+                    <li>wrote more django unit tests to test models as well as views</li>
+                    <li>basic http REST api is in place and working without error checking (list, push, create, signup, etc)</li>
+                    <li>being work/information-gathering for Apple push notification service</li>
+                    <li>the ability for developers to push to those streams and users access the notifications they push</li>
+                </ul>
+                <h4>iOS</h4>
+                <ul class="bullets">
+                    <li>Dyanmically loaded subscriptions/notifications from server</li>
+                    <li>Created the classes within the iOS model to get the table filled with things actually in the model</li>
+                    <li>The ability to add subscriptions for a user is now done</li>
+                    <li>started to form a more refined GUI</li>
+                    <li>properly displayed notifications pushed form server</li>
+                </ul>
+            <h3>Iteration 5</h3>
+                <h4>Server</h4>
+                <ul class="bullets">
+                    <li>Finish Stream</li>
+                    <li>Developer and User Class abstraction</li>
+                    <li>add a sign up flow for Users</li>
+                    <li>add settings for the streams a user possesses in their data model</li>
+                    <li>Add common user signup/account creation</li>
+                    <li>Nearly finish change from polling to push notifications</li>
+                    <li>Added more test cases</li>
+                </ul>
+                <h4>iOS</h4>
+                <ul class="bullets">
+                    <li>Finalize GUI and get streams nearly working</li>
+                    <li>add settings page for each stream</li>
+                    <li>Make User sign up flow (!)</li>
+                    <li>Add settings to GUI</li>
+                    <li>Store account information on iOS device</li>
+                    <li>Completely refactor code</li>
+                    <li>Added test cases</li>
+                </ul>
+            <h3>Iteration 6</h3>
+            <ul class="bullets">
+                <li>Fully integrate APNS push notification library to finish push notification ability</li>
+                <li>Add user-->user notification forwarding (time permitting) -- note: supported on server, not yet client</li>
+                <li>User signup (and equally importantly login) functional</li>
+                <li>User's can subscribe to and view available streams</li>
+                <li>Developers can optionally push a URL to go along with a notification</li>
+            </ul>
+            <h3>Iteration 7</h3>
+            <ul class="bullets">
+                <li>add user-->user notification forwarding on iOS client</li>
+                <li>fix many small useability issues exist on iOS client in regards to GUI function/appearance</li>
+                <li>Incorperate geo-tripping location notifications (currently we have the user's location on iOS client)</li>
+                <li>Fully support the settings listed in-app</li>
+                <li>Add example cases of Developer Subscriptions (potentially with client for our API in python/other languages)</li>
+            </ul>
+        </div>
+        <br />
+        <a id="top_link" href="#top">Back to Top</a>
+    </body>
+</html>

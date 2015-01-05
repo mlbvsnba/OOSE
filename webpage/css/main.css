@@ -1,0 +1,59 @@
+body {
+    text-align: center;
+}
+
+hr {
+    width: 50%;
+    border: 1px dashed #000;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+ol {
+    text-align: left;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.bullets {
+    list-style: disc;
+    list-style-position: inside;
+}
+
+ul#contents_list li a:link, ul#contents_list li a:visited, #top_link:link, #top_link:visited {
+    text-decoration: none;
+    color: blue;
+}
+
+ul#contents_list li a:hover, #top_link:hover {
+    text-decoration: underline;
+}
+
+li {
+    padding: .25em 0;
+}
+
+div.section {
+    width: 40%;
+    margin: auto;
+}
+
+div.section h3 {
+    margin-bottom: 10px;
+    /*padding: 0;*/
+}
+
+.border {
+    border: 1px solid black;
+}
+
+.note {
+    font-weight: bold;
+    color: red;
+}
